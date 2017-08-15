@@ -1,5 +1,4 @@
 // Made by the baddest bitch in town: Khux.//
-"use strict";
 
 const Discord = require("discord.js");
 const random = require("random-animal");
