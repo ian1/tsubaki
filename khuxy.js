@@ -101,9 +101,6 @@ bot.on("message", message => {
 
 /*    if (message.content.toLowerCase() === "help tsubaki") {
         message.channel.send("Hi there, if you need help do  ``t-help``!");
-    }
-    if (message.content.toLowerCase() === "hi tsubaki") {
-        message.channel.send("Hi there!");
     }*/
     if (message.content.toLowerCase().includes("tsubaki")) return message.react('343292881689378816');
     if (message.content.toLowerCase().includes("<@334386617626263553>")) return message.react('343292881689378816');
@@ -112,7 +109,7 @@ bot.on("message", message => {
     if (message.content.toLowerCase().includes("<@142037204548583424>")) return message.react('346848029833297920');
     if (message.content.toLowerCase().includes("pan")) return message.react('346848029833297920');
     if (message.content.toLowerCase().includes("david")) return message.react('346848029833297920');
-    if (message.content.toLowerCase().includes("t-")) return message(':exclamation: | New prefix is `t:` :)');
+    if (message.content.toLowerCase().includes("t-")) return message.channel.send(':exclamation: | New prefix is `t:` :)');
 //~~~~~~~~~~~~~~~~~~~~~~~~
     if (!message.content.startsWith(config.prefix)) {return;}
     if (message.author.id == "") return;
