@@ -109,7 +109,7 @@ bot.on("message", message => {
     if (message.content.toLowerCase().includes("<@142037204548583424>")) return message.react('346848029833297920');
     if (message.content.toLowerCase().includes("pan")) return message.react('346848029833297920');
     if (message.content.toLowerCase().includes("david")) return message.react('346848029833297920');
-    if (message.content.toLowerCase().includes("t-")) return message.channel.send(':exclamation: | New prefix is `t:` :)');
+    if (message.content.toLowerCase().startsWith("t-")) return message.channel.send(':exclamation: | Whoops, didn\'t recognize that! Did you mean `t:' + message.content.substring(2) + '`?');
 //~~~~~~~~~~~~~~~~~~~~~~~~
     if (!message.content.startsWith(config.prefix)) {return;}
     if (message.author.id == "") return;
