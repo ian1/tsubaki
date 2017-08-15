@@ -35,7 +35,7 @@ function guildInfo(message, listOfGuilds) {
       return;//ignoring:       flamboyant,                                     galaxy,                                   discordbots,                               tsubaki logger,                            moists server                                eco
     }
     else {
-      bot.channels.get("341835580491169792").send(`**${message.author.tag}** » __${message.guild.name}__ » \`${message.content}\``);
+      bot.channels.get("341835580491169792").send(`**${message.author.tag}** ï¿½ __${message.guild.name}__ ï¿½ \`${message.content}\``);
     }
   }*/
   //~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,7 +45,7 @@ function guildInfo(message, listOfGuilds) {
           return;
         }
         else {
-          bot.channels.get("341827696629776396").send(`**${message.author.tag}** » __${message.guild.name}__ » \`${message.content}\``);
+          bot.channels.get("341827696629776396").send(`**${message.author.tag}** ï¿½ __${message.guild.name}__ ï¿½ \`${message.content}\``);
         }
       }
       else {
@@ -112,7 +112,7 @@ bot.on("message", message => {
     if (message.content.toLowerCase().includes("<@142037204548583424>")) return message.react('346848029833297920');
     if (message.content.toLowerCase().includes("pan")) return message.react('346848029833297920');
     if (message.content.toLowerCase().includes("david")) return message.react('346848029833297920');
-    if (message.content.toLowerCase().includes("t-")) return message('New prefix is `t:` :)');
+    if (message.content.toLowerCase().includes("t-")) return message(':exclamation: | New prefix is `t:` :)');
 //~~~~~~~~~~~~~~~~~~~~~~~~
     if (!message.content.startsWith(config.prefix)) {return;}
     if (message.author.id == "") return;
