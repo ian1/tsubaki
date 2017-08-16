@@ -13,8 +13,8 @@ function GetBanana() {
 method.execute = function (message, args, bot, points) {
   this.delete(message);
   let userData = points[message.author.id];
-  message.reply(":banana: " + Tsubaki.Style.italicize("You are currently Banana level ") + Tsubaki.Style.code(userData.level) + Tsubaki.Style.italicize(", with ")
-    + Tsubaki.Style.code(userData.points) + ' Bananas!');
+  message.reply(":banana: " + Tsubaki.Style.italicize("You are currently Banana level") + " " + Tsubaki.Style.code(userData.level) + Tsubaki.Style.italicize(", with")
+    + " " + Tsubaki.Style.code(userData.points) + " Bananas!");
 }
 
 module.exports = GetBanana;

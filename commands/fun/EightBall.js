@@ -34,7 +34,7 @@ method.execute = function (message, args, bot, points) {
     "Outlook not so good.",
     "Very doubful."
   ]
-  if (question == '' || question === undefined) return message.channel.send(":eye_in_speech_bubble: | _Give me a question!_");
+  if (question == '' || question === undefined) return message.channel.send(":eye_in_speech_bubble: _Give me a question!_");
   else {
     message.channel.send(Tsubaki.Style.bold(balls[Math.floor(Math.random() * balls.length)]));
   }

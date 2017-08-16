@@ -826,3 +826,6 @@ module.exports.commands = function () {
   return commands;
 };
 module.exports.Style = Style;
+module.exports.help = function () {
+  return new Help();
+}
