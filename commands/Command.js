@@ -1,5 +1,6 @@
 const Tsubaki = require("../Tsubaki.js");
 const Discord = require("discord.js");
+const help = require("./information/Help.js");
 
 let method = Command.prototype;
 
