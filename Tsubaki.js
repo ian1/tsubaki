@@ -24,7 +24,7 @@ const tsubakiTag = "334386617626263553";
 const tsubakiReact = "343292881689378816";
 const khuxTag = "135529980011610112";
 const khuxReact = "343292371749961728";
-const davidTag = "142037204548583424";s
+const davidTag = "142037204548583424";
 const davidReact = "";
 
 // Color codes
