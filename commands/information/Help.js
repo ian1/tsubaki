@@ -12,7 +12,7 @@ function Help() {
 
 method.execute = function (message) {
   this.delete(message);
-  let cmds = Tsubaki.commands;
+  let cmds = Tsubaki.commands();
 
   let description = Tsubaki.Style.bold("Tsubaki Command List") + "\n\n"
     + "Do " + Tsubaki.Style.bold(this.getUsage()) + " and replace " + Tsubaki.Style.bold("[command]") + " with any command you want to learn more about." + "\n";
