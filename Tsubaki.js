@@ -41,14 +41,14 @@ const Info = require("./commands/information/Info.js");
 const Changelog = require("./commands/information/Changelog.js");
 
 var servers = {};
-var commands = {
+var commands = [
   ["Information", new Help(), new Stats(), new Avatar(), new Invite(), new Support(), new Info(), new Changelog()],
   ["Fun", new 8ball(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
   ["Utility", new Ping(), new Add(), new Urban(), new Dictionary(), new Cmds()],
   ["Admin", new Delete(), new Kick(), new Ban(), new Unban(), new Id(), new Welcome()],
   ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],
   ["Disabled", new Cid(), new Gid(), new Music()]
-};
+];
 
 /*function listGuilds(message, listOfGuilds) {
   let i = 0;
