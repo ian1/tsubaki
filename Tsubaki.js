@@ -4,6 +4,7 @@
 const Discord = require("discord.js");
 const music = require("discord.js-music-v11");
 const config = require("./config.json");
+const package = requre("./package.json");
 const chalk = require("chalk");
 const fs = require("fs");
 const Style = require("./Style.js");
@@ -116,11 +117,10 @@ bot.on("ready", () => {
     .format(config.name, bot.users.size, bot.channels.size, bot.guilds.size)));
   
   var embed = new Discord.RichEmbed()
-    .setTitle("Hello there!")
-    .setDescription(":wave: I'm " + Style.bold(config.name) + ".\nDo " + Style.code(new Help().getUsage()) + " to see my commands!")
-    .setAuthor("<@" + khuxTag + "> and <@" + davidTag + ">");
+    .setDescription(":wave: Hello! I'm " + Style.bold(config.name) + ", version " + package.version + ".\n\nDo " + Style.code(new Help().getUsage()) + " to see my commands!")
+    .setFooter("Created by " + package.author);
   for (let i = 0, len = bot.channels.size; i < len; i++) {
-    if (bot.channels[i].type === "text") bot.channels.array()[i].send({ embed: embed });
+    if (bot.channels.array()[i].type === "text") bot.channels.array()[i].send({ embed: embed });
   }
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
