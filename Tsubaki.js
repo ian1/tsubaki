@@ -240,7 +240,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "say") {
-    _super.delete();
+    _super.delete(message);
     message.channel.send(args.join(" "), { tts: false });
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +248,7 @@ bot.on("message", message => {
     if (message.author.id != '135529980011610112') return;
     else {
       let gamemessage = args.join(" ");
-      _super.delete();
+      _super.delete(message);
       bot.user.setGame(gamemessage);
     }
   }
@@ -258,11 +258,11 @@ bot.on("message", message => {
       .setDescription(args.join(" "))
       .setColor(Tsubaki.green)
     message.channel.send({ embed: embed });
-    _super.delete();
+    _super.delete(message);
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "ping") {
-    _super.delete();
+    _super.delete(message);
     message.channel.send(":ping_pong: | Pong! ``" + (bot.ping) + " ms``");
   }
   //Math.round in from of (bot.ping) if u want the number rounded
@@ -355,7 +355,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "invite") {
-    _super.delete();
+    _super.delete(message);
     var embed = new Discord.RichEmbed()
       .setDescription('```css\nInvite ' + `${config.name}` + ' to your server!\n```' + `${'\r\n'}` + '' + `${'\r\n'}` + '**' + `${config.name}` + ' Information:**' + `${'\r\n'}` + `${config.name}` + ' is a Discord.js bot that you can have fun with _and_ moderate with. In your server do `t-help` and a list of all my command will pop up.')
       .addField(`**${config.name}'s Help Server**`, `[Click Here to join](https://discord.gg/Gf7hb33)`)
@@ -424,7 +424,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'profile') {
-    _super.delete();
+    _super.delete(message);
     let profileMention = message.mentions.users.first();
     if (profileMention == '' || profileMention === undefined) return message.channel.send("Mention the person that you want the profile from!");
     else {
@@ -438,13 +438,13 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "guilds") {
-    _super.delete();
+    _super.delete(message);
     var guildsListing = bot.guilds.array()
     message.channel.send(`${guildInfo(message, guildsListing)}`)
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "cmds") {
-    _super.delete();
+    _super.delete(message);
     if (!args[0]) {
       var embed = new Discord.RichEmbed()
         .setDescription("Which command would you like to see more of? **Example:** `t-cmds help`")
@@ -628,7 +628,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'dice') {
-    _super.delete();
+    _super.delete(message);
     let number = message.content.split(' ')[1];
     var numbers = [
       '1',
@@ -642,17 +642,17 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'cat') {
-    _super.delete();
+    _super.delete(message);
     random.cat().then(url => message.channel.send(url)).catch(err => console.log(err.message));
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'dog') {
-    _super.delete();
+    _super.delete(message);
     random.dog().then(url => message.channel.send(url)).catch(err => console.log(err.message));
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "banana") {
-    _super.delete();
+    _super.delete(message);
     let memberMention = message.mentions.users.first();
     if (memberMention == message.author) return message.channel.send(":x: | Don't be greedy, sweetie~ :kissing_heart:");
     if (memberMention == '' || memberMention === undefined) return message.channel.send("Mention a player to give a banana!");
@@ -661,7 +661,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "urban") {
-    _super.delete();
+    _super.delete(message);
     let toDefine = message.content.split(' ')[1];
     if (toDefine == "" || toDefine === undefined) return message.channel.send(":book: | Provide a word to urban define!");
     else {
@@ -677,7 +677,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "dictionary") {
-    _super.delete();
+    _super.delete(message);
     let toDefine = message.content.split(' ')[1];
     if (toDefine == "" || toDefine === undefined) return message.channel.send(":book: | Provide a word to urban define!");
     else {
@@ -693,7 +693,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "support") {
-    _super.delete();
+    _super.delete(message);
     var embed = new Discord.RichEmbed()
       .setDescription('```js\n"Have Questions or need help?"\n```' + `${'\r\n'}` + '' + `${'\r\n'}` + '**' + `${config.name}` + ' Information:**' + `${'\r\n'}` + `${config.name}` + ' is a Discord.js bot that you can have fun with _and_ moderate with. In your do `t-help` and a list of all my command will pop up.')
       .addField(`**${config.name}'s Help Server**`, `[Click Here to join](https://discord.gg/Gf7hb33)`)
@@ -702,17 +702,17 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "tts") {
-    _super.delete();
+    _super.delete(message);
     message.channel.send(args.join(" "), { tts: true });
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "getbanana") {
-    _super.delete();
+    _super.delete(message);
     message.reply(' | _You are currently Banana level_' + ' `' + `${userData.level}` + '` ' + '_, with_' + ' `' + `${userData.points}` + '` ' + 'Bananas!');
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "stats") {
-    _super.delete();
+    _super.delete(message);
     var guildEmbed = new Discord.RichEmbed()
       .setDescription('`' + `${config.name}` + '` Guild Stats:')
       .addField('Guilds', `${bot.guilds.size}`)//${bot.guilds.size} //old: `48`
@@ -724,7 +724,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "info") {
-    _super.delete();
+    _super.delete(message);
     var guildEmbed = new Discord.RichEmbed()
       .setDescription("**Information About " + `${config.name}` + "**\n\n     " + `${config.name}` + " is a **Discord.js** bot. She can be used for moderation, administration, utility, and just for fun. She has a wide range of commands everyone will enjoy, and she is constantly being updated and added to.")
       .setColor(0xFFFFFF)
@@ -732,7 +732,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "changelog") {
-    _super.delete();
+    _super.delete(message);
     var guildEmbed = new Discord.RichEmbed()
       .setDescription("not done ;)")
       .setColor(0xFFFFFF)
@@ -752,7 +752,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'coin') {
-    _super.delete();
+    _super.delete(message);
     let coin = message.content.split(' ')[1];
     var coins = [
       '**Heads!**',
@@ -762,7 +762,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "help") {
-    _super.delete();
+    _super.delete(message);
     var guildEmbed = new Discord.RichEmbed()
       .setDescription("**" + `${config.name}` + " Command List**\n\nDo **t-cmds [command]** and replace **[command]** with any command you want to learn more about.\n\n**Core-** " + "`" + "help" + "`" + " " + "`" + "ping" + "`" + "\n**Fun-** " + "`" + "8ball" + "`" + " " + "`" + "say" + "`" + " " + "`" + "embed" + "`" + " " + "`" + "dice" + "`" + " " + "`" + "cat" + "`" + " " + "`" + "dog" + "`" + " " + "`" + "banana" + "`" + " " + "`" + "tts" + "`" + " " + "`" + "getbanana" + "`" + " " + "`" + "coin" + "`" + "\n**Utility-** " + "`" + "add" + "`" + " " + "`" + "urban" + "`" + " " + "`" + "dictionary" + "`" + " " + "`" + "cmds" + "`" + "" + "\n**Admin-** " + "`" + "delete" + "`" + " " + "`" + "kick" + "`" + " " + "`" + "ban" + "`" + " " + "`" + "unban" + "`" + " " + "`" + "id" + "`" + " " + "`" + "welcome" + "`" + "\n**Information-** " + "`" + "stats" + "`" + " " + "`" + "profile" + "`" + " " + "`" + "invite" + "`" + " " + "`" + "support" + "`" + " " + "`" + "info" + "`" + " " + "`" + "changelog" + "`" + "\n**Music-** `leave` `queue` `play` `pause` `resume` `skip` `clearqueue`\n**Disabled-** `cid` `gid` `music`" + "\n\nYou can also talk to " + `${config.name}` + " by saying **Hi " + `${config.name}` + "**, **Help " + `${config.name}` + "**, or **" + `${config.name}` + "**.\n")
       .setColor(Tsubaki.green)

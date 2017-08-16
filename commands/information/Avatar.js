@@ -10,7 +10,7 @@ function Avatar() {
 }
 
 method.execute = function (message) {
-  _super.delete();
+  _super.delete(message);
 
   let profileMention = message.mentions.users.first();
   if (profileMention == "" || profileMention === undefined) return message.channel.send("Mention the person that you want the profile from!");

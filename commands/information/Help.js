@@ -10,7 +10,7 @@ function Help() {
 }
 
 method.execute = function (message) {
-  _super.delete();
+  _super.delete(message);
   let cmds = Tsubaki.commands;
 
   let description = Tsubaki.Style.bold("Tsubaki Command List") + "\n\n"

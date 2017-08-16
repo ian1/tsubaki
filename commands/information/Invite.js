@@ -10,7 +10,7 @@ function Invite() {
 }
 
 method.execute = function (message) {
-  _super.delete();
+  _super.delete(message);
   var embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.codeBlock("Invite " + Tsubaki.name + " to your server!", "css") + "\n\n"
       + Tsubaki.Style.bold(Tsubaki.name + " Information:") + "\n"
