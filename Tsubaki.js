@@ -53,6 +53,11 @@ const GetBanana = require("./commands/fun/GetBanana.js");
 const Tts = require("./commands/fun/Tts.js");
 const Coin = require("./commands/fun/Coin.js");
 
+const Ping = require("./commands/utility/Ping.js");
+const Add = require("./commands/utility/Add.js");
+const Urban = require("./commands/utility/Urban.js");
+const Dictionary = require("./commands/utility/Dictionary.js");
+
 let servers = {};
 let commands = [];
 
