@@ -4,7 +4,7 @@
 const Discord = require("discord.js");
 const music = require("discord.js-music-v11");
 const config = require("./config.json");
-const package = requre("./package.json");
+const package = require("./package.json");
 const chalk = require("chalk");
 const fs = require("fs");
 const Style = require("./Style.js");
@@ -118,7 +118,8 @@ bot.on("ready", () => {
   
   var embed = new Discord.RichEmbed()
     .setDescription(":wave: Hello! I'm " + Style.bold(config.name) + ", version " + package.version + ".\n\nDo " + Style.code(new Help().getUsage()) + " to see my commands!")
-    .setFooter("Created by " + package.author);
+    .setFooter("Created by " + package.author)
+    .setColor(color.green);
   for (let i = 0, len = bot.channels.size; i < len; i++) {
     if (bot.channels.array()[i].type === "text") bot.channels.array()[i].send({ embed: embed });
   }
