@@ -14,7 +14,7 @@ method.execute = function (message, args, bot, points) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(args.join(" "))
-    .setColor(Tsubaki.color.green)
+    .setColor(Tsubaki.color.green);
   message.channel.send({ embed: embed });
 }
 

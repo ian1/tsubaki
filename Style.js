@@ -26,5 +26,16 @@ module.exports = {
 
   codeBlock: function(text, lang) {
     return "```" + lang + "\n" + text + "\n```";
+  },
+
+  error: function (text) {
+    var embed = new Discord.RichEmbed()
+      .setDescription(":exclamation: " + text)
+      .setColor(Tsubaki.color.red);
+    return embed;
+  },
+
+  errorGeneric: function () {
+    return error("Whoops, I got an error! Please try again later.");
   }
 }

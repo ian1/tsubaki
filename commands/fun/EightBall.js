@@ -25,7 +25,7 @@ method.execute = function (message, args, bot, points) {
     "Signs point to yes.",
     "Reply hazy, try again.",
     "Ask again later.",
-    "Better now tell you now!",
+    "Better not tell you now!",
     "Cannot predict now.",
     "Concentrate and ask again!",
     "Don't count on it!",
@@ -34,9 +34,21 @@ method.execute = function (message, args, bot, points) {
     "Outlook not so good.",
     "Very doubful."
   ]
-  if (question == '' || question === undefined) return message.channel.send(":eye_in_speech_bubble: _Give me a question!_");
+  let thinking = [
+    "I'm thinking...",
+    "Hmm this is a tough question...",
+    "Huh. I'm not sure I know this one. Let me think...",
+    "I'm not sure about this one...",
+    "Oh, this one's easy!"
+  ]
+  if (question == '' || question === undefined) return message.channel.send(Tsubaki.Style.error(":eye_in_speech_bubble: _Give me a question!_"));
   else {
-    message.channel.send(Tsubaki.Style.bold(balls[Math.floor(Math.random() * balls.length)]));
+    message.channel.send(":thinking: " + Tsubaki.Style.italicize(thinking[Math.floor(Math.random() * thinking.length)]));
+
+    // Wait for 2 seconds before sending response.
+    setTimeout(function () {
+      message.channel.send(Tsubaki.Style.bold(balls[Math.floor(Math.random() * balls.length)]));
+    }, 2000);  
   }
 }
 

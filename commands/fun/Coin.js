@@ -7,7 +7,7 @@ let method = Coin.prototype = Object.create(_super);
 method.constructor = Coin;
 
 function Coin() {
-  _super.constructor.apply(this, ["coin", Tsubaki.name + " will flip a coin for you", ""]);
+  _super.constructor.apply(this, ["coin", Tsubaki.name + " will flip a coin for you.", ""]);
 }
 
 method.execute = function (message, args, bot, points) {

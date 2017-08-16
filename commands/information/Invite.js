@@ -20,7 +20,7 @@ method.execute = function (message, args, bot, points) {
       Tsubaki.Style.url("Click Here to invite", "https://discordapp.com/oauth2/authorize?"
       + "client_id=334386617626263553&scope=bot&permissions=305196094"))
     .setColor(Tsubaki.color.green);
-  message.author.sendEmbed(embed);
+  message.author.send({ embed: embed });
 }
 
 module.exports = Invite;

@@ -18,7 +18,7 @@ method.execute = function (message, args, bot, points) {
       + "administration, utility, and just for fun. She has a wide range of commands everyone will enjoy, "
       + "and she is constantly being updated and added to." + "\n"
       + Tsubaki.name + " was created by Khux and PantherMan594.")
-    .setColor(Tsubaki.color.white)
+    .setColor(Tsubaki.color.white);
   message.channel.send({ embed: embed });
 }
 

@@ -14,7 +14,7 @@ method.execute = function (message, args, bot, points) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription("not done ;)")
-    .setColor(Tsubaki.color.white)
+    .setColor(Tsubaki.color.white);
   message.channel.send({ embed: embed });
 }
 

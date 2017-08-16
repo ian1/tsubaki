@@ -16,13 +16,14 @@ method.execute = function (message, args, bot, points) {
   let profileMention = message.mentions.users.first();
   
   if (profileMention == "" || profileMention === undefined) {
-    return message.channel.send("Mention the person that you want the profile from!");
+    return message.channel.send(Tsubaki.Style.error(":thinking: Sorry... I don't know who that is. "
+      + "Please try again, make sure you used @ to mention the player!"));
   } else {
     let profileEmbedAuthor = profileMention.username
     let profileEmbed = new Discord.RichEmbed()
       .setDescription("Profile of " + profileMention)
       .setImage(profileMention.avatarURL)
-      .setColor(Tsubaki.color.green)
+      .setColor(Tsubaki.color.green);
     message.channel.send({ embed: profileEmbed });
   }
 }

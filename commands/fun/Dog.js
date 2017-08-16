@@ -13,7 +13,10 @@ function Dog() {
 
 method.execute = function (message, args, bot, points) {
   this.delete(message);
-  random.dog().then(url => message.channel.send(url)).catch(err => console.log(err.message));
+  random.dog().then(url => message.channel.send(url)).catch(err => {
+    console.log(err.message);
+    message.channel.send({ embed: Tsubaki.Style.errorGeneric() });
+  });
 }
 
 module.exports = Dog;

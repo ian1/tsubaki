@@ -16,8 +16,8 @@ method.execute = function (message, args, bot, points) {
     .setDescription(Tsubaki.Style.codeBlock("Have Questions or need help?", "js") + "\n\n" + this.getInformation())
     .addField(Tsubaki.Style.bold(Tsubaki.name + "'s Help Server"), Tsubaki.Style.url("Click Here to join",
       "https://discord.gg/Gf7hb33"))
-    .setColor(Tsubaki.color.green)
-  message.author.sendEmbed(embed);
+    .setColor(Tsubaki.color.green);
+  message.author.send({ embed: embed });
 }
 
 module.exports = Support;

@@ -5,7 +5,6 @@ const Discord = require("discord.js");
 const music = require("discord.js-music-v11");
 const config = require("./config.json");
 const chalk = require("chalk");
-const webdict = require("webdict");
 const fs = require("fs");
 const Style = require("./Style.js");
 
@@ -30,6 +29,7 @@ const davidReact = "";
 const color = {
   white: "0xFFFFFF",
   green: "0x42F44E",
+  yellow: "0xFFBF00",
   red: "0xFF0000"
 }
 
@@ -134,8 +134,8 @@ bot.on("message", message => {
   if (commands.length == 0) {
     commands = [
       ["Information", new Help(), new Stats(), new Avatar(), new Invite(), new Support(), new Info(), new ChangeLog()] ,
-      ["Fun", new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()]/*,
-      ["Utility", new Ping(), new Add(), new Urban(), new Dictionary()],
+      ["Fun", new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
+      ["Utility", new Ping(), new Add(), new Urban(), new Dictionary()]/*,
       ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],
       ["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Id(), new Welcome()],
       ["Owner", new Playing(), new Guilds()]*/

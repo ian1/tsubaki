@@ -28,7 +28,7 @@ method.execute = function (message, args, bot, points) {
 
     let embed = new Discord.RichEmbed()
       .setDescription(description)
-      .setColor(Tsubaki.color.green)
+      .setColor(Tsubaki.color.green);
     message.channel.send({ embed: embed });
   } else {    
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
@@ -40,16 +40,13 @@ method.execute = function (message, args, bot, points) {
               + Tsubaki.Style.bold("Description: ") + cmd.getDescription() + "\n"
               + Tsubaki.Style.bold("Category: ") + cmds[i][0] + "\n\n"
               + Tsubaki.Style.bold("Usage: ") + cmd.getUsage())
-            .setColor(Tsubaki.color.green)
+            .setColor(Tsubaki.color.green);
           message.channel.send({ embed: embed });
           return;
         }
       }
     }
-    var embed = new Discord.RichEmbed()
-      .setDescription(":exclamation: Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".")
-      .setColor(Tsubaki.color.red)
-    message.channel.send({ embed: embed });
+    message.channel.send({ embed: Tsubaki.Style.error("Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".") });
   }
 }
 
