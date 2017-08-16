@@ -14,9 +14,9 @@ method.execute = function (message, args, bot, points) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.codeBlock("Invite " + Tsubaki.name + " to your server!", "css") + "\n\n" + this.getInformation())
-    .addField(config.name + "'s Help Server",
+    .addField(Tsubaki.name + "'s Help Server",
       Tsubaki.Style.url("Click Here to join", "https://discord.gg/Gf7hb33"))
-    .addField(config.name + "'s Invitation Link",
+    .addField(Tsubaki.name + "'s Invitation Link",
       Tsubaki.Style.url("Click Here to invite", "https://discordapp.com/oauth2/authorize?"
       + "client_id=334386617626263553&scope=bot&permissions=305196094"))
     .setColor(Tsubaki.color.green);

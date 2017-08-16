@@ -14,8 +14,8 @@ method.execute = function (message, args, bot, points) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.codeBlock("Have Questions or need help?", "js") + "\n\n" + this.getInformation())
-    .addField(Tsubaki.Style.bold(Tsubaki.name + "'s Help Server", Tsubaki.Style.url("Click Here to join",
-      "https://discord.gg/Gf7hb33")))
+    .addField(Tsubaki.Style.bold(Tsubaki.name + "'s Help Server"), Tsubaki.Style.url("Click Here to join",
+      "https://discord.gg/Gf7hb33"))
     .setColor(Tsubaki.color.green)
   message.author.sendEmbed(embed);
 }
