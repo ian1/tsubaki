@@ -1,4 +1,4 @@
-const Tsubaki = require("../../Tsubaki.js");
+const Tsubaki = require("../Tsubaki.js");
 
 var method = Command.prototype;
 
