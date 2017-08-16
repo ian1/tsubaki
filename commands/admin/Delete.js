@@ -16,7 +16,7 @@ method.executeAdmin = function (message, args, bot, points) {
   } else if (parseInt(args[0]) > 100) {
     message.channel.send({ embed: Tsubaki.Style.warn("I can't delete more than 100 messages!") });
   } else {
-    message.channel.fetchMessages({ limit: parseInt(args[0]) }).then(messages => message.channel.bulkDelete(messages)).catch(function () {
+    message.channel.fetchMessages({ limit: parseInt(args[0]) + 1 }).then(messages => message.channel.bulkDelete(messages)).catch(function () {
       message.channel.send({ embed: Tsubaki.Style.errorGeneric() });
       console.error;
     });
