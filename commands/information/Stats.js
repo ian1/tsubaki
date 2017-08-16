@@ -10,7 +10,7 @@ function Stats() {
   _super.constructor.apply(this, ["stats", "Will show guilds, users, and channels " + Tsubaki.name + " is in.", ""]);
 }
 
-method.execute = function (message, args) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.bold(Tsubaki.name) + " Guild Stats:")

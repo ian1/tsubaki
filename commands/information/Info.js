@@ -10,11 +10,11 @@ function Info() {
   _super.constructor.apply(this, ["info", "Shows " + Tsubaki.name + "'s information.", ""]);
 }
 
-method.execute = function (message, args) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.bold("Information About " + Tsubaki.name) + "\n\n     "
-      + Tsubaki.name + " is a " + Tsubaki.Style.bold(Discord.js) + " bot. She can be used for moderation, "
+      + Tsubaki.name + " is a " + Tsubaki.Style.bold("Discord.js") + " bot. She can be used for moderation, "
       + "administration, utility, and just for fun. She has a wide range of commands everyone will enjoy, "
       + "and she is constantly being updated and added to." + "\n"
       + Tsubaki.name + " was created by Khux and PantherMan594.")

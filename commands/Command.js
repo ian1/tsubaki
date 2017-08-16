@@ -28,7 +28,7 @@ method.getUsage = function () {
 method.getInformation = function () {
   return Tsubaki.Style.bold(Tsubaki.name + " Information:") + "\n"
     + Tsubaki.name + " is a Discord.js bot that you can have fun with "
-    + Tsubaki.Style.italicize(and) + " moderate with. In your server do "
+    + Tsubaki.Style.italicize("and") + " moderate with. In your server do "
     + Tsubaki.Style.code(new Help().getUsage()) + " and a list of all my command will pop up.";
 };
 

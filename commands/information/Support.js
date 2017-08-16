@@ -10,7 +10,7 @@ function Support() {
   _super.constructor.apply(this, ["support", Tsubaki.name + " will private message you the support server link.", ""]);
 }
 
-method.execute = function (message, args) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.codeBlock("Have Questions or need help?", "js") + "\n\n" + this.getInformation())

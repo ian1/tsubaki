@@ -11,7 +11,7 @@ function Avatar() {
     " <@mention>"]);
 }
 
-method.execute = function (message, args) {
+method.execute = function (message, args, bot) {
   this.delete(message);
 
   let profileMention = message.mentions.users.first();

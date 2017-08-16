@@ -10,7 +10,7 @@ function Help() {
   _super.constructor.apply(this, ["help", "Displays the command list.", " [command]"]);
 }
 
-method.execute = function (message, args) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let cmds = Tsubaki.commands();
 
@@ -38,7 +38,7 @@ method.execute = function (message, args) {
           var embed = new Discord.RichEmbed()
             .setDescription(Tsubaki.Style.bold("Command: ") + cmd.getCommand() + "\n"
               + Tsubaki.Style.bold("Description: ") + cmd.getDescription() + "\n"
-              + Tsubaki.Style.bold("Category: ") + cmds[i] + "\n\n"
+              + Tsubaki.Style.bold("Category: ") + cmds[i][0] + "\n\n"
               + Tsubaki.Style.bold("Usage: ") + cmd.getUsage())
             .setColor(Tsubaki.color.green)
           message.channel.send({ embed: embed });
@@ -47,7 +47,7 @@ method.execute = function (message, args) {
       }
     }
     var embed = new Discord.RichEmbed()
-      .setDescription(":exclamation: Uh oh, I didn't find that command! Try " + new Help().getCommand() + ".")
+      .setDescription(":exclamation: Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".")
       .setColor(Tsubaki.color.red)
     message.channel.send({ embed: embed });
   }
