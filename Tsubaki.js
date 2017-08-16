@@ -40,6 +40,12 @@ const Invite = require("./commands/information/Invite.js");
 const Info = require("./commands/information/Info.js");
 const ChangeLog = require("./commands/information/Changelog.js"); */
 
+module.exports.prefix = config.prefix,
+module.exports.name = config.name;
+module.exports.nameIn = config.nameIn;
+module.exports.commands = commands;
+module.exports.Style = Style;
+
 var servers = {};
 var commands = [
   ["Information", new Help(), new Stats(), new Avatar(), new Invite()/* , new Support(), new Info(), new ChangeLog()],
@@ -791,9 +797,3 @@ if (!String.prototype.includesIgnoreCase) {
 }
 
 bot.login(config.token);
-
-module.exports.prefix = config.prefix,
-module.exports.name = config.name;
-module.exports.nameIn = config.nameIn;
-module.exports.commands = commands;
-module.exports.Style = Style;
