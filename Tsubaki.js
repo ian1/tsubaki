@@ -17,9 +17,8 @@ music(bot, {
 
 const adminPermission = "ADMINISTRATOR";
 
-const logger = "341827696629776396";
+const logger = "342837394766168064";
 const guildLogger = "342832229510021120";
-const modLogger = "342837394766168064";
 const discordBotGuild = "110373943822540800";
 const tsubaiPalaceGuild = "335272347256881154";
 
@@ -125,7 +124,7 @@ bot.on("ready", () => {
   for (let i = 0, len = bot.channels.size; i < len; i++) {
     if (bot.channels.array()[i].type === "text") bot.channels.array()[i].send({ embed: embed });
   }
-  //  bot.user.setGame("t-help | t-invite | Khux#6195");
+    bot.user.setGame("t:help | t:invite");
 });
 
 bot.on("guildCreate", guild => {
@@ -156,11 +155,6 @@ bot.on("guildMemberAdd", (member) => {
       .setColor(white)
     memberGuild.channels.find("id", channelData).send({ embed: welcomeEmbed });
   }
-});
-
-bot.on("guildBanAdd", (guild, user) => {
-  bot.channels.get(modLogger).send("{0} (id: {1}) was banned from: {2} (id: {3})"
-    .format(user.tag, user.id, guild.name, guild.id));
 });
 
 bot.on("message", message => {
