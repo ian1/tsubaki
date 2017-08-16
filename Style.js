@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const Tsubaki = require("./Tsubaki.js");
 
 module.exports = {
   bold: function(text) {

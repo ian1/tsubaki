@@ -28,9 +28,8 @@ method.execute = function (message, args, bot, points) {
           .setFooter(Tsubaki.name + " Dictionary");
         message.channel.send({ embed: embed });
       }
-    }).catch(err => {
-      console.log(err.message);
-      message.channel.send({ embed: Tsubaki.Style.errorGeneric() });
+    }).catch(function () {
+      message.channel.send({ embed: Tsubaki.Style.errorGeneric });
     });
   }
 }
