@@ -191,6 +191,12 @@ bot.on("message", message => {
       }
     }
   }
+  if (!found) {
+    var embed = new Discord.RichEmbed()
+      .setDescription(":exclamation: Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".")
+      .setColor(Tsubaki.color.red)
+    message.channel.send({ embed: embed });
+  }  
   
   /* if (command === "welcome") {
     let hasAdmin = message.member.hasPermission('ADMINISTRATOR');
