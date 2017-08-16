@@ -24,24 +24,27 @@ const tsubakiTag = "334386617626263553";
 const tsubakiReact = "343292881689378816";
 const khuxTag = "135529980011610112";
 const khuxReact = "343292371749961728";
-const davidTag = "142037204548583424";
+const davidTag = "142037204548583424";s
 const davidReact = "";
 
 // Color codes
-const white = "0xFFFFFF";
-const green = "0x42F44E";
+const color = {
+  white: "0xFFFFFF",
+  green: "0x42F44E",
+  red: "0xFF0000"
+}
 
 // Load commands
 const Help = require("./commands/information/Help.js");
-const Stats = require("./commands/information/Help.js");
+const Stats = require("./commands/information/Stats.js");
 const Avatar = require("./commands/information/Avatar.js");
 const Invite = require("./commands/information/Invite.js");
-/* const Support = require("./commands/information/Support.js");
+const Support = require("./commands/information/Support.js");
 const Info = require("./commands/information/Info.js");
-const ChangeLog = require("./commands/information/Changelog.js"); */
+const ChangeLog = require("./commands/information/Changelog.js");
 
-var servers = {};
-var commands = [];
+let servers = {};
+let commands = [];
 
 /*function listGuilds(message, listOfGuilds) {
   let i = 0;
@@ -71,26 +74,29 @@ function guildInfo(message, listOfGuilds) {
 
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== "") {
-    bot.channels.get(logger).send("{0} » {1} » {2}".format(Style.bold(message.author.tag), Style.underline(message.guild.name), Style.code(message.content)));
+    bot.channels.get(logger).send("{0} » {1} » {2}".format(Style.bold(message.author.tag),
+      Style.underline(message.guild.name), Style.code(message.content)));
   }
 }
 
 bot.on("ready", () => {
-  console.log(chalk.green("{0} has started, with {1} users, in {2} channels of {3} guilds.".format(config.name, bot.users.size, bot.channels.size, bot.guilds.size)));
+  console.log(chalk.green("{0} has started, with {1} users, in {2} channels of {3} guilds."
+    .format(config.name, bot.users.size, bot.channels.size, bot.guilds.size)));
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
 
 bot.on("guildCreate", guild => {
-  var moisty = bot.channels.get(guildLogger);
-  moisty.send(":thumbsup: | New guild joined: {0} (id: {1}, owned by {2}). This guild has {3} members!".format(guild.name, guild.id, guild.owner, guild.memberCount));
+  let moisty = bot.channels.get(guildLogger);
+  moisty.send(":thumbsup: | New guild joined: {0} (id: {1}, owned by {2}). This guild has {3} members!"
+    .format(guild.name, guild.id, guild.owner, guild.memberCount));
 });
 bot.on("guildDelete", guild => {
-  var moisty = bot.channels.get(guildLogger);
+  let moisty = bot.channels.get(guildLogger);
   moisty.send(":thumbsdown: | I have been removed from: " + guild.name + " (id: " + guild.id + ")");
 });
 
 bot.on("guildMemberAdd", (member) => {
-  var memberGuild = member.guild;
+  let memberGuild = member.guild;
   if (memberGuild.id == discordBotGuild) return;
   let data = require("./" + memberGuild.name + ".json");
   let guildData = data.GuildID;
@@ -102,7 +108,7 @@ bot.on("guildMemberAdd", (member) => {
 
   if (memberGuild.id !== data.GuildID) return;
   else {
-    var welcomeEmbed = new Discord.RichEmbed()
+    let welcomeEmbed = new Discord.RichEmbed()
       .setDescription("Welcome to " + Style.bold("{0}, {1}!").format(memberGuild.name, member))
       .setColor(white)
     memberGuild.channels.find("id", channelData).send({ embed: welcomeEmbed });
@@ -110,18 +116,19 @@ bot.on("guildMemberAdd", (member) => {
 });
 
 bot.on('guildBanAdd', (guild, user) => {
-  bot.channels.get(modLogger).send("{0} (id: {1}) was banned from: {2} (id: {3})".format(user.tag, user.id, guild.name, guild.id));
+  bot.channels.get(modLogger).send("{0} (id: {1}) was banned from: {2} (id: {3})"
+    .format(user.tag, user.id, guild.name, guild.id));
 });
 
 bot.on("message", message => {
   if (commands.length == 0) {
     commands = [
-      ["Information", new Help(), new Stats(), new Avatar(), new Invite()/* , new Support(), new Info(), new ChangeLog()],
+      ["Information", new Help(), new Stats(), new Avatar(), new Invite(), new Support(), new Info(), new ChangeLog()]/* ,
       ["Fun", new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
       ["Utility", new Ping(), new Add(), new Urban(), new Dictionary()],
-      ["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Id(), new Welcome()],
       ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],
-      ["Disabled", new Cid(), new Gid(), new Music() */]
+      ["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Id(), new Welcome()],
+      ["Owner", new Playing(), new Guilds()]*/
     ];
   }
 
@@ -148,9 +155,9 @@ bot.on("message", message => {
     lowerMsg.includesIgnoreCase("<@" + davidTag + ">")) message.react('346848029833297920');
 
   // Correct user for old prefix
-  if (lowerMsg.startsWith("t-")) {
-    message.channel.send(":exclamation: Hey, the prefix is now " + Style.code("t:") + "!");
-    message.content = message.content.replace("t-", config.prefix);
+  if (lowerMsg.startsWith("t-") || lowerMsg.startsWith("tb-")) {
+    message.channel.send(":exclamation: Hey, the prefix is now " + Style.code(config.prefix) + "!");
+    message.content = message.content.replace("t-", config.prefix).replace("tb-", config.prefix);
   }
 
   if (!message.content.startsWith(config.prefix) || message.author.id == "") return;
@@ -176,7 +183,7 @@ bot.on("message", message => {
   for (let i = 0, lenI = commands.length; i < lenI && !found; i++) {
     for (let j = 1, lenJ = commands[i].length; j < lenJ && !found; j++) {
       if (command === commands[i][j].getCommand()) {
-        commands[i][j].execute(message);
+        commands[i][j].execute(message, args);
         found = true;
         break;
       }
@@ -206,9 +213,9 @@ bot.on("message", message => {
       }
     }
     else {
-      var welcomeEmbed = new Discord.RichEmbed()
+      let welcomeEmbed = new Discord.RichEmbed()
         .setDescription(`You don't have the permission 'ADMINISTRATOR'!");`)
-        .setColor("0xFF0000")
+        .setColor("Tsubaki.color.red")
       message.channel.send({ embed: embed });
     }
     if (message.content.toLowerCase().startsWith(`${config.prefix}welcome disable`)) {
@@ -227,9 +234,9 @@ bot.on("message", message => {
         });
       }
       else {
-        var welcomeEmbed = new Discord.RichEmbed()
+        let welcomeEmbed = new Discord.RichEmbed()
           .setDescription(`You don't have the permission 'ADMINISTRATOR'!");`)
-          .setColor("0xFF0000")
+          .setColor("Tsubaki.color.red")
         message.channel.send({ embed: embed });
       }
     }
@@ -243,7 +250,7 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "say") {
-    _super.delete(message);
+    this.delete(message);
     message.channel.send(args.join(" "), { tts: false });
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -251,27 +258,27 @@ bot.on("message", message => {
     if (message.author.id != '135529980011610112') return;
     else {
       let gamemessage = args.join(" ");
-      _super.delete(message);
+      this.delete(message);
       bot.user.setGame(gamemessage);
     }
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "embed") {
-    var embed = new Discord.RichEmbed()
+    let embed = new Discord.RichEmbed()
       .setDescription(args.join(" "))
-      .setColor(Tsubaki.green)
+      .setColor(Tsubaki.color.green)
     message.channel.send({ embed: embed });
-    _super.delete(message);
+    this.delete(message);
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "ping") {
-    _super.delete(message);
+    this.delete(message);
     message.channel.send(":ping_pong: | Pong! ``" + (bot.ping) + " ms``");
   }
   //Math.round in from of (bot.ping) if u want the number rounded
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "delete") {
-    var msg;
+    let msg;
     if (!args[0]) {
       message.channel.sendMessage(":grey_question: | How many?");
     }
@@ -358,12 +365,12 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "invite") {
-    _super.delete(message);
-    var embed = new Discord.RichEmbed()
+    this.delete(message);
+    let embed = new Discord.RichEmbed()
       .setDescription('```css\nInvite ' + `${config.name}` + ' to your server!\n```' + `${'\r\n'}` + '' + `${'\r\n'}` + '**' + `${config.name}` + ' Information:**' + `${'\r\n'}` + `${config.name}` + ' is a Discord.js bot that you can have fun with _and_ moderate with. In your server do `t-help` and a list of all my command will pop up.')
       .addField(`**${config.name}'s Help Server**`, `[Click Here to join](https://discord.gg/Gf7hb33)`)
       .addField(`${config.name} Invitation Link`, `[Click Here to Invite](https://discordapp.com/oauth2/authorize?client_id=334386617626263553&scope=bot&permissions=305196094)`, true)
-      .setColor(Tsubaki.green)
+      .setColor(Tsubaki.color.green)
     message.author.sendEmbed(embed);
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -389,16 +396,16 @@ bot.on("message", message => {
       message.channel.send(":exclamation: | Please mention a valid user");
     }
     else {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription(`${memberID.id}`)
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === '8ball') {
     let ball = message.content.split(' ')[1];
-    var balls = [
+    let balls = [
       ':crystal_ball: | **It is certain!**',
       ':crystal_ball: | **It is decidedly so!**',
       ':crystal_ball: | **Without a doubt!**',
@@ -427,203 +434,203 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'profile') {
-    _super.delete(message);
+    this.delete(message);
     let profileMention = message.mentions.users.first();
     if (profileMention == '' || profileMention === undefined) return message.channel.send("Mention the person that you want the profile from!");
     else {
       let profileEmbedAuthor = message.mentions.users.first().username
-      var profileEmbed = new Discord.RichEmbed()
+      let profileEmbed = new Discord.RichEmbed()
         .setDescription(`Profile of ${profileMention}`)
         .setImage(`${profileMention.avatarURL}`)
-        .setColor(Tsubaki.green)
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: profileEmbed });
     }
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "guilds") {
-    _super.delete(message);
-    var guildsListing = bot.guilds.array()
+    this.delete(message);
+    let guildsListing = bot.guilds.array()
     message.channel.send(`${guildInfo(message, guildsListing)}`)
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "cmds") {
-    _super.delete(message);
+    this.delete(message);
     if (!args[0]) {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("Which command would you like to see more of? **Example:** `t-cmds help`")
         .setColor('eef442')
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "ping") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `ping`\n**Description:** Returns " + `${config.name}` + "'s ping.\n\n**Usage:** `t-ping`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "invite") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `invite`\n**Description:** " + `${config.name}` + " will private message you information about her, including her invite link.\n\n**Usage:** `t-invite`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "help") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `help`\n**Description:** Displays help list.\n\n**Usage:** `t-help`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "8ball") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `8ball`\n**Description:** " + `${config.name}` + " will give you answers to yes or no questions.\n\n**Usage:** `t-8ball <Question>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "add") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `add`\n**Description:** Will add numbers given.\n\n**Usage:** `t-add <1 & 5|2 & 4 & 6>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "say") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `say`\n**Description:** " + `${config.name}` + " will say any message given.\n\n**Usage:** `t-say <Any sentence or words>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "embed") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `embed`\n**Description:** Will embed any message given.\n\n**Usage:** `t-embed <Any sentence or word>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "dice") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `dice`\n**Description:** " + `${config.name}` + " will roll the dice and give you a random number.\n\n**Usage:** `t-dice`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "delete") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `delete`\n**Description:** Will delete given number of messages.\n\n**Usage:** `t-delete <Greater than 1, less that 100>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "kick") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `kick`\n**Description:** Will kick mentioned player.\n\n**Usage:** `t-kick <@mention>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "ban") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `ban`\n**Description:** Will ban mentioned player.\n\n**Usage:** `t-ban <@mention>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "unban") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `unban`\n**Description:** Will unban the user you give the id for.\n\n**Usage:** `t-unban <player id>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "id") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `id`\n**Description:** Will show id of mentioned player.\n\n**Usage:** `t-id <@mention>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "stats") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `stats`\n**Description:** Will show guilds, users, and channels " + `${config.name}` + " is in.\n\n**Usage:** `t-stats`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "profile") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `profile`\n**Description:** Will show you profile picture of mentioned user.\n\n**Usage:** `t-profile <@mention>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "dog") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `dog`\n**Description:** Will give random picture of a dog.\n\n**Usage:** `t-dog`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "cat") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `cat`\n**Description:** Will give random picture of a cat.\n\n**Usage:** `t-cat`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "banana") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `banana`\n**Description:** Will give mentioned player banana.\n\n**Usage:** `t-banana <@mention>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "urban") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `urban`\n**Description:** Will define any word using Urban Dictionary.\n\n**Usage:** `t-urban <word>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "dictionary") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `dictionary`\n**Description:** Will define any word using traditonal dictionary.\n\n**Usage:** `t-dictionary <word>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "support") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `support`\n**Description:** " + `${config.name}` + " will private message you the support server link.\n\n**Usage:** `t-support`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "tts") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `tts`\n**Description:** Will say any message aloud.\n\n**Usage:** `t-tts <Any sentence or word>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "getbanana") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `getbanana`\n**Description:** Will give you a banana, and list your current bananas.\n\n**Usage:** `t-getbanana`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "cmds") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `cmds`\n**Description:** Will show you information about commands.\n\n**Usage:** `t-cmds <command>`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "coin") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `coin`\n**Description:** " + `${config.name}` + " will flip a coin for you.\n\n**Usage:** `t-coin`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "welcome") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `welcome`\n**Description:** Toggle welcome messages.\n\n**Usage:** `t-welcome <enable | disable> (Channel ID)`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "info") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `info`\n**Description:** Shows " + `${config.name}` + "'s information.\n\n**Usage:** `t-info`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else if (args[0] == "changelog") {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription("**Command:** `changelog`\n**Description:** Shows " + `${config.name}` + "'s change logs.\n\n**Usage:** `t-changelog`")
-        .setColor('Tsubaki.green')
+        .setColor(Tsubaki.color.green)
       message.channel.send({ embed: embed });
     }
     else {
-      var embed = new Discord.RichEmbed()
+      let embed = new Discord.RichEmbed()
         .setDescription(":exclamation: | I am sorry, I did not understand what you said. Please try again!")
         .setColor('ff0000')
       message.channel.send({ embed: embed });
@@ -631,9 +638,9 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'dice') {
-    _super.delete(message);
+    this.delete(message);
     let number = message.content.split(' ')[1];
-    var numbers = [
+    let numbers = [
       '1',
       '2',
       '3',
@@ -645,17 +652,17 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'cat') {
-    _super.delete(message);
+    this.delete(message);
     random.cat().then(url => message.channel.send(url)).catch(err => console.log(err.message));
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'dog') {
-    _super.delete(message);
+    this.delete(message);
     random.dog().then(url => message.channel.send(url)).catch(err => console.log(err.message));
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "banana") {
-    _super.delete(message);
+    this.delete(message);
     let memberMention = message.mentions.users.first();
     if (memberMention == message.author) return message.channel.send(":x: | Don't be greedy, sweetie~ :kissing_heart:");
     if (memberMention == '' || memberMention === undefined) return message.channel.send("Mention a player to give a banana!");
@@ -664,15 +671,15 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "urban") {
-    _super.delete(message);
+    this.delete(message);
     let toDefine = message.content.split(' ')[1];
     if (toDefine == "" || toDefine === undefined) return message.channel.send(":book: | Provide a word to urban define!");
     else {
       webdict("urbandictionary", toDefine).then(resp => {
         let result = resp.definition[0];
-        var guildEmbed = new Discord.RichEmbed()
+        let guildEmbed = new Discord.RichEmbed()
           .setDescription("**Word:** " + '`' + `${toDefine}` + '` ' + `${'\r\n'}**Urban Definition:**` + ' ' + `${result}` + '')
-          .setColor(Tsubaki.green)
+          .setColor(Tsubaki.color.green)
           .setFooter(`${config.name} Dictionary`)
         message.channel.send({ embed: guildEmbed });
       });
@@ -680,15 +687,15 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "dictionary") {
-    _super.delete(message);
+    this.delete(message);
     let toDefine = message.content.split(' ')[1];
     if (toDefine == "" || toDefine === undefined) return message.channel.send(":book: | Provide a word to urban define!");
     else {
       webdict("dictionary", toDefine).then(resp => {
         let result = resp.definition[0];
-        var guildEmbed = new Discord.RichEmbed()
+        let guildEmbed = new Discord.RichEmbed()
           .setDescription("**Word:** " + '`' + `${toDefine}` + '` ' + `${'\r\n'}**Definition:**` + ' ' + `${result}` + '')
-          .setColor(Tsubaki.green)
+          .setColor(Tsubaki.color.green)
           .setFooter(`${config.name} Dictionary`)
         message.channel.send({ embed: guildEmbed });
       });
@@ -696,47 +703,47 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "support") {
-    _super.delete(message);
-    var embed = new Discord.RichEmbed()
+    this.delete(message);
+    let embed = new Discord.RichEmbed()
       .setDescription('```js\n"Have Questions or need help?"\n```' + `${'\r\n'}` + '' + `${'\r\n'}` + '**' + `${config.name}` + ' Information:**' + `${'\r\n'}` + `${config.name}` + ' is a Discord.js bot that you can have fun with _and_ moderate with. In your do `t-help` and a list of all my command will pop up.')
       .addField(`**${config.name}'s Help Server**`, `[Click Here to join](https://discord.gg/Gf7hb33)`)
-      .setColor(Tsubaki.green)
+      .setColor(Tsubaki.color.green)
     message.author.sendEmbed(embed);
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "tts") {
-    _super.delete(message);
+    this.delete(message);
     message.channel.send(args.join(" "), { tts: true });
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "getbanana") {
-    _super.delete(message);
+    this.delete(message);
     message.reply(' | _You are currently Banana level_' + ' `' + `${userData.level}` + '` ' + '_, with_' + ' `' + `${userData.points}` + '` ' + 'Bananas!');
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "stats") {
-    _super.delete(message);
-    var guildEmbed = new Discord.RichEmbed()
+    this.delete(message);
+    let guildEmbed = new Discord.RichEmbed()
       .setDescription('`' + `${config.name}` + '` Guild Stats:')
       .addField('Guilds', `${bot.guilds.size}`)//${bot.guilds.size} //old: `48`
       .addField('Users', `${bot.users.size}`)
       .addField('Channels', `${bot.channels.size}`)
-      .setColor(Tsubaki.green)
+      .setColor(Tsubaki.color.green)
       .setFooter(`${config.name}` + ' Stats')
     message.channel.send({ embed: guildEmbed });
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "info") {
-    _super.delete(message);
-    var guildEmbed = new Discord.RichEmbed()
+    this.delete(message);
+    let guildEmbed = new Discord.RichEmbed()
       .setDescription("**Information About " + `${config.name}` + "**\n\n     " + `${config.name}` + " is a **Discord.js** bot. She can be used for moderation, administration, utility, and just for fun. She has a wide range of commands everyone will enjoy, and she is constantly being updated and added to.")
       .setColor(0xFFFFFF)
     message.channel.send({ embed: guildEmbed });
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "changelog") {
-    _super.delete(message);
-    var guildEmbed = new Discord.RichEmbed()
+    this.delete(message);
+    let guildEmbed = new Discord.RichEmbed()
       .setDescription("not done ;)")
       .setColor(0xFFFFFF)
     message.channel.send({ embed: guildEmbed });
@@ -755,9 +762,9 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === 'coin') {
-    _super.delete(message);
+    this.delete(message);
     let coin = message.content.split(' ')[1];
-    var coins = [
+    let coins = [
       '**Heads!**',
       '**Tails!**',
     ]
@@ -765,10 +772,10 @@ bot.on("message", message => {
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   else if (command === "help") {
-    _super.delete(message);
-    var guildEmbed = new Discord.RichEmbed()
+    this.delete(message);
+    let guildEmbed = new Discord.RichEmbed()
       .setDescription("**" + `${config.name}` + " Command List**\n\nDo **t-cmds [command]** and replace **[command]** with any command you want to learn more about.\n\n**Core-** " + "`" + "help" + "`" + " " + "`" + "ping" + "`" + "\n**Fun-** " + "`" + "8ball" + "`" + " " + "`" + "say" + "`" + " " + "`" + "embed" + "`" + " " + "`" + "dice" + "`" + " " + "`" + "cat" + "`" + " " + "`" + "dog" + "`" + " " + "`" + "banana" + "`" + " " + "`" + "tts" + "`" + " " + "`" + "getbanana" + "`" + " " + "`" + "coin" + "`" + "\n**Utility-** " + "`" + "add" + "`" + " " + "`" + "urban" + "`" + " " + "`" + "dictionary" + "`" + " " + "`" + "cmds" + "`" + "" + "\n**Admin-** " + "`" + "delete" + "`" + " " + "`" + "kick" + "`" + " " + "`" + "ban" + "`" + " " + "`" + "unban" + "`" + " " + "`" + "id" + "`" + " " + "`" + "welcome" + "`" + "\n**Information-** " + "`" + "stats" + "`" + " " + "`" + "profile" + "`" + " " + "`" + "invite" + "`" + " " + "`" + "support" + "`" + " " + "`" + "info" + "`" + " " + "`" + "changelog" + "`" + "\n**Music-** `leave` `queue` `play` `pause` `resume` `skip` `clearqueue`\n**Disabled-** `cid` `gid` `music`" + "\n\nYou can also talk to " + `${config.name}` + " by saying **Hi " + `${config.name}` + "**, **Help " + `${config.name}` + "**, or **" + `${config.name}` + "**.\n")
-      .setColor(Tsubaki.green)
+      .setColor(Tsubaki.color.green)
     message.channel.send({ embed: guildEmbed });
   } */
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -780,7 +787,7 @@ bot.on("message", message => {
 
 if (!String.prototype.format) {
   String.prototype.format = function () {
-    var args = arguments;
+    let args = arguments;
     return this.replace(/{(\d+)}/g, function (match, number) {
       return typeof args[number] != 'undefined' ? args[number] : match;
     });
@@ -798,6 +805,7 @@ bot.login(config.token);
 module.exports.prefix = config.prefix,
 module.exports.name = config.name;
 module.exports.nameIn = config.nameIn;
+module.exports.color = color;
 module.exports.commands = function () {
   return commands;
 };

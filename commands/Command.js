@@ -1,7 +1,7 @@
 const Tsubaki = require("../Tsubaki.js");
 const Discord = require("discord.js");
 
-var method = Command.prototype;
+let method = Command.prototype;
 
 function Command(command, description, usage) {
   this._command = command;
@@ -23,6 +23,13 @@ method.getDescription = function () {
 
 method.getUsage = function () {
   return this._usage;
+};
+
+method.getInformation = function () {
+  return Tsubaki.Style.bold(Tsubaki.name + " Information:") + "\n"
+    + Tsubaki.name + " is a Discord.js bot that you can have fun with "
+    + Tsubaki.Style.italicize(and) + " moderate with. In your server do "
+    + Tsubaki.Style.code(new Help().getUsage()) + " and a list of all my command will pop up.";
 };
 
 method.delete = function (message) {
