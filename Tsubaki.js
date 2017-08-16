@@ -42,12 +42,12 @@ const ChangeLog = require("./commands/information/Changelog.js"); */
 
 var servers = {};
 var commands = [
-  ["Information", new Help(), new Stats(), new Avatar(), new Invite(), new Support(), new Info(), new ChangeLog()],
+  ["Information", new Help(), new Stats(), new Avatar(), new Invite()/* , new Support(), new Info(), new ChangeLog()],
   ["Fun", new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
   ["Utility", new Ping(), new Add(), new Urban(), new Dictionary()],
   ["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Id(), new Welcome()],
   ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],
-  ["Disabled", new Cid(), new Gid(), new Music()]
+  ["Disabled", new Cid(), new Gid(), new Music() */]
 ];
 
 /*function listGuilds(message, listOfGuilds) {
@@ -83,7 +83,7 @@ function cmdLogger(message, bot) {
 }
 
 bot.on("ready", () => {
-  console.log(chalk.Tsubaki.green("{0} has started, with {1} users, in {2} channels of {3} guilds.".format(config.name, bot.users.size, bot.channels.size, bot.guilds.size)));
+  console.log(chalk.green("{0} has started, with {1} users, in {2} channels of {3} guilds.".format(config.name, bot.users.size, bot.channels.size, bot.guilds.size)));
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
 
@@ -780,6 +780,8 @@ if (!String.prototype.includesIgnoreCase) {
 
 bot.login(config.token);
 
-module.exports.config = config;
+module.exports.prefix = config.prefix,
+module.exports.name = config.name;
+module.exports.nameIn = config.nameIn;
 module.exports.commands = commands;
 module.exports.Style = Style;

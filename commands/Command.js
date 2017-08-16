@@ -5,7 +5,7 @@ var method = Command.prototype;
 function Command(command, description, usage) {
   this._command = command;
   this._description = description;
-  this._usage = Tsubaki.config.prefix + command + usage;
+  this._usage = Tsubaki.prefix + command + usage;
 }
 
 method.execute = function () {

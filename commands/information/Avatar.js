@@ -6,7 +6,7 @@ var method = Avatar.prototype = Object.create(_super);
 method.constructor = Avatar;
 
 function Avatar() {
-  _super.constructor.apply(this, "avatar", ["Will show you the profile picture of the mentioned user.", " <@mention>"]);
+  _super.constructor.apply(this, ["avatar", "Will show you the profile picture of the mentioned user.", " <@mention>"]);
 }
 
 method.execute = function (message) {
