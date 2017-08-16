@@ -1,4 +1,4 @@
-// Made by the baddest bitch in town: Khux.//
+// Made by the best baddest bitch in town: Khux, and a little help from david or whatever.//
 
 // Set up, load config
 const Discord = require("discord.js");
