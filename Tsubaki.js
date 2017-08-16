@@ -10,7 +10,9 @@ const Style = require("./Style.js");
 
 const bot = new Discord.Client();
 
-music(bot);
+music(bot, {
+  prefix: config.prefix
+});
 
 const logger = "341827696629776396";
 const guildLogger = "342832229510021120";
@@ -58,6 +60,21 @@ const Add = require("./commands/utility/Add.js");
 const Urban = require("./commands/utility/Urban.js");
 const Dictionary = require("./commands/utility/Dictionary.js");
 
+/*const Leave = require("./commands/music/Leave.js");
+const Queue = require("./commands/music/Queue.js");
+const Play = require("./commands/music/Play.js");
+const Pause = require("./commands/music/Pause.js");
+const Resume = require("./commands/music/Resume.js");
+const Skip = require("./commands/music/Skip.js");
+const ClearQueue = require("./commands/music/ClearQueue.js");*/
+
+const Delete = require("./commands/admin/Delete.js");
+const Kick = require("./commands/admin/Kick.js");
+const Ban = require("./commands/admin/Ban.js");
+const UnBan = require("./commands/admin/UnBan.js");
+const Id = require("./commands/admin/Id.js");
+const Welcome = require("./commands/admin/Welcome.js");
+
 let servers = {};
 let commands = [];
 
@@ -97,6 +114,14 @@ function cmdLogger(message, bot) {
 bot.on("ready", () => {
   console.log(chalk.green("{0} has started, with {1} users, in {2} channels of {3} guilds."
     .format(config.name, bot.users.size, bot.channels.size, bot.guilds.size)));
+  
+  var embed = new Discord.RichEmbed()
+    .setTitle("Hello there!")
+    .setDescription(":wave: I'm " + Style.bold(config.name) + ".\nDo " + Style.code(new Help().getUsage()) + " to see my commands!")
+    .setAuthor("<@" + khuxTag + "> and <@" + davidTag + ">");
+  for (let i = 0, len = bot.channels.size; i < len; i++) {
+    if (bot.channels[i].type === "text") bot.channels[i].send({ embed: embed });
+  }
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
 
@@ -130,7 +155,7 @@ bot.on("guildMemberAdd", (member) => {
   }
 });
 
-bot.on('guildBanAdd', (guild, user) => {
+bot.on("guildBanAdd", (guild, user) => {
   bot.channels.get(modLogger).send("{0} (id: {1}) was banned from: {2} (id: {3})"
     .format(user.tag, user.id, guild.name, guild.id));
 });
@@ -140,9 +165,9 @@ bot.on("message", message => {
     commands = [
       ["Information", new Help(), new Stats(), new Avatar(), new Invite(), new Support(), new Info(), new ChangeLog()] ,
       ["Fun", new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
-      ["Utility", new Ping(), new Add(), new Urban(), new Dictionary()]/*,
-      ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],
-      ["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Id(), new Welcome()],
+      ["Utility", new Ping(), new Add(), new Urban(), new Dictionary()],
+      /*["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
+      ["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Id(), new Welcome()]/*,
       ["Owner", new Playing(), new Guilds()]*/
     ];
   }
