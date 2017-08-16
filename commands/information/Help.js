@@ -1,5 +1,4 @@
 const Tsubaki = require("../../Tsubaki.js");
-const Cmds = require("../utility/Cmds.js");
 
 var _super = require("../Command.js").prototype;
 var method = Help.prototype = Object.create(_super);
@@ -20,7 +19,7 @@ method.execute = function (message) {
     description += "\n" + Tsubaki.Style.bold(cmds[i][0] + ": ");
 
     for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
-      description += Tsubaki.Style.code(cmds[i][j]) + " ";
+      description += Tsubaki.Style.code(cmds[i][j].getCommand()) + " ";
     }
   }
 
