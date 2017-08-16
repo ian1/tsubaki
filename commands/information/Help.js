@@ -10,7 +10,7 @@ function Help() {
   _super.constructor.apply(this, ["help", "Displays the command list.", " [command]"]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, points) {
   this.delete(message);
   let cmds = Tsubaki.commands();
 

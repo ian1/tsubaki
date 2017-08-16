@@ -38,3 +38,27 @@ method.delete = function (message) {
 }
 
 module.exports = Command;
+
+/*
+// TEMPLATE
+
+const Tsubaki = require("../../Tsubaki.js");
+const Discord = require("discord.js");
+
+let _super = require("../Command.js").prototype;
+let method = NAME.prototype = Object.create(_super);
+
+method.constructor = NAME;
+
+function NAME() {
+  _super.constructor.apply(this, ["COMMAND", "DESCRIPTION", "USAGE"]);
+}
+
+method.execute = function (message, args, bot, points) {
+  this.delete(message);
+  // ACTION
+}
+
+module.exports = NAME;
+
+*/

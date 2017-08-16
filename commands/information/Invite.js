@@ -10,7 +10,7 @@ function Invite() {
   _super.constructor.apply(this, ["invite", Tsubaki.name + " will private message you information about her, including her invite link.", ""]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, points) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.codeBlock("Invite " + Tsubaki.name + " to your server!", "css") + "\n\n" + this.getInformation())

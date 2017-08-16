@@ -11,14 +11,14 @@ function Avatar() {
     " <@mention>"]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, points) {
   this.delete(message);
-
   let profileMention = message.mentions.users.first();
+  
   if (profileMention == "" || profileMention === undefined) {
     return message.channel.send("Mention the person that you want the profile from!");
   } else {
-    let profileEmbedAuthor = message.mentions.users.first().username
+    let profileEmbedAuthor = profileMention.username
     let profileEmbed = new Discord.RichEmbed()
       .setDescription("Profile of " + profileMention)
       .setImage(profileMention.avatarURL)
