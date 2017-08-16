@@ -15,19 +15,22 @@ method.execute = function (message, args, bot, points) {
   this.delete(message);
   this.delete(message);
   let toDefine = message.content.split(' ')[1];
-  if (toDefine == "" || toDefine === undefined) return message.channel.send(":book:  Provide a word to urban define!");
+  if (toDefine == "" || toDefine === undefined) return message.channel.send({ embed: Tsubaki.Style.error("Provide a word to define! :book:") });
   else {
     webdict("dictionary", toDefine).then(resp => {
       let result = resp.definition[0];
-      if (result == "" || result === undefined) {
-        message.channel.send({ embed: Tsubaki.Style.error("Hmm... I can't find that word. Try another one!") });
+      if (resp.statusCode === "200") {
+        message.channel.send({ embed: Tsubaki.Style.error("Hmm... I can't find that word. Please check the spelling!") });
       } else {
         let embed = new Discord.RichEmbed()
           .setDescription(Tsubaki.Style.bold("Word:") + " " + Tsubaki.Style.code(toDefine) + "\n" + Tsubaki.Style.bold("Definition:") + " " + Tsubaki.Style.code(result))
           .setColor(Tsubaki.color.green)
-          .setFooter(Tsubaki.name + "Dictionary");
+          .setFooter(Tsubaki.name + " Dictionary");
         message.channel.send({ embed: embed });
-      }  
+      }
+    }).catch(err => {
+      console.log(err.message);
+      message.channel.send({ embed: Tsubaki.Style.errorGeneric() });
     });
   }
 }
