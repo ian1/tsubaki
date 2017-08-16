@@ -15,6 +15,8 @@ music(bot, {
   prefix: config.prefix
 });
 
+const adminPermission = "ADMINISTRATOR";
+
 const logger = "341827696629776396";
 const guildLogger = "342832229510021120";
 const modLogger = "342837394766168064";
@@ -31,6 +33,7 @@ const davidReact = "";
 // Color codes
 const color = {
   white: "0xFFFFFF",
+  gray: "0x4F545C",
   green: "0x42F44E",
   yellow: "0xFFBF00",
   red: "0xFF0000"
@@ -39,7 +42,7 @@ const color = {
 // Load commands
 const Help = require("./commands/information/Help.js");
 const Stats = require("./commands/information/Stats.js");
-const Avatar = require("./commands/information/Avatar.js");
+const Profile = require("./commands/information/Profile.js");
 const Invite = require("./commands/information/Invite.js");
 const Support = require("./commands/information/Support.js");
 const Info = require("./commands/information/Info.js");
@@ -69,12 +72,11 @@ const Resume = require("./commands/music/Resume.js");
 const Skip = require("./commands/music/Skip.js");
 const ClearQueue = require("./commands/music/ClearQueue.js");*/
 
-/*const Delete = require("./commands/admin/Delete.js");
+const Delete = require("./commands/admin/Delete.js");
 const Kick = require("./commands/admin/Kick.js");
 const Ban = require("./commands/admin/Ban.js");
 const UnBan = require("./commands/admin/UnBan.js");
-const Id = require("./commands/admin/Id.js");
-const Welcome = require("./commands/admin/Welcome.js");*/
+const Welcome = require("./commands/admin/Welcome.js");
 
 let servers = {};
 let commands = [];
@@ -164,11 +166,11 @@ bot.on("guildBanAdd", (guild, user) => {
 bot.on("message", message => {
   if (commands.length == 0) {
     commands = [
-      ["Information", new Help(), new Stats(), new Avatar(), new Invite(), new Support(), new Info(), new ChangeLog()] ,
+      ["Information", new Help(), new Stats(), new Profile(), new Invite(), new Support(), new Info(), new ChangeLog()] ,
       ["Fun", new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
       ["Utility", new Ping(), new Add(), new Urban(), new Dictionary()],
       /*["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
-      /*["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Id(), new Welcome()]*//*,
+      ["Admin", new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()]/*,
       ["Owner", new Playing(), new Guilds()]*/
     ];
   }
@@ -231,10 +233,7 @@ bot.on("message", message => {
     }
   }
   if (!found) {
-    var embed = new Discord.RichEmbed()
-      .setDescription(":exclamation: Uh oh, I didn't find that command! Try " + config.prefix + new Help().getCommand() + ".")
-      .setColor(color.red)
-    message.channel.send({ embed: embed });
+    message.channel.send({ embed: Style.warn("Uh oh, I didn't find that command! Try " + Style.code(config.prefix + new Help().getCommand()) + ".") });
   }  
   
   /* if (command === "welcome") {
@@ -851,6 +850,8 @@ bot.login(config.token);
 module.exports.prefix = config.prefix,
 module.exports.name = config.name;
 module.exports.nameIn = config.nameIn;
+module.exports.author = package.author;
+module.exports.adminPermission = adminPermission;
 module.exports.color = color;
 module.exports.commands = function () {
   return commands;

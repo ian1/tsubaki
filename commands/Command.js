@@ -13,6 +13,10 @@ method.execute = function () {
   throw new Error("Abstract method!");
 };
 
+method.executeAdmin = function () {
+  throw new Error("Abstract method!");
+};
+
 method.getCommand = function () {
   return this._command;
 };

@@ -31,6 +31,13 @@ module.exports = {
     return "```" + lang + "\n" + text + "\n```";
   },
 
+  success: function (text) {
+    var embed = new Discord.RichEmbed()
+      .setDescription(":thumbsup: " + text)
+      .setColor(Tsubaki.color.green);
+    return embed;
+  },
+
   error: function (text) {
     var embed = new Discord.RichEmbed()
       .setDescription(":exclamation: " + text)
@@ -48,4 +55,9 @@ module.exports = {
       .setColor(Tsubaki.color.yellow);
     return embed;
   },
+
+  unknownUser: function () {
+    return warn(":thinking: Sorry... I don't know who that is. "
+      + "Please try again, make sure you use @ to mention the user!");
+  }
 }

@@ -19,11 +19,13 @@ method.execute = function (message, args, bot, points) {
       + "Do " + Tsubaki.Style.bold(this.getUsage()) + " and replace " + Tsubaki.Style.bold("[command]")
       + " with any command you want to learn more about." + "\n";
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
-      description += "\n" + Tsubaki.Style.bold(cmds[i][0] + ": ");
+      if (cmds[i][0] !== "Admin" || message.member === undefined || message.member.hasPermission(Tsubaki.adminPermission)) {
+        description += "\n" + Tsubaki.Style.bold(cmds[i][0] + ": ");
 
-      for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
-        description += Tsubaki.Style.code(cmds[i][j].getCommand()) + " ";
-      }
+        for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
+          description += Tsubaki.Style.code(cmds[i][j].getCommand()) + " ";
+        }
+      }  
     }
 
     let embed = new Discord.RichEmbed()
@@ -46,7 +48,7 @@ method.execute = function (message, args, bot, points) {
         }
       }
     }
-    message.channel.send({ embed: Tsubaki.Style.warn("Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".") });
+    message.channel.send({ embed: Tsubaki.Style.warn("Uh oh, I didn't find that command! Try " + Tsubaki.Style.code(Tsubaki.prefix + new Help().getCommand()) + ".") });
   }
 }
 
