@@ -1,5 +1,5 @@
 const Tsubaki = require("../../Tsubaki.js");
-const Discord = require("../../discord.js");
+const Discord = require("discord.js");
 
 var _super = require("../Command.js").prototype;
 var method = Stats.prototype = Object.create(_super);
