@@ -6,7 +6,7 @@ var method = Stats.prototype = Object.create(_super);
 method.constructor = Stats;
 
 function Stats() {
-  _super.constructor.apply(this, "stats", "Will show guilds, users, and channels " + Tsubaki.config.name + " is in.", "");
+  _super.constructor.apply(this, ["stats", "Will show guilds, users, and channels " + Tsubaki.config.name + " is in.", ""]);
 }
 
 method.execute = function (message) {

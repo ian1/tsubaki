@@ -134,12 +134,20 @@ bot.on("message", message => {
     message.channel.send("Hi there, if you need help do  ``t-help``!");
   }*/
 
-  if (lowerMsg.includesIgnoreCase(config.nameIn) || lowerMsg.includesIgnoreCase(config.name) || lowerMsg.includesIgnoreCase("<@" + tsubakiTag + ">")) message.react(tsubakiReact);
-  if (lowerMsg.includesIgnoreCase("khux") || lowerMsg.includesIgnoreCase("<@" + khuxTag + ">")) message.react(khuxReact);
-  if (lowerMsg.includesIgnoreCase("pan") || lowerMsg.includesIgnoreCase("david") || lowerMsg.includesIgnoreCase("<@" + davidTag + ">")) message.react('346848029833297920');
+  // Reacts
+  if (lowerMsg.includesIgnoreCase(config.nameIn) || lowerMsg.includesIgnoreCase(config.name) ||
+    lowerMsg.includesIgnoreCase("<@" + tsubakiTag + ">")) message.react(tsubakiReact);
+
+  if (lowerMsg.includesIgnoreCase("khux") || lowerMsg.includesIgnoreCase("<@" + khuxTag + ">"))
+    message.react(khuxReact);
+
+  if (lowerMsg.includesIgnoreCase("pan") || lowerMsg.includesIgnoreCase("david") ||
+    lowerMsg.includesIgnoreCase("<@" + davidTag + ">")) message.react('346848029833297920');
+
+  // Correct user for old prefix
   if (lowerMsg.startsWith("t-")) {
     message.channel.send(":exclamation: Hey, the prefix is now " + Style.code("t:") + "!");
-    message.content = message.content.replace("t-", "t:");
+    message.content = message.content.replace("t-", config.prefix);
   }
 
   if (!message.content.startsWith(config.prefix) || message.author.id == "") return;

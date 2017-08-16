@@ -6,7 +6,7 @@ var method = Help.prototype = Object.create(_super);
 method.constructor = Help;
 
 function Help() {
-  _super.constructor.apply(this, "help", "Displays the command list.", "");
+  _super.constructor.apply(this, ["help", "Displays the command list.", ""]);
 }
 
 method.execute = function (message) {

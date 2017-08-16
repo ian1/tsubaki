@@ -6,7 +6,7 @@ var method = Invite.prototype = Object.create(_super);
 method.constructor = Invite;
 
 function Invite() {
-  _super.constructor.apply(this, "invite", Tsubaki.config.name + " will private message you information about her, including her invite link.", "");
+  _super.constructor.apply(this, ["invite", Tsubaki.config.name + " will private message you information about her, including her invite link.", ""]);
 }
 
 method.execute = function (message) {
