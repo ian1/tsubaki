@@ -120,7 +120,7 @@ bot.on("ready", () => {
     .setDescription(":wave: I'm " + Style.bold(config.name) + ".\nDo " + Style.code(new Help().getUsage()) + " to see my commands!")
     .setAuthor("<@" + khuxTag + "> and <@" + davidTag + ">");
   for (let i = 0, len = bot.channels.size; i < len; i++) {
-    if (bot.channels[i].type === "text") bot.channels[i].send({ embed: embed });
+    if (bot.channels[i].type === "text") bot.channels.array()[i].send({ embed: embed });
   }
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
