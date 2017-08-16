@@ -14,7 +14,7 @@ method.execute = function (message) {
   let cmds = Tsubaki.commands;
 
   let description = Tsubaki.Style.bold("Tsubaki Command List") + "\n\n"
-    + "Do " + Tsubaki.Style.bold(Cmds.getUsage()) + " and replace " + Tsubaki.Style.bold("[command]") + " with any command you want to learn more about." + "\n";
+    + "Do " + Tsubaki.Style.bold(help.getUsage()) + " and replace " + Tsubaki.Style.bold("[command]") + " with any command you want to learn more about." + "\n";
   for (let i = 0, lenI = cmds.length; i < lenI; i++) {
     description += "\n" + Tsubaki.Style.bold(cmds[i][0] + ": ");
 
