@@ -29,7 +29,7 @@ const davidReact = "";
 
 // Color codes
 const white = "0xFFFFFF";
-const Tsubaki.green = "0x42F44E";
+const green = "0x42F44E";
 
 // Load commands
 const Help = require("./commands/information/Help.js");
@@ -160,7 +160,7 @@ bot.on("message", message => {
     message.reply(":arrow_up: | " + Style.italicize("You've just leveled up to level " + curLevel + "!"));
   }
   
-  if (command === "welcome") {
+  /* if (command === "welcome") {
     let hasAdmin = message.member.hasPermission('ADMINISTRATOR');
     let suffix = message.content.split(' ').slice(1)[1];
 
@@ -747,7 +747,7 @@ bot.on("message", message => {
       .setDescription("**" + `${config.name}` + " Command List**\n\nDo **t-cmds [command]** and replace **[command]** with any command you want to learn more about.\n\n**Core-** " + "`" + "help" + "`" + " " + "`" + "ping" + "`" + "\n**Fun-** " + "`" + "8ball" + "`" + " " + "`" + "say" + "`" + " " + "`" + "embed" + "`" + " " + "`" + "dice" + "`" + " " + "`" + "cat" + "`" + " " + "`" + "dog" + "`" + " " + "`" + "banana" + "`" + " " + "`" + "tts" + "`" + " " + "`" + "getbanana" + "`" + " " + "`" + "coin" + "`" + "\n**Utility-** " + "`" + "add" + "`" + " " + "`" + "urban" + "`" + " " + "`" + "dictionary" + "`" + " " + "`" + "cmds" + "`" + "" + "\n**Admin-** " + "`" + "delete" + "`" + " " + "`" + "kick" + "`" + " " + "`" + "ban" + "`" + " " + "`" + "unban" + "`" + " " + "`" + "id" + "`" + " " + "`" + "welcome" + "`" + "\n**Information-** " + "`" + "stats" + "`" + " " + "`" + "profile" + "`" + " " + "`" + "invite" + "`" + " " + "`" + "support" + "`" + " " + "`" + "info" + "`" + " " + "`" + "changelog" + "`" + "\n**Music-** `leave` `queue` `play` `pause` `resume` `skip` `clearqueue`\n**Disabled-** `cid` `gid` `music`" + "\n\nYou can also talk to " + `${config.name}` + " by saying **Hi " + `${config.name}` + "**, **Help " + `${config.name}` + "**, or **" + `${config.name}` + "**.\n")
       .setColor(Tsubaki.green)
     message.channel.send({ embed: guildEmbed });
-  }
+  } */
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   fs.writeFile("./points.json", JSON.stringify(points), (err) => {
     if (err) console.error(err)
