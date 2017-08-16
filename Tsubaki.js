@@ -167,6 +167,17 @@ bot.on("message", message => {
     userData.level = curLevel;
     message.reply(":arrow_up: | " + Style.italicize("You've just leveled up to level " + curLevel + "!"));
   }
+
+  let found = false;
+
+  for (let i = 0, lenI = commands.length; i < lenI && !found; i++) {
+    for (let j = 0, lenJ = commands[i].length; j < lenJ && !found; j++) {
+      if (command === commands[i][j].getCommand())
+        commands[i][j].execute(args);
+        found = true;
+        break;
+    }
+  }
   
   /* if (command === "welcome") {
     let hasAdmin = message.member.hasPermission('ADMINISTRATOR');
