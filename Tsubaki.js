@@ -171,11 +171,12 @@ bot.on("message", message => {
   let found = false;
 
   for (let i = 0, lenI = commands.length; i < lenI && !found; i++) {
-    for (let j = 0, lenJ = commands[i].length; j < lenJ && !found; j++) {
-      if (command === commands[i][j].getCommand())
+    for (let j = 1, lenJ = commands[i].length; j < lenJ && !found; j++) {
+      if (command === commands[i][j].getCommand()) {
         commands[i][j].execute(args);
         found = true;
         break;
+      }
     }
   }
   
