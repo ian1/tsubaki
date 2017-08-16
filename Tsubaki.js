@@ -201,8 +201,8 @@ bot.on("message", message => {
   }
   if (!found) {
     var embed = new Discord.RichEmbed()
-      .setDescription(":exclamation: Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".")
-      .setColor(Tsubaki.color.red)
+      .setDescription(":exclamation: Uh oh, I didn't find that command! Try " + config.prefix + new Help().getCommand() + ".")
+      .setColor(color.red)
     message.channel.send({ embed: embed });
   }  
   
