@@ -794,7 +794,7 @@ bot.on("message", message => {
       .setColor(Tsubaki.color.green)
     message.channel.send({ embed: guildEmbed });
   } */
-  
+
   fs.writeFile("./points.json", JSON.stringify(points), (err) => {
     if (err) console.error(err)
   });
@@ -825,6 +825,6 @@ module.exports.commands = function () {
   return commands;
 };
 module.exports.Style = Style;
-module.exports.help = function () {
-  return new Help();
+module.exports.helpUsage = function () {
+  return new Help().getUsage();
 }
