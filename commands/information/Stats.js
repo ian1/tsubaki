@@ -1,9 +1,9 @@
 const Tsubaki = require("../../Tsubaki.js");
 
 var _super = require("../Command.js").prototype;
-var method = Help.prototype = Object.create(_super);
+var method = Stats.prototype = Object.create(_super);
 
-method.constructor = Help;
+method.constructor = Stats;
 
 function Stats() {
   _super.constructor.apply(this, "stats", "Will show guilds, users, and channels " + Tsubaki.config.name + " is in.", "");

@@ -1,9 +1,9 @@
 const Tsubaki = require("../../Tsubaki.js");
 
 var _super = require("../Command.js").prototype;
-var method = Help.prototype = Object.create(_super);
+var method = Avatar.prototype = Object.create(_super);
 
-method.constructor = Help;
+method.constructor = Avatar;
 
 function Avatar() {
   _super.constructor.apply(this, "avatar", "Will show you the profile picture of the mentioned user.", " <@mention>");
