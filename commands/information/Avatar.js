@@ -16,8 +16,10 @@ method.execute = function (message, args, bot, points) {
   let profileMention = message.mentions.users.first();
   
   if (profileMention == "" || profileMention === undefined) {
-    return message.channel.send(Tsubaki.Style.error(":thinking: Sorry... I don't know who that is. "
-      + "Please try again, make sure you used @ to mention the player!"));
+    return message.channel.send({
+      embed: Tsubaki.Style.warn(":thinking: Sorry... I don't know who that is. "
+        + "Please try again, make sure you used @ to mention the player!")
+    });
   } else {
     let profileEmbedAuthor = profileMention.username
     let profileEmbed = new Discord.RichEmbed()

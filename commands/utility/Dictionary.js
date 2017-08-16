@@ -15,7 +15,7 @@ method.execute = function (message, args, bot, points) {
   this.delete(message);
   this.delete(message);
   let toDefine = message.content.split(' ')[1];
-  if (toDefine == "" || toDefine === undefined) return message.channel.send({ embed: Tsubaki.Style.error("Provide a word to define! :book:") });
+  if (toDefine == "" || toDefine === undefined) return message.channel.send({ embed: Tsubaki.Style.warn("Provide a word to define! :book:") });
   else {
     webdict("dictionary", toDefine).then(resp => {
       let result = resp.definition[0];

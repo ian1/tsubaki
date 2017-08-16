@@ -46,7 +46,7 @@ method.execute = function (message, args, bot, points) {
         }
       }
     }
-    message.channel.send({ embed: Tsubaki.Style.error("Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".") });
+    message.channel.send({ embed: Tsubaki.Style.warn("Uh oh, I didn't find that command! Try " + Tsubaki.prefix + new Help().getCommand() + ".") });
   }
 }
 

@@ -13,7 +13,7 @@ function Add() {
 method.execute = function (message, args, bot, points) {
   this.delete(message);
   if (args.length < 2) {
-    return message.channel.send({ embed: Tsubaki.Style.error("Hey, you must provide the numbers first!") });
+    return message.channel.send({ embed: Tsubaki.Style.warn("Hey, you must provide the numbers first!") });
   }
   let numArray = args.map(n => parseInt(n));
   let total = numArray.reduce((p, c) => p + c);

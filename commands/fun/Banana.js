@@ -15,7 +15,7 @@ method.execute = function (message, args, bot, points) {
   let memberMention = message.mentions.users.first();
   if (memberMention == message.author) return message.channel.send(":x: Don't be greedy, sweetie~ :kissing_heart:");
 
-  if (memberMention == '' || memberMention === undefined) return message.channel.send(Tsubaki.Style.error("Mention a player to give a banana!"));
+  if (memberMention == '' || memberMention === undefined) return message.channel.send(Tsubaki.Style.warn("Mention a player to give a banana!"));
   else {
     message.channel.send(":banana: " + message.author.tag + " has given " + memberMention + " a banana!");
     points[memberMention.id].points++;

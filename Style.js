@@ -40,5 +40,12 @@ module.exports = {
 
   errorGeneric: function () {
     return error("Whoops, I got an error! Please try again later.");
-  }
+  },
+
+  warn: function (text) {
+    var embed = new Discord.RichEmbed()
+      .setDescription(text)
+      .setColor(Tsubaki.color.yellow);
+    return embed;
+  },
 }

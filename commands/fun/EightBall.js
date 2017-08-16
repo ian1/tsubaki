@@ -41,7 +41,7 @@ method.execute = function (message, args, bot, points) {
     "I'm not sure about this one...",
     "Oh, this one's easy!"
   ]
-  if (question == '' || question === undefined) return message.channel.send(Tsubaki.Style.error(":eye_in_speech_bubble: _Give me a question!_"));
+  if (question == '' || question === undefined) return message.channel.send({ embed: Tsubaki.Style.warn(":eye_in_speech_bubble: _Give me a question!_") });
   else {
     message.channel.send(":thinking: " + Tsubaki.Style.italicize(thinking[Math.floor(Math.random() * thinking.length)]));
 
