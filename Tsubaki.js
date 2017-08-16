@@ -36,9 +36,9 @@ const Help = require("./commands/information/Help.js");
 const Stats = require("./commands/information/Help.js");
 const Avatar = require("./commands/information/Avatar.js");
 const Invite = require("./commands/information/Invite.js");
-const Support = require("./commands/information/Support.js");
+/* const Support = require("./commands/information/Support.js");
 const Info = require("./commands/information/Info.js");
-const ChangeLog = require("./commands/information/Changelog.js");
+const ChangeLog = require("./commands/information/Changelog.js"); */
 
 var servers = {};
 var commands = [
