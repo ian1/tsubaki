@@ -33,7 +33,7 @@ method.execute = function (message, args) {
   } else {    
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
       for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
-        if (command === cmds[i][j].getCommand()) {
+        if (args[0] === cmds[i][j].getCommand()) {
           var cmd = cmds[i][j];
           var embed = new Discord.RichEmbed()
             .setDescription(Tsubaki.Style.bold("Command: ") + cmd.getCommand() + "\n"
