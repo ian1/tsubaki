@@ -7,7 +7,7 @@ let method = Delete.prototype = Object.create(_super);
 method.constructor = Delete;
 
 function Delete() {
-  _super.constructor.apply(this, ["delete", "Delete the specified number of messages.", " <number between 1 and 100>"]);
+  _super.constructor.apply(this, ["delete", "Delete the specified number of messages.", " <number between 1 and 99>"]);
 }
 
 method.executeAdmin = function (message, args, bot, db) {
