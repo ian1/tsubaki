@@ -18,8 +18,8 @@ method.execute = function (message, args, bot, db) {
       + "Do " + Tsubaki.Style.bold(this.getUsage()) + " and replace " + Tsubaki.Style.bold("[command]")
       + " with any command you want to learn more about." + "\n";
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
-      if ((!cmds[i][0].startsWith('*') || message.member.hasPermission(Tsubaki.adminPermission))
-        && (!cmds[i][0].startsWith('**') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
+      if ((!cmds[i][0].startsWith('_') || message.member.hasPermission(Tsubaki.adminPermission))
+        && (!cmds[i][0].startsWith('__') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
         description += "\n" + Tsubaki.Style.bold(cmds[i][0] + ": ");
 
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
@@ -36,8 +36,8 @@ method.execute = function (message, args, bot, db) {
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
       for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
         if (args[0] === cmds[i][j].getCommand()) {
-          if ((!cmds[i][0].startsWith('*') || message.member.hasPermission(Tsubaki.adminPermission))
-            && (!cmds[i][0].startsWith('**') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
+          if ((!cmds[i][0].startsWith('_') || message.member.hasPermission(Tsubaki.adminPermission))
+            && (!cmds[i][0].startsWith('__') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
             var cmd = cmds[i][j];
             var embed = new Discord.RichEmbed()
               .setDescription(Tsubaki.Style.bold("Command: ") + cmd.getCommand() + "\n"

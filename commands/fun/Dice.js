@@ -11,15 +11,7 @@ function Dice() {
 }
 
 method.execute = function (message, args, bot, db) {
-  let numbers = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-  ]
-  message.channel.send(":game_die: You rolled a " + (numbers[Math.floor(Math.random() * numbers.length)]));
+  message.channel.send(":game_die: You rolled a " + (Math.ceil(Math.random() * 6)));
 }
 
 module.exports = Dice;

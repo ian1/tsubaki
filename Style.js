@@ -46,7 +46,7 @@ module.exports = {
   },
 
   errorGeneric: function () {
-    return module.exports.error("Whoops, I got an error! Please try again later.");
+    return this.error("Whoops, I got an error! Please try again later.");
   },
 
   warn: function (text) {
@@ -57,12 +57,12 @@ module.exports = {
   },
 
   unknownUser: function () {
-    return module.exports.warn(":thinking: Sorry... I don't know who that is. "
+    return this.warn(":thinking: Sorry... I don't know who that is. "
       + "Please try again, make sure you use @ to mention the user!");
   },
 
   notFound: function () {
     return module.exports.warn('Uh oh, I didn\'t find that command! Try '
-      + Style.code(Tsubaki.config.prefix + Tsubaki.help.getCommand()) + '.')
+      + this.code(Tsubaki.prefix + Tsubaki.help().getCommand()) + '.')
   }
 }

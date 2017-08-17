@@ -90,14 +90,14 @@ const db = new sqlite.Database('./data.db');
 
 function getPoints(id, callback) {
   let points = -2;
-  db.get('SELECT points FROM points WHERE member_id = ' + id, function (err, row) {
+  db.get('SELECT points FROM members WHERE member_id = ' + id, function (err, row) {
     if (row !== undefined) {
       points = row.points;
     }
     
     if (points < 0) {
       points = 0;
-      db.run('INSERT INTO points VALUES (' + id + ', 0)', function () {
+      db.run('INSERT INTO members VALUES (' + id + ', 0)', function () {
         callback(points);
       });
     } else {
@@ -107,9 +107,9 @@ function getPoints(id, callback) {
 }
 
 function setPoints(id, points, channel) {
-  db.run('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id, function () {
+  db.run('UPDATE members SET points = ' + points + ' WHERE member_id = ' + id, function () {
     if (getLevel(points) === getLevelR(points)) {
-      channel.send(':arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!'));
+      channel.send({ embed: Style.success(' :arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!')) });
     }
   });
 }
@@ -135,7 +135,7 @@ function setPlaying(message) {
     name: message,
     url: 'https://discordapp.com'
   }
-  bot.user.setPresence({ 'game': gameData })
+  bot.user.setPresence({ 'game': gameData });
 }
 
 bot.on('ready', () => {
@@ -153,7 +153,7 @@ bot.on('ready', () => {
   db.serialize(function() {
     db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id INTEGER, channel_id INTEGER)');
-    db.run('CREATE TABLE IF NOT EXISTS points (member_id INTEGER, points INTEGER)');
+    db.run('CREATE TABLE IF NOT EXISTS members (member_id INTEGER, points INTEGER, is_muted INTEGER)');
   });
 
   setTimeout(function () { setPlaying() }, 3000);
@@ -163,8 +163,8 @@ bot.on('ready', () => {
     ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
     ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
     /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
-    ['* Admin', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
-    ['** Owner', new Playing(), new Guilds(), new LeaveGuild()],
+    ['_Admin_', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
+    ['__Owner__', new Playing(), new Guilds(), new LeaveGuild()],
   ];
 });
 

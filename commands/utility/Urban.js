@@ -17,17 +17,14 @@ method.execute = function (message, args, bot, db) {
   else {
     webdict("urbandictionary", toDefine).then(resp => {
       let result = resp.definition[0];
-      if (resp.statusCode != "200") {
-        message.channel.send({ embed: Tsubaki.Style.error("Hmm... I can't find that word. Please check your spelling!") });
-      } else {
-        let embed = new Discord.RichEmbed()
-          .setDescription(Tsubaki.Style.bold("Word:") + " " + Tsubaki.Style.code(toDefine) + "\n" + Tsubaki.Style.bold("Urban Definition:") + " " + Tsubaki.Style.code(result))
-          .setColor(Tsubaki.color.green)
-          .setFooter(Tsubaki.name + " Dictionary");
-        message.channel.send({ embed: embed });
-      }
+
+      let embed = new Discord.RichEmbed()
+        .setDescription(Tsubaki.Style.bold("Word:") + " " + Tsubaki.Style.code(toDefine) + "\n" + Tsubaki.Style.bold("Urban Definition:") + " " + Tsubaki.Style.code(result))
+        .setColor(Tsubaki.color.green)
+        .setFooter(Tsubaki.name + " Dictionary");
+      message.channel.send({ embed: embed });
     }).catch(function () {
-      message.channel.send({ embed: Tsubaki.Style.errorGeneric });
+      message.channel.send({ embed: Tsubaki.Style.error("Hmm... I can't find that word. Please check your spelling!") });
     });
   }
 }

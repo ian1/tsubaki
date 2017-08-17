@@ -11,7 +11,11 @@ function Say() {
 }
 
 method.execute = function (message, args, bot, db) {
-  message.channel.send(args.join(" "), { tts: false });
+  if (args.length == 0) {
+    message.channel.send({ embed: Tsubaki.Style.warn("Please tell me what to say!") });
+  } else {
+    message.channel.send(args.join(" "), { tts: false });
+  }  
 }
 
 module.exports = Say;

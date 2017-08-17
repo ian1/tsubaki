@@ -7,7 +7,7 @@ let method = Welcome.prototype = Object.create(_super);
 method.constructor = Welcome;
 
 function Welcome() {
-  _super.constructor.apply(this, ["welcome", "Toggle welcome messages on or off for specified channel.", " <enable|disable> [channel id]"]);
+  _super.constructor.apply(this, ["welcome", "Toggle welcome messages on or off for specified channel.", " <enable|disable> [#channel]"]);
 }
 
 method.executeAdmin = function (message, args, bot, db) {
@@ -17,7 +17,7 @@ method.executeAdmin = function (message, args, bot, db) {
   let channelId = message.channel.id;
 
   let status = args[0].toLowerCase();
-  if (args.length >= 2) channelId = args[1];
+  if (args.length >= 2 && args[1].startsWith('<#') && args[1].endsWith('>')) channelId = args[1].substring(2, args[1].length - 1);
 
   if (status === "enable") {
     if (!message.guild.channels.find('id', channelId)) 

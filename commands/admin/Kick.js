@@ -21,7 +21,7 @@ method.executeAdmin = function (message, args, bot, db) {
 
   if (isKickable || userID.kickable) {
     message.guild.member(userToKick.id).send(":boot: You have been {0} by {1} {2}"
-      .format(Tsubaki.Style.bold("kicked")), Tsubaki.Style.bold(message.author), (reason.length > 0 ? " for: " + Tsubaki.Style.bold(reason) : "!"));
+      .format(Tsubaki.Style.bold("kicked"), Tsubaki.Style.bold(message.author), (reason.length > 0 ? " for: " + Tsubaki.Style.bold(reason) : "!")));
 
     if (reason.length > 0) {
       message.guild.member(userToKick).kick(reason);
