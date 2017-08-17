@@ -214,7 +214,7 @@ bot.on('message', (message) => {
       ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
       ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
       /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
-      ['Admin', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome(), new Playing(), new Guild()],/* ,
+      ['Admin', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()/* , new Playing(), new Guild() */],/* ,
       ["Owner", new Playing(), new Guilds()]*/
     ];
   }
