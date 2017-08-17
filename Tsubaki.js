@@ -19,11 +19,10 @@ music(bot, {
 
 const adminPermission = 'ADMINISTRATOR';
 
-const logger = '341827696629776396';
 const guildLogger = '342832229510021120';
-const modLogger = '342837394766168064';
 const discordBotGuild = '110373943822540800';
 const tsubakiPalaceGuild = '335272347256881154';
+const logger = '341827696629776396';
 
 const tsubakiTag = '334386617626263553';
 const tsubakiReact = '343292881689378816';
@@ -206,11 +205,6 @@ bot.on('guildMemberAdd', (member) => {
   }
   
   db.close();
-});
-
-bot.on('guildBanAdd', (guild, user) => {
-  bot.channels.get(modLogger).send('{0} (id: {1}) was banned from: {2} (id: {3})'
-    .format(user.tag, user.id, guild.name, guild.id));
 });
 
 bot.on('message', (message) => {
