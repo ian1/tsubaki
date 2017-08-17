@@ -10,7 +10,7 @@ function Banana() {
   _super.constructor.apply(this, ["banana", "Will give the mentioned member a banana.", " <@mention>"]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   let memberMention = message.mentions.users.first();
   if (memberMention == message.author) return message.channel.send(":x: Don't be greedy, sweetie~ :kissing_heart:");

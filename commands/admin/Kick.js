@@ -10,7 +10,7 @@ function Kick() {
   _super.constructor.apply(this, ["kick", "Will kick the specified user.", " <@mention> [reason]"]);
 }
 
-method.executeAdmin = function (message, args, bot) {
+method.executeAdmin = function (message, args, bot, db) {
   let userToKick = message.mentions.users.first();
   if (userToKick == "" || userToKick === undefined) return message.channel.send({ embed: Tsubaki.Style.unknownUser() });
   let userID = userToKick.id;
@@ -39,10 +39,10 @@ method.executeAdmin = function (message, args, bot) {
   }
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
-    this.executeAdmin(message, args, bot);
+    this.executeAdmin(message, args, bot, db);
   } else {
     return message.channel.send({ embed: Tsubaki.Style.error("You don't have permission for that!") });
   }  

@@ -10,7 +10,7 @@ function UnBan() {
   _super.constructor.apply(this, ["unban", "Unban the specified user.", " <@mention> [reason]"]);
 }
 
-method.executeAdmin = function (message, args, bot) {
+method.executeAdmin = function (message, args, bot, db) {
   let reason = args.slice(1).join(" ");
   userToUnBan.send("You have been {0} by {1} {2}"
     .format(Tsubaki.Style.bold("unbanned")), Tsubaki.Style.bold(message.author), (reason.length > 0 ? " for: " + Tsubaki.Style.bold(reason) : "!"));
@@ -22,10 +22,10 @@ method.executeAdmin = function (message, args, bot) {
     (reason.length > 0 ? "for: " + Tsubaki.Style.bold(reason) : "!")));
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
-    this.executeAdmin(message, args, bot);
+    this.executeAdmin(message, args, bot, db);
   } else {
     return message.channel.send({ embed: Tsubaki.Style.error("You don't have permission for that!") });
   }

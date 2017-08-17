@@ -10,7 +10,7 @@ function Ping() {
   _super.constructor.apply(this, ["ping", "Returns " + Tsubaki.name + "'s ping (useful for testing connection).", ""]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   let ping = bot.ping;
   let color = Tsubaki.color.green;

@@ -10,7 +10,7 @@ function Dice() {
   _super.constructor.apply(this, ["dice", Tsubaki.name + " will roll the dice and give you a random number.", ""]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   let numbers = [
     '1',

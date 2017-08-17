@@ -11,7 +11,7 @@ function Cat() {
   _super.constructor.apply(this, ["cat", "Will give a random picture of a cat.", ""]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   random.cat().then(url => message.channel.send(url)).catch(err => {
     console.log(err.message);

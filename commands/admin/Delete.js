@@ -10,7 +10,7 @@ function Delete() {
   _super.constructor.apply(this, ["delete", "Delete the specified number of messages.", " <number between 1 and 100>"]);
 }
 
-method.executeAdmin = function (message, args, bot) {
+method.executeAdmin = function (message, args, bot, db) {
   if (args.length == 0 || parseInt(args[0]) < 1) {
     message.channel.send({ embed: Tsubaki.Style.warn(":grey_question: How many messages do you want to delete?") });
   } else if (parseInt(args[0]) > 100) {
@@ -23,10 +23,10 @@ method.executeAdmin = function (message, args, bot) {
   }
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
-    this.executeAdmin(message, args, bot);
+    this.executeAdmin(message, args, bot, db);
   } else {
     return message.channel.send({ embed: Tsubaki.Style.error("You don't have permission for that!") });
   }  

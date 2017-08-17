@@ -10,7 +10,7 @@ function Coin() {
   _super.constructor.apply(this, ["coin", Tsubaki.name + " will flip a coin for you.", ""]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   let coins = [
     'Heads',

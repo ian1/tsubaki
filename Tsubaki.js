@@ -157,6 +157,7 @@ bot.on('ready', () => {
   
   db.serialize(function() {
     db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
+    db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id INTEGER, channel_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS points (member_id INTEGER, points INTEGER)');
   });
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
@@ -243,7 +244,7 @@ bot.on('message', (message) => {
   for (let i = 0, lenI = commands.length; i < lenI && !found; i++) {
     for (let j = 1, lenJ = commands[i].length; j < lenJ && !found; j++) {
       if (command === commands[i][j].getCommand()) {
-        commands[i][j].execute(message, args, bot);
+        commands[i][j].execute(message, args, bot, db);
         found = true;
         break;
       }
@@ -309,9 +310,6 @@ module.exports.commands = function() {
 }
 module.exports.help = function() {
   return new Help();
-}
-module.exports.getDb = function() {
-  return getDb();
 }
 module.exports.getPoints = function(id, callback) {
   return getPoints(id, callback)

@@ -7,51 +7,58 @@ let method = Welcome.prototype = Object.create(_super);
 method.constructor = Welcome;
 
 function Welcome() {
-  _super.constructor.apply(this, ["welcome", "Toggle welcome messages on or off for specified channel.", " <enable|disable> <channel id>"]);
+  _super.constructor.apply(this, ["welcome", "Toggle welcome messages on or off for specified channel.", " <enable|disable> [channel id]"]);
 }
 
-method.executeAdmin = function (message, args, bot) {
+method.executeAdmin = function (message, args, bot, db) {
   
-  if (args.length < 2) return message.channel.send({ embed: Tsubaki.Style.warn("Invalid arguments! Usage: " + this.getUsage()) });
+  if (args.length == 0) return message.channel.send({ embed: Tsubaki.Style.warn("Invalid arguments! Usage: " + this.getUsage()) });
+  let guildId = message.guild.id;
+  let channelId = message.channel.id;
+
   let status = args[0].toLowerCase();
-  let channelId = args[1];// message.content.split(' ').slice(1)[1]
+  if (args.length >= 2) channelId = args[1];
 
   if (status === "enable") {
     if (!message.guild.channels.find('id', channelId)) 
       return message.channel.send({ embed: Tsubaki.Style.warn("Sorry, I couldn't find a channel with the id " + channelId + ".") });
-    message.channel.send({ embed: Tsubaki.Style.success("Welcome messages will now be sent to channel <#" + channelId + ">") });
-    let guildID = message.guild.id;
-    let WCData = {
-      "channelID": channelId
-    }
-    
-    fs.writeFile(message.guild.id + ".json", JSON.stringify(WCData), (err) => {
-      if (err) console.error(err)
+    db.get('SELECT * FROM guilds WHERE guild_id = ' + guildId, function (err, row) {
+      if (row === undefined) {
+        db.run('INSERT INTO guilds VALUES (' + guildId + ', ' + channelId + ')');
+        message.channel.send({
+          embed: Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('enabled')
+            + ' for this guild in channel <#' + channelId + '>.')
+        });
+      } else if (row.channel_id == channelId) {
+        message.channel.send({
+          embed: Tsubaki.Style.warn('Welcome messages are already ' + Tsubaki.Style.code('enabled')
+            + ' for this guild in channel <#' + channelId + '>,')
+        });
+      } else {
+        db.run('UPDATE guilds SET channel_id = ' + channelId + ' WHERE guild_id = ' + guildId);
+        message.channel.send({
+          embed: Tsubaki.Style.success('Welcome messages have been switched to channel <#' + channelId + '> for this guild. :frowning:')
+        });
+      }
     });
   } else if (status === "disable") {
-    fs.stat(`../../${message.guild.id}.json`, function (err) {
-      if (err) {
-        console.log(err);
-      }
-    });
-    fs.unlink(`../../${message.guild.id}.json`, function (err) {
-      if (err) return console.log(err);
-      else {
-        message.channel.send('Welcome messages now `disabled` for this guild.');
-      }
+    db.run('DELETE FROM guilds WHERE guild_id = ' + guildId, function () {
+      message.channel.send({
+        embed: Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('disabled') + ' for this guild.')
+      });
     });
   } else {
     message.channel.send({ embed: Tsubaki.Style.warn("Invalid arguments! Usage: " + this.getUsage()) });
   }
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
-    this.executeAdmin(message, args, bot);
+    this.executeAdmin(message, args, bot, db);
   } else {
     return message.channel.send({ embed: Tsubaki.Style.error("You don't have permission for that!") });
-  }  
+  }
 }
 
 module.exports = Welcome;

@@ -10,7 +10,7 @@ function Say() {
   _super.constructor.apply(this, ["say", Tsubaki.name + " will say any message given.", " <message>"]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   message.channel.send(args.join(" "), { tts: false });
 }

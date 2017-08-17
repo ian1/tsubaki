@@ -11,7 +11,7 @@ function Dictionary() {
   _super.constructor.apply(this, ["dictionary", "Will define any word using a traditional dictionary.", " <word>"]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   this.delete(message);
   let toDefine = message.content.split(' ')[1];

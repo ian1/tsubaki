@@ -10,7 +10,7 @@ function Info() {
   _super.constructor.apply(this, ["info", "Shows " + Tsubaki.name + "'s information.", ""]);
 }
 
-method.execute = function (message, args, bot) {
+method.execute = function (message, args, bot, db) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.bold("Information About " + Tsubaki.name) + "\n\n     "
