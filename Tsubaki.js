@@ -19,10 +19,10 @@ music(bot, {
 
 const adminPermission = 'ADMINISTRATOR';
 
+const logger = '341827696629776396';
 const guildLogger = '342832229510021120';
 const discordBotGuild = '110373943822540800';
 const tsubakiPalaceGuild = '335272347256881154';
-const logger = '341827696629776396';
 
 const tsubakiTag = '334386617626263553';
 const tsubakiReact = '343292881689378816';
@@ -154,11 +154,13 @@ bot.on('ready', () => {
   console.log(chalk.green('{0} has started, with {1} users, in {2} channels of {3} guilds.'
     .format(config.name, bot.users.size, bot.channels.size, bot.guilds.size)));
 
-  let embed = new Discord.RichEmbed()
-    .setDescription(':wave: Hello! I\'m ' + Style.bold(config.name) + ', version ' + package.version + '.\n\nDo ' + Style.code(new Help().getUsage()) + ' to see my commands!')
-    .setFooter('Created by ' + package.author)
-    .setColor(color.green);
-  bot.channels.get(logger).send({embed: embed});
+  setTimeout(function () {
+    let embed = new Discord.RichEmbed()
+      .setDescription(':wave: Hello! I\'m ' + Style.bold(config.name) + ', version ' + package.version + '.\n\nDo ' + Style.code(new Help().getUsage()) + ' to see my commands!')
+      .setFooter('Created by ' + package.author)
+      .setColor(color.green);
+    bot.channels.get(logger).send({ embed: embed });
+  }, 3000);  
 
   let db = getDb();
   db.serialize(function() {
