@@ -1,1 +1,10 @@
 node_modules/
+
+config.json
+points.json
+data.db
+.elintrc*
+.vscode/
+
+.DS_Store
+npm-debug.log
