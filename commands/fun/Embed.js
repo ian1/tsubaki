@@ -10,7 +10,7 @@ function Embed() {
   _super.constructor.apply(this, ["embed", "Will embed any message given.", " [color code] <message>"]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(args.join(" "))

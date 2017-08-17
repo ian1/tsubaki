@@ -11,7 +11,7 @@ function Urban() {
   _super.constructor.apply(this, ["urban", "Will define any word using urban dictionary.", " <word>"]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   this.delete(message);
   let toDefine = message.content.split(' ')[1];

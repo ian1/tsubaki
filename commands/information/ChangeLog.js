@@ -10,7 +10,7 @@ function ChangeLog() {
   _super.constructor.apply(this, ["changelog", "Will show " + Tsubaki.name + "'s change log.", ""]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription("not done ;)")

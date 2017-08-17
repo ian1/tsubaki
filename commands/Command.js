@@ -57,7 +57,7 @@ function NAME() {
   _super.constructor.apply(this, ["COMMAND", "DESCRIPTION", "USAGE"]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   // ACTION
 }

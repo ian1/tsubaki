@@ -10,7 +10,7 @@ function Kick() {
   _super.constructor.apply(this, ["kick", "Will kick the specified user.", " <@mention> [reason]"]);
 }
 
-method.executeAdmin = function (message, args, bot, points) {
+method.executeAdmin = function (message, args, bot) {
   let userToKick = message.mentions.users.first();
   if (userToKick == "" || userToKick === undefined) return message.channel.send({ embed: Tsubaki.Style.unknownUser() });
   let userID = userToKick.id;
@@ -39,7 +39,7 @@ method.executeAdmin = function (message, args, bot, points) {
   }
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
     this.executeAdmin(message, args, bot, points);

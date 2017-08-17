@@ -10,7 +10,7 @@ function Tts() {
   _super.constructor.apply(this, ["tts", "Will say given message out loud.", " <message>"]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   message.channel.send(args.join(" "), { tts: true });
 }

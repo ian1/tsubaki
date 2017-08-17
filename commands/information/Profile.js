@@ -10,7 +10,7 @@ function Profile() {
   _super.constructor.apply(this, ["profile", "Will show you the profile of the mentioned user.", " <@mention>"]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let profileMention = message.mentions.users.first();
   
