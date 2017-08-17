@@ -20,7 +20,7 @@ method.execute = function (message, args, bot, db) {
   }
 
   let embed = new Discord.RichEmbed()
-    .setDescription("Pong! " + Tsubaki.Style.code(Math.round(ping, -2) + " ms") + ".")
+    .setDescription("Pong! " + Tsubaki.Style.code(Number(Math.round(ping + 'e2') + 'e-2') + " ms") + ".")
     .setColor(color);
   message.channel.send({ embed: embed });
 }
