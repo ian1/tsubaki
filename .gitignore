@@ -5,3 +5,6 @@ points.json
 data.db
 .elintrc*
 .vscode/
+
+.DS_Store
+*/.DS_Store

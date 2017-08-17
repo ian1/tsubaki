@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 const package = require('./package.json');
 const config = require('./config.json');
 
-const sqlite = requre('sqlite3').verbose();
+const sqlite = require('sqlite3').verbose();
 const chalk = require('chalk');
 const music = require('discord.js-music-v11');
 const Style = require('./Style.js');

@@ -33,7 +33,6 @@ method.execute = function (message, args, bot, points) {
     let profileEmbed = new Discord.RichEmbed()
       .setTitle("Profile of " + profileMention + "#" + profileMention.discriminator)
       .addField("Id", profileMention.id)
-      .addBlankField()
       .addField("Tag", profileMention.tag)
       .addField("Banana", "Level " + userData.level + ", with " + userData.points + " Bananas")
       .setImage(profileMention.displayAvatarURL)
