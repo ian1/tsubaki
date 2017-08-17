@@ -82,39 +82,49 @@ const Welcome = require('./commands/admin/Welcome.js');
 let commands = [];
 
 function getDb() {
-  return new sqlite.cached.Database('./data.db');
+  return new sqlite.Database('./data.db');
 }
 
 function getPoints(id) {
-  let points = 0;
+  let points = -2;
   let db = getDb();
-  db.serialize(function() {
+  db.serialize(function () {
+    console.log('SELECT points FROM points WHERE member_id = ' + id);
     db.each('SELECT points FROM points WHERE member_id = ' + id, function (err, row) {
-      if (row !== undefined) points = row.points;
+      if (row !== undefined) {
+        points = row.points;
+        console.log('points: ' + points);
+      }
     });
   });
 
+  console.log('123: ' + points);
   if (points < 0) {
     points = 0;
-    db.serialize(function() {
+    db.serialize(function () {
+      console.log('INSERT INTO points VALUES (' + id + ', 0)');
       db.run('INSERT INTO points VALUES (' + id + ', 0)');
     });
   }
+  console.log('456: ' + points);
 
-  //db.close();
-  return points;
+  db.close(function () {
+    console.log('789: ' + points);
+    return points;
+  });
 }
 
 function setPoints(id, points) {
   let db = getDb();
-  db.serialize(function() {
+  db.serialize(function () {
+    console.log('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id);
     db.run('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id);
   });
-  //db.close();
-
-  if (getLevel(points) === getLevelR(points)) {
-    bot.users.get(id).send(':arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!'));
-  }
+  db.close(function () {
+    if (getLevel(points) === getLevelR(points)) {
+      bot.users.get(id).send(':arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!'));
+    }
+  });
 }
 
 function getLevel(points) {
@@ -167,7 +177,7 @@ bot.on('ready', () => {
     db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS points (member_id INTEGER, points INTEGER)');
   });
-  //db.close();
+  db.close();
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
 
@@ -206,7 +216,7 @@ bot.on('guildMemberAdd', (member) => {
     })
   }
   
-  //db.close();
+  db.close();
 });
 
 bot.on('message', (message) => {
@@ -254,7 +264,9 @@ bot.on('message', (message) => {
   let command = message.content.split(' ')[0].slice(config.prefix.length).toLowerCase();
   let args = message.content.split(' ').slice(1);
 
-  setPoints(getPoints(message.author.id) + 1);
+  let newPoints = getPoints(message.author.id) + 1;
+  console.log('new: ' + newPoints);
+  setPoints(message.author.id, newPoints);
 
   let found = false;
 
@@ -315,33 +327,31 @@ if (!String.prototype.includesIgnoreCase) {
 
 bot.login(config.token);
 
-module.exports = {
-  prefix: config.prefix,
-  name: config.name,
-  nameIn: config.nameIn,
-  author: package.author,
-  adminPermission: adminPermission,
-  color: color,
-  Style: Style,
-  commands: function() {
-    return commands;
-  },
-  help: function() {
-    return new Help();
-  },
-  getDb: function() {
-    return getDb();
-  },
-  getPoints: function(id) {
-    return getPoints(id)
-  },
-  setPoints: function(id, points) {
-    setPoints(id, points);
-  },
-  getLevel: function(points) {
-    return getLevel(points);
-  },
-  getLevelR: function(points) {
-    return getLevelR(points);
-  },
+module.exports.prefix = config.prefix;
+module.exports.name = config.name;
+module.exports.nameIn = config.nameIn;
+module.exports.author = package.author;
+module.exports.adminPermission = adminPermission;
+module.exports.color = color;
+module.exports.Style = Style;
+module.exports.commands = function() {
+  return commands;
+}
+module.exports.help = function() {
+  return new Help();
+}
+module.exports.getDb = function() {
+  return getDb();
+}
+module.exports.getPoints = function(id) {
+  return getPoints(id)
+}
+module.exports.setPoints = function(id, points) {
+  setPoints(id, points);
+}
+module.exports.getLevel = function(points) {
+  return getLevel(points);
+}
+module.exports.getLevelR = function(points) {
+  return getLevelR(points);
 }

@@ -29,12 +29,11 @@ method.execute = function (message, args, bot) {
         color = Tsubaki.color.yellow;
         break;
     }
-    let userData = points[profileMention.id];
+    let points = Tsubaki.getPoints(profileMention.id);
     let profileEmbed = new Discord.RichEmbed()
-      .setTitle("Profile of " + profileMention + "#" + profileMention.discriminator)
+      .setTitle("Profile of " + profileMention.tag)
       .addField("Id", profileMention.id)
-      .addField("Tag", profileMention.tag)
-      .addField("Banana", "Level " + userData.level + ", with " + userData.points + " Bananas")
+      .addField("Banana", "Level " + Tsubaki.getLevelR(points) + ", with " + points + " Bananas")
       .setImage(profileMention.displayAvatarURL)
       .setColor(color);
     message.channel.send({ embed: profileEmbed });
