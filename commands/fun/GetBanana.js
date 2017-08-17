@@ -12,9 +12,10 @@ function GetBanana() {
 
 method.execute = function (message, args, bot) {
   this.delete(message);
-  let points = Tsubaki.getPoints(message.author.id);
-  message.reply(":banana: " + Tsubaki.Style.italicize("You are currently Banana level") + " " + Tsubaki.Style.code(Tsubaki.getLevelR(points)) + Tsubaki.Style.italicize(", with")
-    + " " + Tsubaki.Style.code(points) + " Bananas!");
+  Tsubaki.getPoints(message.author.id, function (points) {
+    message.reply(":banana: " + Tsubaki.Style.italicize("You are currently Banana level") + " " + Tsubaki.Style.code(Tsubaki.getLevelR(points)) + Tsubaki.Style.italicize(", with")
+      + " " + Tsubaki.Style.code(points) + " Bananas!");
+  });
 }
 
 module.exports = GetBanana;

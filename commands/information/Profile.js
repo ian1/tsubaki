@@ -29,14 +29,15 @@ method.execute = function (message, args, bot) {
         color = Tsubaki.color.yellow;
         break;
     }
-    let points = Tsubaki.getPoints(profileMention.id);
-    let profileEmbed = new Discord.RichEmbed()
-      .setTitle("Profile of " + profileMention.tag)
-      .addField("Id", profileMention.id)
-      .addField("Banana", "Level " + Tsubaki.getLevelR(points) + ", with " + points + " Bananas")
-      .setImage(profileMention.displayAvatarURL)
-      .setColor(color);
-    message.channel.send({ embed: profileEmbed });
+    Tsubaki.getPoints(profileMention.id, function (points) {
+      let profileEmbed = new Discord.RichEmbed()
+        .setTitle("Profile of " + profileMention.tag)
+        .addField("Id", profileMention.id)
+        .addField("Banana", "Level " + Tsubaki.getLevelR(points) + ", with " + points + " Bananas")
+        .setImage(profileMention.displayAvatarURL)
+        .setColor(color);
+      message.channel.send({ embed: profileEmbed });
+    });  
   }
 }
 

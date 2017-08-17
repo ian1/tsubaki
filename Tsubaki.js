@@ -19,7 +19,8 @@ music(bot, {
 
 const adminPermission = 'ADMINISTRATOR';
 
-const logger = '341827696629776396';
+const logger = '342837394766168064';
+const commandLogger = '341827696629776396';
 const guildLogger = '342832229510021120';
 const discordBotGuild = '110373943822540800';
 const tsubakiPalaceGuild = '335272347256881154';
@@ -81,46 +82,28 @@ const Welcome = require('./commands/admin/Welcome.js');
 
 let commands = [];
 
-function getDb() {
-  return new sqlite.Database('./data.db');
-}
+const db = new sqlite.Database('./data.db');
 
-function getPoints(id) {
+function getPoints(id, callback) {
   let points = -2;
-  let db = getDb();
-  db.serialize(function () {
-    console.log('SELECT points FROM points WHERE member_id = ' + id);
-    db.each('SELECT points FROM points WHERE member_id = ' + id, function (err, row) {
-      if (row !== undefined) {
-        points = row.points;
-        console.log('points: ' + points);
-      }
-    });
-  });
-
-  console.log('123: ' + points);
-  if (points < 0) {
-    points = 0;
-    db.serialize(function () {
-      console.log('INSERT INTO points VALUES (' + id + ', 0)');
-      db.run('INSERT INTO points VALUES (' + id + ', 0)');
-    });
-  }
-  console.log('456: ' + points);
-
-  db.close(function () {
-    console.log('789: ' + points);
-    return points;
+  db.get('SELECT points FROM points WHERE member_id = ' + id, function (err, row) {
+    if (row !== undefined) {
+      points = row.points;
+    }
+    
+    if (points < 0) {
+      points = 0;
+      db.run('INSERT INTO points VALUES (' + id + ', 0)', function () {
+        callback(points);
+      });
+    } else {
+      callback(points);
+    }
   });
 }
 
 function setPoints(id, points) {
-  let db = getDb();
-  db.serialize(function () {
-    console.log('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id);
-    db.run('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id);
-  });
-  db.close(function () {
+  db.run('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id, function () {
     if (getLevel(points) === getLevelR(points)) {
       bot.users.get(id).send(':arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!'));
     }
@@ -155,7 +138,7 @@ function guildInfo(message, listOfGuilds) {
 
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== '') {
-    bot.channels.get(logger).send('{0} » {1} » {2}'.format(Style.bold(message.author.tag),
+    bot.channels.get(commandLogger).send('{0} » {1} » {2}'.format(Style.bold(message.author.tag),
       Style.underline(message.guild.name), Style.code(message.content)));
   }
 }
@@ -171,13 +154,11 @@ bot.on('ready', () => {
       .setColor(color.green);
     bot.channels.get(logger).send({ embed: embed });
   }, 3000);  
-
-  let db = getDb();
+  
   db.serialize(function() {
     db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS points (member_id INTEGER, points INTEGER)');
   });
-  db.close();
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
 
@@ -196,27 +177,16 @@ bot.on('guildMemberAdd', (member) => {
   let memberGuild = member.guild;
   if (memberGuild.id == discordBotGuild) return;
 
-  let db = getDb();
-
-  let found = false;
-  db.serialize(function () {
-    db.each('SELECT * from guild_join WHERE member_id = ' + member.id
-      + ' AND guild_id = ' + memberGuild.id, function (err, row) {
-        if (row !== undefined) found = true;
-      });
-  })
-
-  if (!found) {
-    let welcomeEmbed = new Discord.RichEmbed()
-      .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(memberGuild.name, member))
-      .setColor(white);
-    memberGuild.channels.find('id', channelData).send({ embed: welcomeEmbed });
-    db.serialize(function () {
-      db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + memberGuild.id + ')');
-    })
-  }
-  
-  db.close();
+  db.get('SELECT * from guild_join WHERE member_id = ' + member.id
+    + ' AND guild_id = ' + memberGuild.id, function (err, row) {
+      if (row === undefined) {
+        let welcomeEmbed = new Discord.RichEmbed()
+          .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(memberGuild.name, member))
+          .setColor(white);
+        memberGuild.channels.find('id', channelData).send({ embed: welcomeEmbed });
+        db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + memberGuild.id + ')');
+      }
+  });
 });
 
 bot.on('message', (message) => {
@@ -264,9 +234,9 @@ bot.on('message', (message) => {
   let command = message.content.split(' ')[0].slice(config.prefix.length).toLowerCase();
   let args = message.content.split(' ').slice(1);
 
-  let newPoints = getPoints(message.author.id) + 1;
-  console.log('new: ' + newPoints);
-  setPoints(message.author.id, newPoints);
+  getPoints(message.author.id, function (points) {
+    setPoints(message.author.id, points + 1);
+  });
 
   let found = false;
 
@@ -343,8 +313,8 @@ module.exports.help = function() {
 module.exports.getDb = function() {
   return getDb();
 }
-module.exports.getPoints = function(id) {
-  return getPoints(id)
+module.exports.getPoints = function(id, callback) {
+  return getPoints(id, callback)
 }
 module.exports.setPoints = function(id, points) {
   setPoints(id, points);
@@ -355,3 +325,39 @@ module.exports.getLevel = function(points) {
 module.exports.getLevelR = function(points) {
   return getLevelR(points);
 }
+
+process.stdin.resume();
+
+function exitHandler(options, err) {
+  if (options.cleanup) {
+    const bot = new Discord.Client();
+    bot.login(config.token);
+    console.log(chalk.yellow('Shutting down gracefully...'));
+
+    const { execSync } = require('child_process');
+    let options = { stdio: 'pipe' };
+    execSync('curl -v '
+      + '-H "Authorization: Bot ' + config.token + '" '
+      + '-H "User-Agent: ' + config.nameIn + ' (https://iandomme.com, v' + package.version + ')" '
+      + '-H "Content-Type: application/json" '
+      + '-d \'{"content": ":wave: Goodbye! Shutting down..." }\' '
+      + 'https://discordapp.com/api/channels/' + logger + '/messages > /dev/null'
+      , options);
+    
+    db.close();
+    console.log("Closed db");
+  }
+  if (err) console.log(err.stack);
+  if (options.exit) {
+    process.exit();
+  }
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null, { cleanup: true }));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, { exit: true }));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, { exit: true }));

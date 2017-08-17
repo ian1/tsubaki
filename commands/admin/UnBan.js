@@ -25,7 +25,7 @@ method.executeAdmin = function (message, args, bot) {
 method.execute = function (message, args, bot) {
   this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
-    this.executeAdmin(message, args, bot, points);
+    this.executeAdmin(message, args, bot);
   } else {
     return message.channel.send({ embed: Tsubaki.Style.error("You don't have permission for that!") });
   }

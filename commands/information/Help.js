@@ -36,14 +36,16 @@ method.execute = function (message, args, bot) {
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
       for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
         if (args[0] === cmds[i][j].getCommand()) {
-          var cmd = cmds[i][j];
-          var embed = new Discord.RichEmbed()
-            .setDescription(Tsubaki.Style.bold("Command: ") + cmd.getCommand() + "\n"
+          if (cmds[i][0] !== "Admin" || message.member === undefined || message.member.hasPermission(Tsubaki.adminPermission)) {
+            var cmd = cmds[i][j];
+            var embed = new Discord.RichEmbed()
+              .setDescription(Tsubaki.Style.bold("Command: ") + cmd.getCommand() + "\n"
               + Tsubaki.Style.bold("Description: ") + cmd.getDescription() + "\n"
               + Tsubaki.Style.bold("Category: ") + cmds[i][0] + "\n\n"
               + Tsubaki.Style.bold("Usage: ") + cmd.getUsage())
-            .setColor(Tsubaki.color.green);
-          message.channel.send({ embed: embed });
+              .setColor(Tsubaki.color.green);
+            message.channel.send({ embed: embed });
+          }  
           return;
         }
       }

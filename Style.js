@@ -46,7 +46,7 @@ module.exports = {
   },
 
   errorGeneric: function () {
-    return error("Whoops, I got an error! Please try again later.");
+    return module.exports.error("Whoops, I got an error! Please try again later.");
   },
 
   warn: function (text) {
@@ -57,7 +57,7 @@ module.exports = {
   },
 
   unknownUser: function () {
-    return warn(":thinking: Sorry... I don't know who that is. "
+    return module.exports.warn(":thinking: Sorry... I don't know who that is. "
       + "Please try again, make sure you use @ to mention the user!");
   }
 }
