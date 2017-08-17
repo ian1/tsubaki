@@ -1,4 +1,4 @@
-// Made by the best Khux and David
+// Made by the best, Khux and David
 
 // Set up, load config
 const Discord = require('discord.js');
