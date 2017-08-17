@@ -97,7 +97,7 @@ function getPoints(id, callback) {
     
     if (points < 0) {
       points = 0;
-      db.run('INSERT INTO members VALUES (' + id + ', 0)', function () {
+      db.run('INSERT INTO members (member_id) VALUES (' + id + ')', function () {
         callback(points);
       });
     } else {
@@ -153,7 +153,7 @@ bot.on('ready', () => {
   db.serialize(function() {
     db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id INTEGER, channel_id INTEGER)');
-    db.run('CREATE TABLE IF NOT EXISTS members (member_id INTEGER, points INTEGER, is_muted INTEGER)');
+    db.run('CREATE TABLE IF NOT EXISTS members (member_id INTEGER, points INTEGER DEFAULT 0, is_muted INTEGER DEFAULT 0)');
   });
 
   setTimeout(function () { setPlaying() }, 3000);
