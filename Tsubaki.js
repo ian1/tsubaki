@@ -79,6 +79,8 @@ const Kick = require('./commands/admin/Kick.js');
 const Ban = require('./commands/admin/Ban.js');
 const UnBan = require('./commands/admin/UnBan.js');
 const Welcome = require('./commands/admin/Welcome.js');
+const Playing = require('./commands/admin/Playing.js');
+const Guilds = require('./commands/admin/Guilds.js');
 
 let commands = [];
 
@@ -118,29 +120,20 @@ function getLevelR(points) {
   return Math.floor(getLevel(points));
 }
 
-/* function listGuilds(message, listOfGuilds) {
-  let i = 0;
-  while (i != listOfGuilds.length + 1) {
-    return listOfGuilds[i] + "\r\n";
-    i++;
-  }
-  return "\nend";
-}*/
-
-function guildInfo(message, listOfGuilds) {
-  let i = 0;
-  let listAll = [];
-  listOfGuilds.forEach(function(item) {
-    listAll.push(item + '\r\n' + item.id + '\r\n');
-  });
-  return (listAll.join('\r\n'));
-}
-
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== '') {
     bot.channels.get(commandLogger).send('{0} » {1} » {2}'.format(Style.bold(message.author.tag),
       Style.underline(message.guild.name), Style.code(message.content)));
   }
+}
+
+function setPlaying(message) {
+  if (message == ' ' || message === undefined || message.length == 0) message = config.name + ' v' + package.version;
+  let gameData = {
+    name: message,
+    url: 'https://discordapp.com'
+  }
+  bot.user.setPresence({ 'game': gameData })
 }
 
 bot.on('ready', () => {
@@ -160,7 +153,16 @@ bot.on('ready', () => {
     db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id INTEGER, channel_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS points (member_id INTEGER, points INTEGER)');
   });
-  //  bot.user.setGame("t-help | t-invite | Khux#6195");
+
+  setTimeout(function () { setPlaying() }, 3000);
+
+  commands = [
+    ['Information', new Help(), new Stats(), new Profile(), new Invite(), new Support(), new Info(), new ChangeLog()],
+    ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
+    ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
+    /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
+    ['Admin', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome(), new Playing(), new Guilds()],
+  ];
 });
 
 // Log guild create and delete
@@ -191,16 +193,6 @@ bot.on('guildMemberAdd', (member) => {
 });
 
 bot.on('message', (message) => {
-  if (commands.length == 0) {
-    commands = [
-      ['Information', new Help(), new Stats(), new Profile(), new Invite(), new Support(), new Info(), new ChangeLog()],
-      ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
-      ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
-      /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
-      ['Admin', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()/* , new Playing(), new Guild() */],/* ,
-      ["Owner", new Playing(), new Guilds()]*/
-    ];
-  }
 
   if (message.author.bot) return;
   if (message.channel.type === 'dm') return;
@@ -254,18 +246,7 @@ bot.on('message', (message) => {
     message.channel.send({embed: Style.warn('Uh oh, I didn\'t find that command! Try ' + Style.code(config.prefix + new Help().getCommand()) + '.')});
   }
 
-  /* 
-  else if (command === "playing") {
-    if (message.author.id != '135529980011610112') return;
-    else {
-      let gamemessage = args.join(" ");
-      bot.user.setGame(gamemessage);
-    }
-  }
-  else if (command === "guilds") {
-    let guildsListing = bot.guilds.array()
-    message.channel.send(`${guildInfo(message, guildsListing)}`)
-  }
+  /*
   else if (command === "leaveserver") {
     if (message.author.id == "135529980011610112") {
       if (args[0]) {
@@ -320,6 +301,9 @@ module.exports.getLevel = function(points) {
 }
 module.exports.getLevelR = function(points) {
   return getLevelR(points);
+}
+module.exports.setPlaying = function(message) {
+  return setPlaying(message);
 }
 
 process.stdin.resume();
