@@ -11,7 +11,6 @@ function Coin() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let coins = [
     'Heads',
     'Tails',

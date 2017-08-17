@@ -37,14 +37,14 @@ method.executeAdmin = function (message, args, bot, db) {
       } else {
         db.run('UPDATE guilds SET channel_id = ' + channelId + ' WHERE guild_id = ' + guildId);
         message.channel.send({
-          embed: Tsubaki.Style.success('Welcome messages have been switched to channel <#' + channelId + '> for this guild. :frowning:')
+          embed: Tsubaki.Style.success('Welcome messages have been switched to channel <#' + channelId + '> for this guild.')
         });
       }
     });
   } else if (status === "disable") {
     db.run('DELETE FROM guilds WHERE guild_id = ' + guildId, function () {
       message.channel.send({
-        embed: Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('disabled') + ' for this guild.')
+        embed: Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('disabled') + ' for this guild. :frowning:')
       });
     });
   } else {
@@ -53,7 +53,6 @@ method.executeAdmin = function (message, args, bot, db) {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
     this.executeAdmin(message, args, bot, db);
   } else {

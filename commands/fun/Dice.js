@@ -11,7 +11,6 @@ function Dice() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let numbers = [
     '1',
     '2',

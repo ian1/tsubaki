@@ -11,7 +11,6 @@ function Tts() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   message.channel.send(args.join(" "), { tts: true });
 }
 

@@ -11,7 +11,6 @@ function Profile() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let profileMention = message.mentions.users.first();
   
   if (profileMention == "" || profileMention === undefined) {

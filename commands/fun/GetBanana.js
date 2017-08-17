@@ -11,7 +11,6 @@ function GetBanana() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   Tsubaki.getPoints(message.author.id, function (points) {
     message.reply(":banana: " + Tsubaki.Style.italicize("You are currently Banana level") + " " + Tsubaki.Style.code(Tsubaki.getLevelR(points)) + Tsubaki.Style.italicize(", with")
       + " " + Tsubaki.Style.code(points) + " Bananas!");

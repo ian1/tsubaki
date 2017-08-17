@@ -11,7 +11,6 @@ function Support() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.codeBlock("Have Questions or need help?", "js") + "\n\n" + this.getInformation())
     .addField(Tsubaki.Style.bold(Tsubaki.name + "'s Help Server"), Tsubaki.Style.url("Click Here to join",

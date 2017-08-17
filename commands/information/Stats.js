@@ -11,7 +11,6 @@ function Stats() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.bold(Tsubaki.name) + " Guild Stats:")
     .addField("Guilds", bot.guilds.size)

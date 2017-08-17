@@ -9,11 +9,16 @@ function Command(command, description, usage) {
   this._usage = Tsubaki.prefix + command + usage;
 }
 
-method.execute = function () {
+method.executeInternal = function (message, args, bot, db) {
+  this.execute(message, args, bot, db);
+  message.delete(message);
+};
+
+method.execute = function (message, args, bot, db) {
   throw new Error("Abstract method!");
 };
 
-method.executeAdmin = function () {
+method.executeAdmin = function (message, args, bot, db) {
   throw new Error("Abstract method!");
 };
 
@@ -37,7 +42,7 @@ method.getInformation = function () {
 };
 
 method.delete = function (message) {
-  message.delete(message, { wait: 10 }, function (error) { });
+  //message.delete(message, { wait: 10 }, function (error) { });
 }
 
 module.exports = Command;
@@ -58,7 +63,6 @@ function NAME() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   // ACTION
 }
 

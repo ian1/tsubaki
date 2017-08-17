@@ -11,7 +11,6 @@ function Add() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   if (args.length < 2) {
     return message.channel.send({ embed: Tsubaki.Style.warn("Hey, you must provide the numbers first!") });
   }

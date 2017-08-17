@@ -11,7 +11,6 @@ function Invite() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.codeBlock("Invite " + Tsubaki.name + " to your server!", "css") + "\n\n" + this.getInformation())
     .addField(Tsubaki.name + "'s Help Server",

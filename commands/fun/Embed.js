@@ -11,7 +11,6 @@ function Embed() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(args.join(" "))
     .setColor(Tsubaki.color.green);

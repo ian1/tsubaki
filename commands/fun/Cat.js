@@ -12,7 +12,6 @@ function Cat() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   random.cat().then(url => message.channel.send(url)).catch(err => {
     console.log(err.message);
     message.channel.send({ embed: Tsubaki.Style.errorGeneric() });

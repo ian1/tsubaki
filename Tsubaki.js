@@ -244,7 +244,7 @@ bot.on('message', (message) => {
   for (let i = 0, lenI = commands.length; i < lenI && !found; i++) {
     for (let j = 1, lenJ = commands[i].length; j < lenJ && !found; j++) {
       if (command === commands[i][j].getCommand()) {
-        commands[i][j].execute(message, args, bot, db);
+        commands[i][j].executeInternal(message, args, bot, db);
         found = true;
         break;
       }
@@ -259,12 +259,10 @@ bot.on('message', (message) => {
     if (message.author.id != '135529980011610112') return;
     else {
       let gamemessage = args.join(" ");
-      this.delete(message);
       bot.user.setGame(gamemessage);
     }
   }
   else if (command === "guilds") {
-    this.delete(message);
     let guildsListing = bot.guilds.array()
     message.channel.send(`${guildInfo(message, guildsListing)}`)
   }

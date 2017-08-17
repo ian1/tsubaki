@@ -11,7 +11,6 @@ function ChangeLog() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription("not done ;)")
     .setColor(Tsubaki.color.white);

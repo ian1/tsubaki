@@ -11,7 +11,6 @@ function Help() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let cmds = Tsubaki.commands();
 
   if (args.length == 0) {

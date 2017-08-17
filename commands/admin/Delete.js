@@ -24,7 +24,6 @@ method.executeAdmin = function (message, args, bot, db) {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
     this.executeAdmin(message, args, bot, db);
   } else {

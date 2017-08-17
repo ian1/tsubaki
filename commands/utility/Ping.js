@@ -11,7 +11,6 @@ function Ping() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let ping = bot.ping;
   let color = Tsubaki.color.green;
   if (ping > 150) {

@@ -11,7 +11,6 @@ function Info() {
 }
 
 method.execute = function (message, args, bot, db) {
-  this.delete(message);
   let embed = new Discord.RichEmbed()
     .setDescription(Tsubaki.Style.bold("Information About " + Tsubaki.name) + "\n\n     "
       + Tsubaki.name + " is a " + Tsubaki.Style.bold("Discord.js") + " bot. She can be used for moderation, "
