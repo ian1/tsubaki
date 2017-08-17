@@ -89,8 +89,8 @@ function getPoints(id) {
   let points = 0;
   let db = getDb();
   db.serialize(function() {
-    db.each('SELECT points FROM points WHERE member_id = ' + id, function(err, row) {
-      points = row.points;
+    db.each('SELECT points FROM points WHERE member_id = ' + id, function (err, row) {
+      if (row !== undefined) points = row.points;
     });
   });
 
@@ -190,7 +190,7 @@ bot.on('guildMemberAdd', (member) => {
   db.serialize(function () {
     db.each('SELECT * from guild_join WHERE member_id = ' + member.id
       + ' AND guild_id = ' + memberGuild.id, function (err, row) {
-        found = true;
+        if (row !== undefined) found = true;
       });
   })
 
