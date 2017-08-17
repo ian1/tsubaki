@@ -106,10 +106,10 @@ function getPoints(id, callback) {
   });
 }
 
-function setPoints(id, points) {
+function setPoints(id, points, channel) {
   db.run('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id, function () {
     if (getLevel(points) === getLevelR(points)) {
-      bot.users.get(id).send(':arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!'));
+      channel.send(':arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!'));
     }
   });
 }
@@ -231,7 +231,7 @@ bot.on('message', (message) => {
   let args = message.content.split(' ').slice(1);
 
   getPoints(message.author.id, function (points) {
-    setPoints(message.author.id, points + 1);
+    setPoints(message.author.id, points + 1, message.channel);
   });
 
   let found = false;
@@ -285,8 +285,8 @@ module.exports.help = function() {
 module.exports.getPoints = function(id, callback) {
   return getPoints(id, callback)
 }
-module.exports.setPoints = function(id, points) {
-  setPoints(id, points);
+module.exports.setPoints = function(id, points, channel) {
+  setPoints(id, points, channel);
 }
 module.exports.getLevel = function(points) {
   return getLevel(points);
