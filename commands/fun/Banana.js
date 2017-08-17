@@ -18,7 +18,7 @@ method.execute = function (message, args, bot, points) {
   if (memberMention == '' || memberMention === undefined) return message.channel.send({ embed: Tsubaki.Style.unknownUser() });
   else {
     message.channel.send(":banana: " + message.author.tag + " has given " + memberMention + " a banana!");
-    points[memberMention.id].points++;
+    Tsubaki.setPoints(memberMention.id, Tsubaki.getPoints(memberMention.id) + 1);
   }
 }
 

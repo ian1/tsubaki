@@ -40,6 +40,8 @@ method.executeAdmin = function (message, args, bot, points) {
         message.channel.send('Welcome messages now `disabled` for this guild.');
       }
     });
+  } else {
+    message.channel.send({ embed: Tsubaki.Style.warn("Invalid arguments! Usage: " + this.getUsage()) });
   }
 }
 
