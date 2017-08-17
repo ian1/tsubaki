@@ -27,9 +27,9 @@ const tsubakiPalaceGuild = '335272347256881154';
 
 const tsubakiTag = '334386617626263553';
 const tsubakiReact = '343292881689378816';
-const khuxTag = '135529980011610112';
-const khuxReact = '343292371749961728';
-const davidTag = '142037204548583424';
+const ianId = '135529980011610112';
+const ianReact = '343292371749961728';
+const davidId = '142037204548583424';
 const davidReact = '346848029833297920';
 
 // Color codes
@@ -79,8 +79,10 @@ const Kick = require('./commands/admin/Kick.js');
 const Ban = require('./commands/admin/Ban.js');
 const UnBan = require('./commands/admin/UnBan.js');
 const Welcome = require('./commands/admin/Welcome.js');
-const Playing = require('./commands/admin/Playing.js');
-const Guilds = require('./commands/admin/Guilds.js');
+
+const Playing = require('./commands/owner/Playing.js');
+const Guilds = require('./commands/owner/Guilds.js');
+const LeaveGuild = require('./commands/owner/LeaveGuild.js');
 
 let commands = [];
 
@@ -161,7 +163,8 @@ bot.on('ready', () => {
     ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
     ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
     /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
-    ['Admin', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome(), new Playing(), new Guilds()],
+    ['* Admin', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
+    ['** Owner', new Playing(), new Guilds(), new LeaveGuild()],
   ];
 });
 
@@ -210,11 +213,11 @@ bot.on('message', (message) => {
   if (lowerMsg.includesIgnoreCase(config.nameIn) || lowerMsg.includesIgnoreCase(config.name) ||
     lowerMsg.includesIgnoreCase('<@' + tsubakiTag + '>')) message.react(tsubakiReact);
 
-  if (lowerMsg.includesIgnoreCase('khux') || lowerMsg.includesIgnoreCase('<@' + khuxTag + '>'))
-    {message.react(khuxReact);}
+  if (lowerMsg.includesIgnoreCase('khux') || lowerMsg.includesIgnoreCase('<@' + ianId + '>'))
+    {message.react(ianReact);}
 
   if (lowerMsg.includesIgnoreCase('pan') || lowerMsg.includesIgnoreCase('david') ||
-    lowerMsg.includesIgnoreCase('<@' + davidTag + '>')) message.react(davidReact);
+    lowerMsg.includesIgnoreCase('<@' + davidId + '>')) message.react(davidReact);
 
   // Correct user for old prefix
   if (lowerMsg.startsWith('t-') || lowerMsg.startsWith('tb-')) {
@@ -243,21 +246,8 @@ bot.on('message', (message) => {
     }
   }
   if (!found) {
-    message.channel.send({embed: Style.warn('Uh oh, I didn\'t find that command! Try ' + Style.code(config.prefix + new Help().getCommand()) + '.')});
+    message.channel.send({embed: Style.notFound()});
   }
-
-  /*
-  else if (command === "leaveserver") {
-    if (message.author.id == "135529980011610112") {
-      if (args[0]) {
-        let guildz = bot.guilds.get(args[0])
-        message.channel.send(`Leaving server ${guildz.name}...`);
-        guildz.leave();
-        message.channel.send(`Left server.`);
-      }
-      else { message.channel.send("Please put a server id") }
-    }
-  }*/
 });
 
 if (!String.prototype.format) {
@@ -284,6 +274,8 @@ module.exports.author = package.author;
 module.exports.adminPermission = adminPermission;
 module.exports.color = color;
 module.exports.Style = Style;
+module.exports.ianId = ianId;
+module.exports.davidId = davidId;
 module.exports.commands = function() {
   return commands;
 }

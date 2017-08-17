@@ -18,7 +18,8 @@ method.execute = function (message, args, bot, db) {
       + "Do " + Tsubaki.Style.bold(this.getUsage()) + " and replace " + Tsubaki.Style.bold("[command]")
       + " with any command you want to learn more about." + "\n";
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
-      if (cmds[i][0] !== "Admin" || message.member === undefined || message.member.hasPermission(Tsubaki.adminPermission)) {
+      if ((!cmds[i][0].startsWith('*') || message.member.hasPermission(Tsubaki.adminPermission))
+        && (!cmds[i][0].startsWith('**') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
         description += "\n" + Tsubaki.Style.bold(cmds[i][0] + ": ");
 
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
@@ -35,7 +36,8 @@ method.execute = function (message, args, bot, db) {
     for (let i = 0, lenI = cmds.length; i < lenI; i++) {
       for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
         if (args[0] === cmds[i][j].getCommand()) {
-          if (cmds[i][0] !== "Admin" || message.member === undefined || message.member.hasPermission(Tsubaki.adminPermission)) {
+          if ((!cmds[i][0].startsWith('*') || message.member.hasPermission(Tsubaki.adminPermission))
+            && (!cmds[i][0].startsWith('**') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
             var cmd = cmds[i][j];
             var embed = new Discord.RichEmbed()
               .setDescription(Tsubaki.Style.bold("Command: ") + cmd.getCommand() + "\n"
@@ -44,12 +46,14 @@ method.execute = function (message, args, bot, db) {
               + Tsubaki.Style.bold("Usage: ") + cmd.getUsage())
               .setColor(Tsubaki.color.green);
             message.channel.send({ embed: embed });
-          }  
+          } else {
+            message.channel.send({ embed: Tsubaki.Style.notFound() });
+          }
           return;
         }
       }
     }
-    message.channel.send({ embed: Tsubaki.Style.warn("Uh oh, I didn't find that command! Try " + Tsubaki.Style.code(Tsubaki.prefix + new Help().getCommand()) + ".") });
+    message.channel.send({ embed: Tsubaki.Style.notFound() });
   }
 }
 

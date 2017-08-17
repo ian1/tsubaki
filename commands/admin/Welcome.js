@@ -56,7 +56,7 @@ method.execute = function (message, args, bot, db) {
   if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
     this.executeAdmin(message, args, bot, db);
   } else {
-    return message.channel.send({ embed: Tsubaki.Style.error("You don't have permission for that!") });
+    return message.channel.send({ embed: Tsubaki.Style.notFound() });
   }
 }
 

@@ -14,7 +14,7 @@ method.execute = function (message, args, bot, db) {
   let profileMention = message.mentions.users.first();
   
   if (profileMention == "" || profileMention === undefined) {
-    return message.channel.send({ embed: Tsubaki.Style.unknownUser });
+    return message.channel.send({ embed: Tsubaki.Style.unknownUser() });
   } else {
     let color = Tsubaki.color.gray;
     switch (profileMention.presence.status) {

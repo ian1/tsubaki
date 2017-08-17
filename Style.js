@@ -59,5 +59,10 @@ module.exports = {
   unknownUser: function () {
     return module.exports.warn(":thinking: Sorry... I don't know who that is. "
       + "Please try again, make sure you use @ to mention the user!");
+  },
+
+  notFound: function () {
+    return module.exports.warn('Uh oh, I didn\'t find that command! Try '
+      + Style.code(Tsubaki.config.prefix + Tsubaki.help.getCommand()) + '.')
   }
 }

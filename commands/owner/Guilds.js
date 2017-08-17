@@ -7,7 +7,7 @@ let method = Guilds.prototype = Object.create(_super);
 method.constructor = Guilds;
 
 function Guilds() {
-  _super.constructor.apply(this, ["guilds", "Print a list of the guilds using " + config.name + '.', ""]);
+  _super.constructor.apply(this, ["guilds", "Print a list of the guilds using " + Tsubaki.name + '.', ""]);
 }
 
 method.executeAdmin = function (message, args, bot, db) {
@@ -43,10 +43,10 @@ method.executeAdmin = function (message, args, bot, db) {
 }
 
 method.execute = function (message, args, bot, db) {
-  if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
+  if (message.member !== undefined && (message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
     this.executeAdmin(message, args, bot, db);
   } else {
-    return message.channel.send({ embed: Tsubaki.Style.error("You don't have permission for that!") });
+    return message.channel.send({ embed: Tsubaki.Style.notFound() });
   }
 }
 
