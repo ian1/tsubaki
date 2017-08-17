@@ -101,7 +101,7 @@ function getPoints(id) {
     });
   }
 
-  db.close();
+  //db.close();
   return points;
 }
 
@@ -110,7 +110,7 @@ function setPoints(id, points) {
   db.serialize(function() {
     db.run('UPDATE points SET points = ' + points + ' WHERE member_id = ' + id);
   });
-  db.close();
+  //db.close();
 
   if (getLevel(points) === getLevelR(points)) {
     bot.users.get(id).send(':arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!'));
@@ -165,7 +165,7 @@ bot.on('ready', () => {
     db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS points (member_id INTEGER, points INTEGER)');
   });
-  db.close();
+  //db.close();
   //  bot.user.setGame("t-help | t-invite | Khux#6195");
 });
 
@@ -204,7 +204,7 @@ bot.on('guildMemberAdd', (member) => {
     })
   }
   
-  db.close();
+  //db.close();
 });
 
 bot.on('message', (message) => {
