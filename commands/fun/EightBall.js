@@ -10,7 +10,7 @@ function EightBall() {
   _super.constructor.apply(this, ["8ball", "Will answer your burning (yes or no) questions.", " <question>"]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   let question = message.content.split(' ')[1];
   let balls = [
     "It is certain!",

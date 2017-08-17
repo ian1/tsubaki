@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 const package = require('./package.json');
 const config = require('./config.json');
 
-const sqlite = requre('sqlite3').verbose();
+const sqlite = require('sqlite3').verbose();
 const chalk = require('chalk');
 const music = require('discord.js-music-v11');
 const Style = require('./Style.js');
@@ -259,7 +259,7 @@ bot.on('message', (message) => {
   for (let i = 0, lenI = commands.length; i < lenI && !found; i++) {
     for (let j = 1, lenJ = commands[i].length; j < lenJ && !found; j++) {
       if (command === commands[i][j].getCommand()) {
-        commands[i][j].execute(message, args, bot, points);
+        commands[i][j].execute(message, args, bot);
         found = true;
         break;
       }

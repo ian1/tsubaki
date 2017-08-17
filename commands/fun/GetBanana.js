@@ -10,7 +10,7 @@ function GetBanana() {
   _super.constructor.apply(this, ["getbanana", "Will give you a banana, and list your current points.", ""]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let points = Tsubaki.getPoints(message.author.id);
   message.reply(":banana: " + Tsubaki.Style.italicize("You are currently Banana level") + " " + Tsubaki.Style.code(Tsubaki.getLevelR(points)) + Tsubaki.Style.italicize(", with")

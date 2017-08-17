@@ -10,7 +10,7 @@ function Add() {
   _super.constructor.apply(this, ["add", "Will add the numbers given.", " <number 1> <num2> [num3] [num4]..."]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   if (args.length < 2) {
     return message.channel.send({ embed: Tsubaki.Style.warn("Hey, you must provide the numbers first!") });

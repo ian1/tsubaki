@@ -10,7 +10,7 @@ function Profile() {
   _super.constructor.apply(this, ["profile", "Will show you the profile of the mentioned user.", " <@mention>"]);
 }
 
-method.execute = function (message, args, bot, points) {
+method.execute = function (message, args, bot) {
   this.delete(message);
   let profileMention = message.mentions.users.first();
   
@@ -33,7 +33,6 @@ method.execute = function (message, args, bot, points) {
     let profileEmbed = new Discord.RichEmbed()
       .setTitle("Profile of " + profileMention + "#" + profileMention.discriminator)
       .addField("Id", profileMention.id)
-      .addBlankField()
       .addField("Tag", profileMention.tag)
       .addField("Banana", "Level " + userData.level + ", with " + userData.points + " Bananas")
       .setImage(profileMention.displayAvatarURL)
