@@ -28,10 +28,13 @@ method.execute = function (message, args, bot, db) {
         color = Tsubaki.color.yellow;
         break;
     }
+
+    let roleList = message.guild.member(profileMention.id).roles.array();
     Tsubaki.getPoints(profileMention.id, function (points) {
       let profileEmbed = new Discord.RichEmbed()
         .setTitle("Profile of " + profileMention.tag)
         .addField("Id", profileMention.id)
+        .addField('Roles', roleList.join(' '))
         .addField("Banana", "Level " + Tsubaki.getLevelR(points) + ", with " + points + " Bananas")
         .setImage(profileMention.displayAvatarURL)
         .setColor(color);
