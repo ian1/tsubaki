@@ -222,7 +222,6 @@ bot.on('message', (message) => {
   // Correct user for old prefix
   if (lowerMsg.startsWith('t-') || lowerMsg.startsWith('tb-')) {
     message.channel.send(':exclamation: Hey, the prefix is now ' + Style.code(config.prefix) + '!');
-    message.content = message.content.replace('t-', config.prefix).replace('tb-', config.prefix);
   }
 
   if (!message.content.startsWith(config.prefix) || message.author.id == '') return;
