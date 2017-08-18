@@ -86,6 +86,8 @@ const LeaveGuild = require('./commands/owner/LeaveGuild.js');
 const Eval = require('./commands/owner/Eval.js');
 
 let commands = [];
+let cooldowns = [];
+let cooldownMsgs = [];
 
 const db = new sqlite.Database('./data.db');
 
@@ -215,17 +217,43 @@ bot.on('message', (message) => {
     lowerMsg.includesIgnoreCase('<@' + tsubakiTag + '>')) message.react(tsubakiReact);
 
   if (lowerMsg.includesIgnoreCase('khux') || lowerMsg.includesIgnoreCase('<@' + ianId + '>'))
-    {message.react(ianReact);}
+    message.react(ianReact);
 
   if (lowerMsg.includesIgnoreCase('pan') || lowerMsg.includesIgnoreCase('david') ||
     lowerMsg.includesIgnoreCase('<@' + davidId + '>')) message.react(davidReact);
 
   // Correct user for old prefix
   if (lowerMsg.startsWith(config.prefix.replace(':', '-'))) {
-    message.channel.send({ embed: Style.error('Whoops, I didn\'t recognize that! Did you mean ' + Style.code(message.content.replace('^tb?-', config.prefix)) + '?') });
+    message.channel.send({ embed: Style.error('Whoops, I didn\'t recognize that! Did you mean ' + Style.code(message.content.replace('^tb?-', config.prefix).replace('`', '&#96;')) + '?') });
   }
 
   if (!message.content.startsWith(config.prefix) || message.author.id == '') return;
+
+  let time = new Date().getTime();
+
+  if (message.author.id in cooldowns) {
+    if (time - cooldowns[message.author.id] < 3000) {
+      let diff = (time - cooldowns[message.author.id]) / 1000.0;
+      diff = Number(Math.round(diff + 'e2') + 'e-2');
+
+      message.channel.delete(message);
+      if (message.author.id in cooldownMsgs) {
+        if (time - cooldownMsgs[message.author.id] < 10000) { // Show cooldown messages at most once every 10 seconds
+          let diff = (time - cooldownMsgs[message.author.id]) / 1000.0;
+          diff = Number(Math.round(diff + 'e2') + 'e-2')
+          return;
+        }
+      }
+
+      cooldownMsgs[message.author.id] = time;
+      message.channel.send({
+        embed: Style.error(message.author.username + ', please wait ' + diff
+          + ' seconds before executing your next command!')
+      })
+    }
+  }
+
+  cooldowns[message.author.id] = time;
 
   let command = message.content.split(' ')[0].slice(config.prefix.length).toLowerCase();
   let args = message.content.split(' ').slice(1);

@@ -39,7 +39,7 @@ method.execute = function (message, args, bot, db) {
         .addField("ID", profileMention.id, true)
         .addField("Banana", "Level " + Tsubaki.getLevelR(points) + ", with " + points + " Bananas", true)
         .addField('Roles', roleList.join(' '), true)
-        .setImage(profileMention.displayAvatarURL)
+        .setThumbnail(profileMention.displayAvatarURL)
         .setFooter('Member since ' + formatDate(guildMember.joinedAt) + ', Discorder since ' + formatDate(profileMention.createdAt))
         .setColor(color);
       message.channel.send({ embed: profileEmbed });
