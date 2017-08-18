@@ -255,15 +255,15 @@ bot.on('message', (message) => {
   }*/
 
   // Reacts
-  if (lowerMsg.includes(config.nameIn) || lowerMsg.includes(config.name) || lowerMsg.includes('<@' + tsubakiTag + '>')) {
+  if (lowerMsg.includes(config.nameIn.toLowerCase()) || lowerMsg.includes(config.name.toLowerCase()) || lowerMsg.includes(tsubakiTag)) {
     message.react(tsubakiReact);
   }
 
-  if (lowerMsg.includes('khux') || lowerMsg.includes('<@' + ianId + '>')) {
+  if (lowerMsg.includes('khux') || lowerMsg.includes('ian') || lowerMsg.includes(ianId)) {
     message.react(ianReact);
   }
 
-  if (lowerMsg.includes('pan') || lowerMsg.includes('david') || lowerMsg.includes('<@' + davidId + '>')) {
+  if (lowerMsg.includes('pan') || lowerMsg.includes('david') || lowerMsg.includes(davidId)) {
     message.react(davidReact);
   }
 
