@@ -66,13 +66,13 @@ const Add = require('./commands/utility/Add.js');
 const Urban = require('./commands/utility/Urban.js');
 const Dictionary = require('./commands/utility/Dictionary.js');
 
-/* const Leave = require("./commands/music/Leave.js");
-const Queue = require("./commands/music/Queue.js");
-const Play = require("./commands/music/Play.js");
-const Pause = require("./commands/music/Pause.js");
-const Resume = require("./commands/music/Resume.js");
-const Skip = require("./commands/music/Skip.js");
-const ClearQueue = require("./commands/music/ClearQueue.js");*/
+/* const Leave = require('./commands/music/Leave.js');
+const Queue = require('./commands/music/Queue.js');
+const Play = require('./commands/music/Play.js');
+const Pause = require('./commands/music/Pause.js');
+const Resume = require('./commands/music/Resume.js');
+const Skip = require('./commands/music/Skip.js');
+const ClearQueue = require('./commands/music/ClearQueue.js');*/
 
 const Delete = require('./commands/admin/Delete.js');
 const Kick = require('./commands/admin/Kick.js');
@@ -94,46 +94,43 @@ const db = new sqlite.Database('./data.db');
 function cooldownMsg(id, username, sentCooldownMsg, message) {
   let time = new Date().getTime();
 
-  if (id in cooldowns) {
-    if (time - cooldowns[id] < 3000) {
-      let diff = 3 - (time - cooldowns[id]) / 1000.0;
-      diff = Math.ceil(diff);
-      if (diff == 1) {
-        diff = diff + ' second';
-      } else {
-        diff = diff + ' seconds';
-      }
-
-      var embed = Style.error(username + ', please wait ' + diff
-        + ' before executing your next command!');
-
-      if (sentCooldownMsg === undefined) {
-        message.delete();
-        
-        message.channel.send({
-          embed: embed
-        }).then(sentMsg => {
-          setTimeout(function () {
-            cooldownMsg(id, username, sentMsg, message);
-          }, 500);
-        }).catch(console.error);
-        return true;
-      } else {
-        sentCooldownMsg.edit({
-          embed: embed
-        }).then(sentMsg => {
-          setTimeout(function () {
-            cooldownMsg(id, username, sentMsg, message);
-          }, 500);
-        }).catch(console.error);
-      }
+  if (!(id in cooldowns)) return false;  
+  if (time - cooldowns[id] < 3000) {
+    let diff = 3 - (time - cooldowns[id]) / 1000.0; // 3 second cooldown
+    diff = Math.ceil(diff);
+    if (diff == 1) {
+      diff = diff + ' second'; // Because aesthetics.
     } else {
-      if (sentCooldownMsg !== undefined) {
-        sentCooldownMsg.delete();
-      }
+      diff = diff + ' seconds';
     }
+
+    var embed = Style.error(username + ', please wait ' + diff
+      + ' before executing your next command!');
+
+    // First iteration of loop: sentCooldownMsg hasn't been created yet
+    if (sentCooldownMsg === undefined) {
+      message.delete();
+      
+      message.channel.send({ // Create the cooldown message
+        embed: embed
+      }).then(sentMsg => {
+        setTimeout(function () { // Continue the loop
+          cooldownMsg(id, username, sentMsg, message);
+        }, 500);
+        }).catch(console.error);
+    } else {
+      sentCooldownMsg.edit({ // Update the cooldown message
+        embed: embed
+      }).then(sentMsg => {
+        setTimeout(function () { // Continue the loop
+          cooldownMsg(id, username, sentMsg, message);
+        }, 500);
+      }).catch(console.error);
+    }
+  } else if (sentCooldownMsg !== undefined) { // Delete the message if it exists, but cooldown is over
+    sentCooldownMsg.delete();
   }
-  return false;
+  return true;
 }
 
 function getPoints(id, callback) {
@@ -180,10 +177,18 @@ function cmdLogger(message, bot) {
 function setPlaying(message) {
   if (message == ' ' || message === undefined || message.length == 0) message = config.name + ' v' + package.version;
   let gameData = {
-    name: message,
-    url: 'https://discordapp.com'
+    'name': message,
+    'url': 'https://discordapp.com'
   }
-  bot.user.setPresence({ 'game': gameData });
+  bot.user.setPresence({ 'status': 'online', 'game': gameData }).then(user => {
+    console.log('check');
+    if (bot.user.presence.game.name !== message) {
+      console.log('try again');
+      setPlaying(message);
+    } else {
+      console.log('pass');
+    }
+  });
 }
 
 bot.on('ready', () => {
@@ -210,7 +215,7 @@ bot.on('ready', () => {
     ['Information', new Help(), new Stats(), new Profile(), new Invite(), new Support(), new Info(), new ChangeLog()],
     ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
     ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
-    /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
+    /* ['Music', new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
     ['_Admin_', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
     ['__Owner__', new Playing(), new Guilds(), new LeaveGuild(), new Eval()],
   ];
@@ -253,19 +258,24 @@ bot.on('message', (message) => {
 
   let lowerMsg = message.content.toLowerCase();
 
-  /* if (lowerMsg.toLowerCase() === "help tsubaki") {
-    message.channel.send("Hi there, if you need help do  ``t-help``!");
+  /* if (lowerMsg.toLowerCase() === 'help tsubaki') {
+    message.channel.send('Hi there, if you need help do  ``t-help``!');
   }*/
 
   // Reacts
   if (lowerMsg.includesIgnoreCase(config.nameIn) || lowerMsg.includesIgnoreCase(config.name) ||
-    lowerMsg.includesIgnoreCase('<@' + tsubakiTag + '>')) message.react(tsubakiReact);
+    lowerMsg.includesIgnoreCase('<@' + tsubakiTag + '>')) {
+    message.react(tsubakiReact);
+  }
 
-  if (lowerMsg.includesIgnoreCase('khux') || lowerMsg.includesIgnoreCase('<@' + ianId + '>'))
+  if (lowerMsg.includesIgnoreCase('khux') || lowerMsg.includesIgnoreCase('<@' + ianId + '>')) {
     message.react(ianReact);
+  }
 
   if (lowerMsg.includesIgnoreCase('pan') || lowerMsg.includesIgnoreCase('david') ||
-    lowerMsg.includesIgnoreCase('<@' + davidId + '>')) message.react(davidReact);
+    lowerMsg.includesIgnoreCase('<@' + davidId + '>')) {
+    message.react(davidReact);
+  }
 
   // Correct user for old prefix
   if (lowerMsg.startsWith(config.prefix.replace(':', '-'))) {
@@ -278,7 +288,9 @@ bot.on('message', (message) => {
 
   if (cooldownMsg(message.author.id, message.author.username, undefined, message)) return;
 
-  cooldowns[message.author.id] = time;
+  if (message.author.id !== ianId && message.author.id !== davidId) {
+    cooldowns[message.author.id] = time;
+  }
 
   let command = message.content.split(' ')[0].slice(config.prefix.length).toLowerCase();
   let args = message.content.split(' ').slice(1);
@@ -370,7 +382,7 @@ function exitHandler(options, err) {
       , options);
     
     db.close();
-    console.log("Closed db");
+    console.log('Closed db');
   }
   if (err) console.log(err.stack);
   if (options.exit) {

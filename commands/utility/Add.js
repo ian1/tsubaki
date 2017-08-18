@@ -1,25 +1,23 @@
-const Tsubaki = require("../../Tsubaki.js");
-const Discord = require("discord.js");
+const Tsubaki = require('../../Tsubaki.js');
+const Discord = require('discord.js');
 
-let _super = require("../Command.js").prototype;
-let method = Add.prototype = Object.create(_super);
+const Command = require('../Command.js');
 
-method.constructor = Add;
-
-function Add() {
-  _super.constructor.apply(this, ["add", "Will add the numbers given.", " <number 1> <num2> [num3] [num4]..."]);
-}
-
-method.execute = function (message, args, bot, db) {
-  if (args.length < 2) {
-    return message.channel.send({ embed: Tsubaki.Style.warn("Hey, you must provide the numbers first!") });
+class Add extends Command {
+  constructor() {
+    super('add', 'Will add the numbers given.', ' <number 1> <num2> [num3] [num4]...');
   }
-  let numArray = args.map(n => parseInt(n));
-  let total = numArray.reduce((p, c) => p + c);
 
-  console.log(typeof total);  
-  if (!(total < 9007199254740991)) message.channel.send({ embed: Tsubaki.Style.warn("Hey, you must provide the numbers first!") });
-  else message.channel.send(total);
+  execute(message, args, bot, db) {
+    if (args.length < 2) {
+      return message.channel.send({ embed: Tsubaki.Style.warn('Hey, you must provide the numbers first!') });
+    }
+    let numArray = args.map(n => parseInt(n));
+    let total = numArray.reduce((p, c) => p + c);
+    
+    if (!(total < 9007199254740991)) message.channel.send({ embed: Tsubaki.Style.warn('Hey, you must provide the numbers first!') });
+    else message.channel.send(total);
+  }
 }
 
 module.exports = Add;

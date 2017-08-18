@@ -1,21 +1,20 @@
-const Tsubaki = require("../../Tsubaki.js");
-const Discord = require("discord.js");
+const Tsubaki = require('../../Tsubaki.js');
+const Discord = require('discord.js');
 
-let _super = require("../Command.js").prototype;
-let method = Say.prototype = Object.create(_super);
+const Command = require('../Command.js');
 
-method.constructor = Say;
+class Say extends Command {
+  constructor() {
+    super('say', Tsubaki.name + ' will say any message given.', ' <message>');
+  }
 
-function Say() {
-  _super.constructor.apply(this, ["say", Tsubaki.name + " will say any message given.", " <message>"]);
-}
-
-method.execute = function (message, args, bot, db) {
-  if (args.length == 0) {
-    message.channel.send({ embed: Tsubaki.Style.warn("Please tell me what to say!") });
-  } else {
-    message.channel.send(args.join(" "), { tts: false });
-  }  
+  execute(message, args, bot, db) {
+    if (args.length == 0) {
+      message.channel.send({ embed: Tsubaki.Style.warn('Please tell me what to say!') });
+    } else {
+      message.channel.send(args.join(' '), { tts: false });
+    }
+  }
 }
 
 module.exports = Say;

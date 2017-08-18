@@ -1,48 +1,44 @@
-const Tsubaki = require("../Tsubaki.js");
-const Discord = require("discord.js");
+const Tsubaki = require('../Tsubaki.js');
+const Discord = require('discord.js');
 
-let method = Command.prototype;
+class Command {
+  constructor(command, description, usage) {
+    this._command = command;
+    this._description = description;
+    this._usage = Tsubaki.prefix + command + usage;
+  }
 
-function Command(command, description, usage) {
-  this._command = command;
-  this._description = description;
-  this._usage = Tsubaki.prefix + command + usage;
-}
+  executeInternal(message, args, bot, db) {
+    this.execute(message, args, bot, db);
+    message.delete();
+  }
 
-method.executeInternal = function (message, args, bot, db) {
-  this.execute(message, args, bot, db);
-  message.delete(message);
-};
+  execute(message, args, bot, db) {
+    throw new Error('Abstract method!');
+  }
 
-method.execute = function (message, args, bot, db) {
-  throw new Error("Abstract method!");
-};
+  executeAdmin(message, args, bot, db) {
+    throw new Error('Abstract method!');
+  }
 
-method.executeAdmin = function (message, args, bot, db) {
-  throw new Error("Abstract method!");
-};
+  getCommand() {
+    return this._command;
+  };
 
-method.getCommand = function () {
-  return this._command;
-};
+  getDescription() {
+    return this._description;
+  };
 
-method.getDescription = function () {
-  return this._description;
-};
+  getUsage() {
+    return this._usage;
+  };
 
-method.getUsage = function () {
-  return this._usage;
-};
-
-method.getInformation = function () {
-  return Tsubaki.Style.bold(Tsubaki.name + " Information:") + "\n"
-    + Tsubaki.name + " is a Discord.js bot that you can have fun with "
-    + Tsubaki.Style.italicize("and") + " moderate with. In your server do "
-    + Tsubaki.Style.code(Tsubaki.help().getUsage()) + " and a list of all my command will pop up.";
-};
-
-method.delete = function (message) {
-  //message.delete(message, { wait: 10 }, function (error) { });
+  getInformation() {
+    return Tsubaki.Style.bold(Tsubaki.name + ' Information:') + '\n'
+      + Tsubaki.name + ' is a Discord.js bot that you can have fun with '
+      + Tsubaki.Style.italicize('and') + ' moderate with. In your server do '
+      + Tsubaki.Style.code(Tsubaki.help().getUsage()) + ' and a list of all my command will pop up.';
+  };
 }
 
 module.exports = Command;
@@ -50,20 +46,19 @@ module.exports = Command;
 /*
 // TEMPLATE
 
-const Tsubaki = require("../../Tsubaki.js");
-const Discord = require("discord.js");
+const Tsubaki = require('../../Tsubaki.js');
+const Discord = require('discord.js');
 
-let _super = require("../Command.js").prototype;
-let method = NAME.prototype = Object.create(_super);
+const Command = require('../Command.js');
 
-method.constructor = NAME;
+class NAME extends Command {
+  constructor() {
+    super('COMMAND', 'DESCRIPTION, 'USAGE');
+  }
 
-function NAME() {
-  _super.constructor.apply(this, ["COMMAND", "DESCRIPTION", "USAGE"]);
-}
-
-method.execute = function (message, args, bot, db) {
-  // ACTION
+  execute(message, args, bot, db) {
+    // ACTION
+  }
 }
 
 module.exports = NAME;

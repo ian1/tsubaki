@@ -1,17 +1,16 @@
-const Tsubaki = require("../../Tsubaki.js");
-const Discord = require("discord.js");
+const Tsubaki = require('../../Tsubaki.js');
+const Discord = require('discord.js');
 
-let _super = require("../Command.js").prototype;
-let method = Dice.prototype = Object.create(_super);
+const Command = require('../Command.js');
 
-method.constructor = Dice;
+class Dice extends Command {
+  constructor() {
+    super('dice', Tsubaki.name + ' will roll the dice and give you a random number.', '');
+  }
 
-function Dice() {
-  _super.constructor.apply(this, ["dice", Tsubaki.name + " will roll the dice and give you a random number.", ""]);
-}
-
-method.execute = function (message, args, bot, db) {
-  message.channel.send(":game_die: You rolled a " + (Math.ceil(Math.random() * 6)));
+  execute(message, args, bot, db) {
+    message.channel.send(':game_die: You rolled a ' + (Math.ceil(Math.random() * 6)));
+  }
 }
 
 module.exports = Dice;
