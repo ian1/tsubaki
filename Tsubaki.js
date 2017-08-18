@@ -180,15 +180,7 @@ function setPlaying(message) {
     'name': message,
     'url': 'https://discordapp.com'
   }
-  bot.user.setPresence({ 'status': 'online', 'game': gameData }).then(user => {
-    console.log('check');
-    if (bot.user.presence.game.name !== message) {
-      console.log('try again');
-      setPlaying(message);
-    } else {
-      console.log('pass');
-    }
-  });
+  bot.user.setPresence({ 'status': 'online', 'game': gameData });
 }
 
 bot.on('ready', () => {
