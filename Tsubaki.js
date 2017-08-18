@@ -124,7 +124,7 @@ function getLevelR(points) {
 
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== '') {
-    bot.channels.get(commandLogger).send('{0} Â» {1} Â» {2}'.format(Style.bold(message.author.tag),
+    bot.channels.get(commandLogger).send('{0} » {1} » {2}'.format(Style.bold(message.author.tag),
       Style.underline(message.guild.name), Style.code(message.content)));
   }
 }
@@ -221,7 +221,7 @@ bot.on('message', (message) => {
 
   // Correct user for old prefix
   if (lowerMsg.startsWith('t-') || lowerMsg.startsWith('tb-')) {
-    message.channel.send(':exclamation: Hey, the prefix is now ' + Style.code(config.prefix) + '!');
+    message.channel.send(':exclamation: | Whoops, didn\'t recognize that! Did you mean `t:' + message.content.substring(2) + '`?');
   }
 
   if (!message.content.startsWith(config.prefix) || message.author.id == '') return;
