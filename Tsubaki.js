@@ -124,7 +124,7 @@ function getLevelR(points) {
 
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== '') {
-    bot.channels.get(commandLogger).send('{0} » {1} » {2}'.format(Style.bold(message.author.tag),
+    bot.channels.get(commandLogger).send('{0} ï¿½ {1} ï¿½ {2}'.format(Style.bold(message.author.tag),
       Style.underline(message.guild.name), Style.code(message.content)));
   }
 }
@@ -220,8 +220,8 @@ bot.on('message', (message) => {
     lowerMsg.includesIgnoreCase('<@' + davidId + '>')) message.react(davidReact);
 
   // Correct user for old prefix
-  if (lowerMsg.startsWith('t-') || lowerMsg.startsWith('tb-')) {
-    message.channel.send(':exclamation: | Whoops, didn\'t recognize that! Did you mean `t:' + message.content.substring(2) + '`?');
+  if (lowerMsg.startsWith(config.prefix.replace(':', '-'))) {
+    message.channel.send({ embed: Style.error('Whoops, I didn\'t recognize that! Did you mean ' + Style.code(message.content.replace('^tb?-', config.prefix)) + '?') });
   }
 
   if (!message.content.startsWith(config.prefix) || message.author.id == '') return;
