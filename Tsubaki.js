@@ -83,6 +83,7 @@ const Welcome = require('./commands/admin/Welcome.js');
 const Playing = require('./commands/owner/Playing.js');
 const Guilds = require('./commands/owner/Guilds.js');
 const LeaveGuild = require('./commands/owner/LeaveGuild.js');
+const Eval = require('./commands/owner/Eval.js');
 
 let commands = [];
 
@@ -124,7 +125,7 @@ function getLevelR(points) {
 
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== '') {
-    bot.channels.get(commandLogger).send('{0} � {1} � {2}'.format(Style.bold(message.author.tag),
+    bot.channels.get(commandLogger).send('{0} » {1} » {2}'.format(Style.bold(message.author.tag),
       Style.underline(message.guild.name), Style.code(message.content)));
   }
 }
@@ -164,7 +165,7 @@ bot.on('ready', () => {
     ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
     /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
     ['_Admin_', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
-    ['__Owner__', new Playing(), new Guilds(), new LeaveGuild()],
+    ['__Owner__', new Playing(), new Guilds(), new LeaveGuild(), new Eval()],
   ];
 });
 

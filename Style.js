@@ -46,7 +46,7 @@ module.exports = {
   },
 
   errorGeneric: function () {
-    return this.error("Whoops, I got an error! Please try again later.");
+    return this.error("Whoops, I got an error! Please try again.");
   },
 
   warn: function (text) {
