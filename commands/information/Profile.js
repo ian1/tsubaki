@@ -29,18 +29,33 @@ method.execute = function (message, args, bot, db) {
         break;
     }
 
-    let roleList = message.guild.member(profileMention.id).roles.array();
+    let guildMember = message.guild.member(profileMention.id);
+    let roleList = guildMember.roles.array();
+
     Tsubaki.getPoints(profileMention.id, function (points) {
       let profileEmbed = new Discord.RichEmbed()
-        .setTitle("Profile of " + profileMention.tag)
-        .addField("Id", profileMention.id)
-        .addField('Roles', roleList.join(' '))
-        .addField("Banana", "Level " + Tsubaki.getLevelR(points) + ", with " + points + " Bananas")
+        .setDescription(Tsubaki.Style.bold(Tsubaki.Style.underline(guildMember.displayName)))
+        .addField("Full Username", profileMention.tag, true)
+        .addField("ID", profileMention.id, true)
+        .addField("Banana", "Level " + Tsubaki.getLevelR(points) + ", with " + points + " Bananas", true)
+        .addField('Roles', roleList.join(' '), true)
         .setImage(profileMention.displayAvatarURL)
+        .setFooter('Member since ' + formatDate(guildMember.joinedAt) + ', Discorder since ' + formatDate(profileMention.createdAt))
         .setColor(color);
       message.channel.send({ embed: profileEmbed });
     });  
   }
+}
+
+function formatDate(date) {
+  const monthNames = [
+    "Jan", "Feb", "Mar",
+    "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct",
+    "Nov", "Dec"
+  ];
+
+  return date.getDate() + ' ' + monthNames[date.getMonth()] + ' ' + date.getFullYear();
 }
 
 module.exports = Profile;
