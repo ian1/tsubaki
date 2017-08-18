@@ -236,7 +236,7 @@ bot.on('message', (message) => {
       let diff = (time - cooldowns[message.author.id]) / 1000.0;
       diff = Number(Math.round(diff + 'e2') + 'e-2');
 
-      message.channel.delete(message);
+      message.delete();
       if (message.author.id in cooldownMsgs) {
         if (time - cooldownMsgs[message.author.id] < 10000) { // Show cooldown messages at most once every 10 seconds
           let diff = (time - cooldownMsgs[message.author.id]) / 1000.0;
