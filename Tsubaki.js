@@ -255,17 +255,15 @@ bot.on('message', (message) => {
   }*/
 
   // Reacts
-  if (lowerMsg.includesIgnoreCase(config.nameIn) || lowerMsg.includesIgnoreCase(config.name) ||
-    lowerMsg.includesIgnoreCase('<@' + tsubakiTag + '>')) {
+  if (lowerMsg.includes(config.nameIn) || lowerMsg.includes(config.name) || lowerMsg.includes('<@' + tsubakiTag + '>')) {
     message.react(tsubakiReact);
   }
 
-  if (lowerMsg.includesIgnoreCase('khux') || lowerMsg.includesIgnoreCase('<@' + ianId + '>')) {
+  if (lowerMsg.includes('khux') || lowerMsg.includes('<@' + ianId + '>')) {
     message.react(ianReact);
   }
 
-  if (lowerMsg.includesIgnoreCase('pan') || lowerMsg.includesIgnoreCase('david') ||
-    lowerMsg.includesIgnoreCase('<@' + davidId + '>')) {
+  if (lowerMsg.includes('pan') || lowerMsg.includes('david') || lowerMsg.includes('<@' + davidId + '>')) {
     message.react(davidReact);
   }
 
@@ -313,12 +311,6 @@ if (!String.prototype.format) {
     return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] != 'undefined' ? args[number] : match;
     });
-  };
-}
-
-if (!String.prototype.includesIgnoreCase) {
-  String.prototype.includesIgnoreCase = function(compare) {
-    return this.toLowerCase().includes(compare.toLowerCase);
   };
 }
 
