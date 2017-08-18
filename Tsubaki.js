@@ -91,6 +91,51 @@ let cooldownMsgs = [];
 
 const db = new sqlite.Database('./data.db');
 
+function cooldownMsg(id, username, sentCooldownMsg, message) {
+  let time = new Date().getTime();
+
+  if (id in cooldowns) {
+    if (time - cooldowns[id] < 3000) {
+      let diff = 3 - (time - cooldowns[id]) / 1000.0;
+      diff = Math.ceil(diff);
+      if (diff == 1) {
+        diff = diff + ' second';
+      } else {
+        diff = diff + ' seconds';
+      }
+
+      var embed = Style.error(username + ', please wait ' + diff
+        + ' before executing your next command!');
+
+      if (sentCooldownMsg === undefined) {
+        message.delete();
+        
+        message.channel.send({
+          embed: embed
+        }).then(sentMsg => {
+          setTimeout(function () {
+            cooldownMsg(id, username, sentMsg, message);
+          }, 500);
+        }).catch(console.error);
+        return true;
+      } else {
+        sentCooldownMsg.edit({
+          embed: embed
+        }).then(sentMsg => {
+          setTimeout(function () {
+            cooldownMsg(id, username, sentMsg, message);
+          }, 500);
+        }).catch(console.error);
+      }
+    } else {
+      if (sentCooldownMsg !== undefined) {
+        sentCooldownMsg.delete();
+      }
+    }
+  }
+  return false;
+}
+
 function getPoints(id, callback) {
   let points = -2;
   db.get('SELECT points FROM members WHERE member_id = ' + id, function (err, row) {
@@ -224,34 +269,14 @@ bot.on('message', (message) => {
 
   // Correct user for old prefix
   if (lowerMsg.startsWith(config.prefix.replace(':', '-'))) {
-    message.channel.send({ embed: Style.error('Whoops, I didn\'t recognize that! Did you mean ' + Style.code(message.content.replace('^tb?-', config.prefix).replace('`', '&#96;')) + '?') });
+    message.channel.send({ embed: Style.error('Whoops, I didn\'t recognize that! Did you mean: ' + Style.codeBlock(message.content.replace('^tb?-', config.prefix), '')) });
   }
 
   if (!message.content.startsWith(config.prefix) || message.author.id == '') return;
 
   let time = new Date().getTime();
 
-  if (message.author.id in cooldowns) {
-    if (time - cooldowns[message.author.id] < 3000) {
-      let diff = (time - cooldowns[message.author.id]) / 1000.0;
-      diff = Number(Math.round(diff + 'e2') + 'e-2');
-
-      message.delete();
-      if (message.author.id in cooldownMsgs) {
-        if (time - cooldownMsgs[message.author.id] < 10000) { // Show cooldown messages at most once every 10 seconds
-          let diff = (time - cooldownMsgs[message.author.id]) / 1000.0;
-          diff = Number(Math.round(diff + 'e2') + 'e-2')
-          return;
-        }
-      }
-
-      cooldownMsgs[message.author.id] = time;
-      message.channel.send({
-        embed: Style.error(message.author.username + ', please wait ' + diff
-          + ' seconds before executing your next command!')
-      })
-    }
-  }
+  if (cooldownMsg(message.author.id, message.author.username, undefined, message)) return;
 
   cooldowns[message.author.id] = time;
 
