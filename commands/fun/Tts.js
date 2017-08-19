@@ -1,17 +1,20 @@
-const Tsubaki = require("../../Tsubaki.js");
-const Discord = require("discord.js");
+const Tsubaki = require('../../Tsubaki.js');
+const Discord = require('discord.js');
 
-let _super = require("../Command.js").prototype;
-let method = Tts.prototype = Object.create(_super);
+const Command = require('../Command.js');
 
-method.constructor = Tts;
+class Tts extends Command {
+  constructor() {
+    super('tts', 'Will say given message out loud.', ' <message>');
+  }
 
-function Tts() {
-  _super.constructor.apply(this, ["tts", "Will say given message out loud.", " <message>"]);
-}
-
-method.execute = function (message, args, bot, db) {
-  message.channel.send(args.join(" "), { tts: true });
+  execute(message, args, bot, db) {
+    if (args.length == 0) {
+      message.channel.send({ embed: Tsubaki.Style.warn('Please tell me what to say!') });
+    } else {
+      message.channel.send(args.join(' '), { tts: true });
+    }
+  }
 }
 
 module.exports = Tts;

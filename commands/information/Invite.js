@@ -1,25 +1,24 @@
-const Tsubaki = require("../../Tsubaki.js");
-const Discord = require("discord.js");
+const Tsubaki = require('../../Tsubaki.js');
+const Discord = require('discord.js');
 
-let _super = require("../Command.js").prototype;
-let method = Invite.prototype = Object.create(_super);
+const Command = require('../Command.js');
 
-method.constructor = Invite;
+class Invite extends Command {
+  constructor() {
+    super('invite', Tsubaki.name + ' will private message you information about her, including her invite link.', '');
+  }
 
-function Invite() {
-  _super.constructor.apply(this, ["invite", Tsubaki.name + " will private message you information about her, including her invite link.", ""]);
-}
-
-method.execute = function (message, args, bot, db) {
-  let embed = new Discord.RichEmbed()
-    .setDescription(Tsubaki.Style.codeBlock("Invite " + Tsubaki.name + " to your server!", "css") + "\n\n" + this.getInformation())
-    .addField(Tsubaki.name + "'s Help Server",
-      Tsubaki.Style.url("Click Here to join", "https://discord.gg/Gf7hb33"))
-    .addField(Tsubaki.name + "'s Invitation Link",
-      Tsubaki.Style.url("Click Here to invite", "https://discordapp.com/oauth2/authorize?"
-      + "client_id=334386617626263553&scope=bot&permissions=305196094"))
-    .setColor(Tsubaki.color.green);
-  message.author.send({ embed: embed });
+  execute(message, args, bot, db) {
+    let embed = new Discord.RichEmbed()
+      .setDescription(Tsubaki.Style.codeBlock('Invite ' + Tsubaki.name + ' to your server!', 'css') + '\n\n' + this.getInformation())
+      .addField(Tsubaki.name + '\'s Help Server',
+        Tsubaki.Style.url('Click Here to join', 'https://discord.gg/Gf7hb33'))
+      .addField(Tsubaki.name + '\'s Invitation Link',
+        Tsubaki.Style.url('Click Here to invite', 'https://discordapp.com/oauth2/authorize?'
+        + 'client_id=334386617626263553&scope=bot&permissions=305196094'))
+      .setColor(Tsubaki.color.green);
+    message.author.send({ embed: embed });
+  }
 }
 
 module.exports = Invite;

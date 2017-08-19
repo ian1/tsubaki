@@ -25,12 +25,12 @@ const guildLogger = '342832229510021120';
 const discordBotGuild = '110373943822540800';
 const tsubakiPalaceGuild = '335272347256881154';
 
-const tsubakiTag = '334386617626263553';
-const tsubakiReact = '343292881689378816';
+//const tsubakiTag = '334386617626263553';
+//const tsubakiReact = '343292881689378816';
 const ianId = '135529980011610112';
-const ianReact = '343292371749961728';
+//const ianReact = '343292371749961728';
 const davidId = '142037204548583424';
-const davidReact = '346848029833297920';
+//const davidReact = '346848029833297920';
 
 // Color codes
 const color = {
@@ -64,15 +64,15 @@ const Coin = require('./commands/fun/Coin.js');
 const Ping = require('./commands/utility/Ping.js');
 const Add = require('./commands/utility/Add.js');
 const Urban = require('./commands/utility/Urban.js');
-const Dictionary = require('./commands/utility/Dictionary.js');
+const Define = require('./commands/utility/Define.js');
 
-/* const Leave = require("./commands/music/Leave.js");
-const Queue = require("./commands/music/Queue.js");
-const Play = require("./commands/music/Play.js");
-const Pause = require("./commands/music/Pause.js");
-const Resume = require("./commands/music/Resume.js");
-const Skip = require("./commands/music/Skip.js");
-const ClearQueue = require("./commands/music/ClearQueue.js");*/
+/* const Leave = require('./commands/music/Leave.js');
+const Queue = require('./commands/music/Queue.js');
+const Play = require('./commands/music/Play.js');
+const Pause = require('./commands/music/Pause.js');
+const Resume = require('./commands/music/Resume.js');
+const Skip = require('./commands/music/Skip.js');
+const ClearQueue = require('./commands/music/ClearQueue.js');*/
 
 const Delete = require('./commands/admin/Delete.js');
 const Kick = require('./commands/admin/Kick.js');
@@ -83,10 +83,55 @@ const Welcome = require('./commands/admin/Welcome.js');
 const Playing = require('./commands/owner/Playing.js');
 const Guilds = require('./commands/owner/Guilds.js');
 const LeaveGuild = require('./commands/owner/LeaveGuild.js');
+const Eval = require('./commands/owner/Eval.js');
 
 let commands = [];
+let cooldowns = [];
+let cooldownMsgs = [];
 
 const db = new sqlite.Database('./data.db');
+
+function cooldownMsg(id, username, sentCooldownMsg, message) {
+  let time = new Date().getTime();
+
+  if (!(id in cooldowns)) return false;  
+  if (time - cooldowns[id] < 3000) {
+    let diff = 3 - (time - cooldowns[id]) / 1000.0; // 3 second cooldown
+    diff = Math.ceil(diff);
+    if (diff == 1) {
+      diff = diff + ' second'; // Because aesthetics.
+    } else {
+      diff = diff + ' seconds';
+    }
+
+    var embed = Style.error(username + ', please wait ' + diff
+      + ' before executing your next command!');
+
+    // First iteration of loop: sentCooldownMsg hasn't been created yet
+    if (sentCooldownMsg === undefined) {
+      message.delete();
+      
+      message.channel.send({ // Create the cooldown message
+        embed: embed
+      }).then(sentMsg => {
+        setTimeout(function () { // Continue the loop
+          cooldownMsg(id, username, sentMsg, message);
+        }, 500);
+        }).catch(console.error);
+    } else {
+      sentCooldownMsg.edit({ // Update the cooldown message
+        embed: embed
+      }).then(sentMsg => {
+        setTimeout(function () { // Continue the loop
+          cooldownMsg(id, username, sentMsg, message);
+        }, 500);
+      }).catch(console.error);
+    }
+  } else if (sentCooldownMsg !== undefined) { // Delete the message if it exists, but cooldown is over
+    sentCooldownMsg.delete();
+  }
+  return true;
+}
 
 function getPoints(id, callback) {
   let points = -2;
@@ -124,7 +169,7 @@ function getLevelR(points) {
 
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== '') {
-    bot.channels.get(commandLogger).send('{0} » {1} » {2}'.format(Style.bold(message.author.tag),
+    bot.channels.get(commandLogger).send('{0} Â» {1} Â» {2}'.format(Style.bold(message.author.tag),
       Style.underline(message.guild.name), Style.code(message.content)));
   }
 }
@@ -132,10 +177,10 @@ function cmdLogger(message, bot) {
 function setPlaying(message) {
   if (message == ' ' || message === undefined || message.length == 0) message = config.name + ' v' + package.version;
   let gameData = {
-    name: message,
-    url: 'https://discordapp.com'
+    'name': message,
+    'url': 'https://discordapp.com'
   }
-  bot.user.setPresence({ 'game': gameData });
+  bot.user.setPresence({ 'status': 'online', 'game': gameData });
 }
 
 bot.on('ready', () => {
@@ -151,9 +196,9 @@ bot.on('ready', () => {
   }, 3000);  
   
   db.serialize(function() {
-    db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
-    db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id INTEGER, channel_id INTEGER)');
-    db.run('CREATE TABLE IF NOT EXISTS members (member_id INTEGER, points INTEGER DEFAULT 0, is_muted INTEGER DEFAULT 0)');
+    db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id TEXT, guild_id TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id TEXT, channel_id TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS members (member_id TEXT, points INTEGER DEFAULT 0, is_muted INTEGER DEFAULT 0)');
   });
 
   setTimeout(function () { setPlaying() }, 3000);
@@ -161,10 +206,10 @@ bot.on('ready', () => {
   commands = [
     ['Information', new Help(), new Stats(), new Profile(), new Invite(), new Support(), new Info(), new ChangeLog()],
     ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
-    ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
-    /* ["Music", new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
+    ['Utility', new Ping(), new Add(), new Urban(), new Define()],
+    /* ['Music', new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
     ['_Admin_', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
-    ['__Owner__', new Playing(), new Guilds(), new LeaveGuild()],
+    ['__Owner__', new Playing(), new Guilds(), new LeaveGuild(), new Eval()],
   ];
 });
 
@@ -180,18 +225,24 @@ bot.on('guildDelete', (guild) => {
 });
 
 bot.on('guildMemberAdd', (member) => {
-  let memberGuild = member.guild;
-  if (memberGuild.id == discordBotGuild) return;
+  let guild = member.guild;
+  if (guild.id == discordBotGuild) return;
 
-  db.get('SELECT * from guild_join WHERE member_id = ' + member.id
-    + ' AND guild_id = ' + memberGuild.id, function (err, row) {
-      if (row === undefined) {
-        let welcomeEmbed = new Discord.RichEmbed()
-          .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(memberGuild.name, member))
-          .setColor(white);
-        memberGuild.channels.find('id', channelData).send({ embed: welcomeEmbed });
-        db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + memberGuild.id + ')');
-      }
+  db.get('SELECT * from guilds WHERE guild_id = ' + guild.id, function (err, row) {
+    if (row === undefined) return; 
+    let channelId = row.channel_id;
+
+    db.get('SELECT * from guild_join WHERE member_id = ' + member.id
+      + ' AND guild_id = ' + guild.id, function (err, row) {
+        if (row === undefined) {
+          console.log('welcome');
+          let welcomeEmbed = new Discord.RichEmbed()
+            .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(guild.name, member))
+            .setColor(color.white);
+          bot.channels.get(channelId).send({ embed: welcomeEmbed });
+          db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + guild.id + ')');
+        }
+    });
   });
 });
 
@@ -205,26 +256,32 @@ bot.on('message', (message) => {
 
   let lowerMsg = message.content.toLowerCase();
 
-  /* if (lowerMsg.toLowerCase() === "help tsubaki") {
-    message.channel.send("Hi there, if you need help do  ``t-help``!");
+  /* if (lowerMsg.toLowerCase() === 'help tsubaki') {
+    message.channel.send('Hi there, if you need help do  ``t-help``!');
   }*/
 
   // Reacts
-  if (lowerMsg.includesIgnoreCase(config.nameIn) || lowerMsg.includesIgnoreCase(config.name) ||
-    lowerMsg.includesIgnoreCase('<@' + tsubakiTag + '>')) message.react(tsubakiReact);
-
-  if (lowerMsg.includesIgnoreCase('khux') || lowerMsg.includesIgnoreCase('<@' + ianId + '>'))
-    {message.react(ianReact);}
-
-  if (lowerMsg.includesIgnoreCase('pan') || lowerMsg.includesIgnoreCase('david') ||
-    lowerMsg.includesIgnoreCase('<@' + davidId + '>')) message.react(davidReact);
-
-  // Correct user for old prefix
-  if (lowerMsg.startsWith('t-') || lowerMsg.startsWith('tb-')) {
-    message.channel.send(':exclamation: | Whoops, didn\'t recognize that! Did you mean `t:' + message.content.substring(2) + '`?');
+  /*if (lowerMsg.includes(config.nameIn.toLowerCase()) || lowerMsg.includes(config.name.toLowerCase()) || lowerMsg.includes(tsubakiTag)) {
+    message.react(tsubakiReact);
   }
 
+  if (lowerMsg.includes('khux') || lowerMsg.includes('ian') || lowerMsg.includes(ianId)) {
+    message.react(ianReact);
+  }
+
+  if (lowerMsg.includes('pan') || lowerMsg.includes('david') || lowerMsg.includes(davidId)) {
+    message.react(davidReact);
+  }*/
+
   if (!message.content.startsWith(config.prefix) || message.author.id == '') return;
+
+  let time = new Date().getTime();
+
+  if (cooldownMsg(message.author.id, message.author.username, undefined, message)) return;
+
+  if (message.author.id !== ianId && message.author.id !== davidId) {
+    cooldowns[message.author.id] = time;
+  }
 
   let command = message.content.split(' ')[0].slice(config.prefix.length).toLowerCase();
   let args = message.content.split(' ').slice(1);
@@ -255,12 +312,6 @@ if (!String.prototype.format) {
     return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] != 'undefined' ? args[number] : match;
     });
-  };
-}
-
-if (!String.prototype.includesIgnoreCase) {
-  String.prototype.includesIgnoreCase = function(compare) {
-    return this.toLowerCase().includes(compare.toLowerCase);
   };
 }
 
@@ -316,7 +367,7 @@ function exitHandler(options, err) {
       , options);
     
     db.close();
-    console.log("Closed db");
+    console.log('Closed db');
   }
   if (err) console.log(err.stack);
   if (options.exit) {
