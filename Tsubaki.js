@@ -228,6 +228,10 @@ bot.on('guildMemberAdd', (member) => {
   let guild = member.guild;
   if (guild.id == discordBotGuild) return;
 
+  if (guild.id === tsubakiPalaceGuild) {
+    member.addRole(member.guild.roles.find("name", "Member"));
+  }
+
   db.get('SELECT * from guilds WHERE guild_id = ' + guild.id, function (err, row) {
     if (row === undefined) return; 
     let channelId = row.channel_id;
