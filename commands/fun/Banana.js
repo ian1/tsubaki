@@ -17,7 +17,7 @@ class Banana extends Command {
       message.channel.send(':banana: ' + message.author.tag + ' has given ' + memberMention + ' a banana!');
       Tsubaki.getPoints(memberMention.id, function (points) {
         Tsubaki.setPoints(memberMention.id, points + 1, message.channel);
-      })
+      });
     }
   }
 }

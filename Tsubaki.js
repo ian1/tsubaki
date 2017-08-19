@@ -196,9 +196,9 @@ bot.on('ready', () => {
   }, 3000);  
   
   db.serialize(function() {
-    db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id INTEGER, guild_id INTEGER)');
-    db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id INTEGER, channel_id INTEGER)');
-    db.run('CREATE TABLE IF NOT EXISTS members (member_id INTEGER, points INTEGER DEFAULT 0, is_muted INTEGER DEFAULT 0)');
+    db.run('CREATE TABLE IF NOT EXISTS guild_join (member_id TEXT, guild_id TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS guilds (guild_id TEXT, channel_id TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS members (member_id TEXT, points INTEGER DEFAULT 0, is_muted INTEGER DEFAULT 0)');
   });
 
   setTimeout(function () { setPlaying() }, 3000);
@@ -225,18 +225,24 @@ bot.on('guildDelete', (guild) => {
 });
 
 bot.on('guildMemberAdd', (member) => {
-  let memberGuild = member.guild;
-  if (memberGuild.id == discordBotGuild) return;
+  let guild = member.guild;
+  if (guild.id == discordBotGuild) return;
 
-  db.get('SELECT * from guild_join WHERE member_id = ' + member.id
-    + ' AND guild_id = ' + memberGuild.id, function (err, row) {
-      if (row === undefined) {
-        let welcomeEmbed = new Discord.RichEmbed()
-          .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(memberGuild.name, member))
-          .setColor(white);
-        memberGuild.channels.find('id', channelData).send({ embed: welcomeEmbed });
-        db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + memberGuild.id + ')');
-      }
+  db.get('SELECT * from guilds WHERE guild_id = ' + guild.id, function (err, row) {
+    if (row === undefined) return; 
+    let channelId = row.channel_id;
+
+    db.get('SELECT * from guild_join WHERE member_id = ' + member.id
+      + ' AND guild_id = ' + guild.id, function (err, row) {
+        if (row === undefined) {
+          console.log('welcome');
+          let welcomeEmbed = new Discord.RichEmbed()
+            .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(guild.name, member))
+            .setColor(color.white);
+          bot.channels.get(channelId).send({ embed: welcomeEmbed });
+          db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + guild.id + ')');
+        }
+    });
   });
 });
 
