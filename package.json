@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Khux#6195 and PantherMan594#5722",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bufferutil": "^3.0.2",
     "chalk": "^2.0.1",
