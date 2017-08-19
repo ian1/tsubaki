@@ -228,7 +228,7 @@ bot.on('guildMemberAdd', (member) => {
   let guild = member.guild;
   if (guild.id == discordBotGuild) return;
 
-  if (guild.id === tsubakiPalaceGuild) {
+  if ("337747052878626816" === tsubakiPalaceGuild) {
     member.addRole(member.guild.roles.find("name", "Member"));
   }
 
