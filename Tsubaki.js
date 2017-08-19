@@ -25,12 +25,12 @@ const guildLogger = '342832229510021120';
 const discordBotGuild = '110373943822540800';
 const tsubakiPalaceGuild = '335272347256881154';
 
-const tsubakiTag = '334386617626263553';
-const tsubakiReact = '343292881689378816';
+//const tsubakiTag = '334386617626263553';
+//const tsubakiReact = '343292881689378816';
 const ianId = '135529980011610112';
-const ianReact = '343292371749961728';
+//const ianReact = '343292371749961728';
 const davidId = '142037204548583424';
-const davidReact = '346848029833297920';
+//const davidReact = '346848029833297920';
 
 // Color codes
 const color = {
@@ -64,7 +64,7 @@ const Coin = require('./commands/fun/Coin.js');
 const Ping = require('./commands/utility/Ping.js');
 const Add = require('./commands/utility/Add.js');
 const Urban = require('./commands/utility/Urban.js');
-const Dictionary = require('./commands/utility/Dictionary.js');
+const Define = require('./commands/utility/Define.js');
 
 /* const Leave = require('./commands/music/Leave.js');
 const Queue = require('./commands/music/Queue.js');
@@ -206,7 +206,7 @@ bot.on('ready', () => {
   commands = [
     ['Information', new Help(), new Stats(), new Profile(), new Invite(), new Support(), new Info(), new ChangeLog()],
     ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
-    ['Utility', new Ping(), new Add(), new Urban(), new Dictionary()],
+    ['Utility', new Ping(), new Add(), new Urban(), new Define()],
     /* ['Music', new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
     ['_Admin_', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
     ['__Owner__', new Playing(), new Guilds(), new LeaveGuild(), new Eval()],
@@ -255,7 +255,7 @@ bot.on('message', (message) => {
   }*/
 
   // Reacts
-  if (lowerMsg.includes(config.nameIn.toLowerCase()) || lowerMsg.includes(config.name.toLowerCase()) || lowerMsg.includes(tsubakiTag)) {
+  /*if (lowerMsg.includes(config.nameIn.toLowerCase()) || lowerMsg.includes(config.name.toLowerCase()) || lowerMsg.includes(tsubakiTag)) {
     message.react(tsubakiReact);
   }
 
@@ -265,12 +265,7 @@ bot.on('message', (message) => {
 
   if (lowerMsg.includes('pan') || lowerMsg.includes('david') || lowerMsg.includes(davidId)) {
     message.react(davidReact);
-  }
-
-  // Correct user for old prefix
-  if (lowerMsg.startsWith(config.prefix.replace(':', '-'))) {
-    message.channel.send({ embed: Style.error('Whoops, I didn\'t recognize that! Did you mean: ' + Style.codeBlock(message.content.replace('^tb?-', config.prefix), '')) });
-  }
+  }*/
 
   if (!message.content.startsWith(config.prefix) || message.author.id == '') return;
 

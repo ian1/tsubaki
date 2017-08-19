@@ -4,9 +4,9 @@ const webdict = require('webdict');
 
 const Command = require('../Command.js');
 
-class Dictionary extends Command {
+class Define extends Command {
   constructor() {
-    super('dictionary', 'Will define any word using a traditional dictionary.', ' <word>');
+    super('define', 'Will define any word using a traditional dictionary.', ' <word>');
   }
 
   execute(message, args, bot, db) {
@@ -28,4 +28,4 @@ class Dictionary extends Command {
   }
 }
 
-module.exports = Dictionary;
+module.exports = Define;

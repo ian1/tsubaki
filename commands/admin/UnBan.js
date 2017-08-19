@@ -5,13 +5,12 @@ const Command = require('../Command.js');
 
 class UnBan extends Command {
   constructor() {
-    super('unban', 'Unban the specified user.', ' <@mention> [reason]');
+    super('unban', 'Unban the specified user.', ' <id> [reason]');
   }
 
   executeAdmin(message, args, bot, db) {
-    let userToUnBan = message.mentions.users.first();
+    let userToUnBan = bot.users.get(args[0]);
     if (userToUnBan == '' || userToUnBan === undefined) return message.channel.send({ embed: Tsubaki.Style.unknownUser() });
-    let userID = userToUnBan.id;
     
     let reason = args.slice(1).join(' ');
     userToUnBan.send('You have been {0} by {1} {2}'
