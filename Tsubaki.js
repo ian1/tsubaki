@@ -23,7 +23,7 @@ const logger = '342837394766168064';
 const commandLogger = '341827696629776396';
 const guildLogger = '342832229510021120';
 const discordBotGuild = '110373943822540800';
-const tsubakiPalaceGuild = '335272347256881154';
+const tsubakiPalaceGuild = '337747052878626816';
 
 //const tsubakiTag = '334386617626263553';
 //const tsubakiReact = '343292881689378816';
