@@ -27,9 +27,9 @@ class Ban extends Command {
         message.guild.member(userToBan).ban(7);
       }
 
-      message.channel.send(':hammer: {0} has been {1} by {2} {3}'
+      message.channel.send({ embed: Tsubaki.Style.success(':hammer: {0} has been {1} by {2} {3}'
         .format(userToBan.username, Tsubaki.Style.bold('banned'), Tsubaki.Style.bold(message.author.tag),
-        (reason.length > 0 ? 'for: ' + Tsubaki.Style.bold(reason) : '!')));
+        (reason.length > 0 ? 'for: ' + Tsubaki.Style.bold(reason) : '!')))});
     } else if (!isBannable || !(userID.bannable)) {
       message.channel.send({ embed: Tsubaki.Style.error('You can\'t ban that user!') });
     } else {

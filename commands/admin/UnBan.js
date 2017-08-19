@@ -18,9 +18,9 @@ class UnBan extends Command {
 
     message.guild.unban(userToUnBan);
 
-    message.channel.send('{0} has been {1} by {2} {3}'
+    message.channel.send({ embed: Tsubaki.Style.success('{0} has been {1} by {2} {3}'
       .format(userToUnBan.username, Tsubaki.Style.bold('unbanned'), Tsubaki.Style.bold(message.author.tag),
-      (reason.length > 0 ? 'for: ' + Tsubaki.Style.bold(reason) : '!')));
+      (reason.length > 0 ? 'for: ' + Tsubaki.Style.bold(reason) : '!')))});
   }
 
   execute(message, args, bot, db) {
