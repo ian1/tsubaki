@@ -33,30 +33,14 @@ class Queue extends Command {
         , Tsubaki.name + ' music'), 10000);
     } else {
       if (args.length == 0) {
-        let text = music.getQueue().map((video, index) => (
-          (index + 1) + ': ' + video.titleUrl + ' (' + video.duration + ')'
-        )).join('\n');
-
-        let status = 'Paused';
-        if (music.isPlaying() && music.getPlaying() !== undefined) {
-          let currSong = music.getPlaying();
-          let elapsed = Math.round(music.getDispatcher().time / 1000);
-          let seconds = elapsed % 60;
-          let elapsedS = Math.floor(elapsed / 60) + ':' + (seconds < 10 ? '0' + seconds : seconds);
-          console.log(elapsed);
-
-          status = 'Playing ' + currSong.titleUrl
-            + ' (' + elapsedS + ' / ' + currSong.duration + ')'; 
-        }
-
-        var embed = new Discord.RichEmbed()
-          .setTitle(Tsubaki.name + ' music')
-          .addField('Status', status);
-        if (text !== undefined && text != '') {
-          embed.addField('Queue', text);
-        }
-
-        message.channel.sendTemp({ embed: embed }, 30000);
+        message.channel.send(Queue.getQueue(music)).then(msg => {
+          for (let i = 1; i <= 30; i++) {
+            setTimeout(() => {
+              msg.edit(Queue.getQueue(music));
+            }, i * 1000);
+          }
+          msg.delete(31000);
+        });
         return;
       }
 
@@ -161,6 +145,50 @@ class Queue extends Command {
       message.channel.sendTemp(Tsubaki.Style.success('Queued: ' + songInfo.titleUrl
         , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
     }
+  }
+
+  static getQueue(music) {
+    let text = music.getQueue().map((video, index) => (
+      (index + 1) + ': ' + video.titleUrl + ' (' + video.duration + ')'
+    )).join('\n');
+
+    let status = 'Paused';
+    if (music.isPlaying() && music.getPlaying() !== undefined) {
+      let currSong = music.getPlaying();
+      let elapsed = Queue.getTime(music.getDispatcher().time);
+
+      status = 'Playing ' + currSong.titleUrl
+        + ' (' + elapsed + ' / ' + currSong.duration + ')';
+    }
+
+    var embed = new Discord.RichEmbed()
+      .setTitle(Tsubaki.name + ' music')
+      .addField('Status', status);
+    if (text !== undefined && text != '') {
+      embed.addField('Queue', text);
+    } else {
+      embed.addField('Queue', 'Empty');
+    }
+
+    return { embed: embed };
+  }
+
+  static getTime(milliseconds) {
+    let seconds = parseInt((milliseconds / 1000) % 60)
+    seconds = (seconds < 10) ? '0' + seconds : seconds;
+    let minutes = parseInt((milliseconds / (1000 * 60)) % 60)
+    let hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24);
+
+    let time = '';
+
+    if (hours > 0) {
+      minutes = (minutes < 10) ? '0' + minutes : minutes;
+      time = hours + ":" + minutes + ":" + seconds;
+    } else {
+      time = minutes + ":" + seconds;
+    }
+
+    return time;
   }
 }
 
