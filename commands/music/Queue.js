@@ -40,11 +40,8 @@ class Queue extends Command {
         let status = 'Paused';
         if (music.isPlaying() && music.getPlaying() !== undefined) {
           let currSong = music.getPlaying();
-          let elapsed = (music.getDispatcher().time / 60) + ':';
-          elapsed += Math.round(music.getDispatcher().time % 60);
-          
-          status = 'Playing ' + currSong.titleUrl
-            + ' (' + elapsed + ' / ' + currSong.duration + ')';
+
+          status = 'Playing ' + currSong.titleUrl;
         }
 
         var embed = new Discord.RichEmbed()
