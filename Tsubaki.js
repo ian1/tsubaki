@@ -239,12 +239,16 @@ bot.on('guildMemberAdd', (member) => {
     db.get('SELECT * from guild_join WHERE member_id = ' + member.id
       + ' AND guild_id = ' + guild.id, function (err, row) {
         if (row === undefined) {
-          console.log('welcome');
           let welcomeEmbed = new Discord.RichEmbed()
             .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(guild.name, member))
             .setColor(color.white);
           bot.channels.get(channelId).send({ embed: welcomeEmbed });
           db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + guild.id + ')');
+        } else {
+          let welcomeEmbed = new Discord.RichEmbed()
+            .setDescription('Welcome back to ' + Style.bold('{0}, {1}!').format(guild.name, member))
+            .setColor(color.white);
+          bot.channels.get(channelId).send({ embed: welcomeEmbed });
         }
     });
   });
