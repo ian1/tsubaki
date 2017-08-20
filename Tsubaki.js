@@ -2,20 +2,17 @@
 
 // Set up, load config
 const Discord = require('discord.js');
+const http = require('http');
+const fs = require('fs');
 
 const package = require('./package.json');
 const config = require('./config.json');
 
 const sqlite = require('sqlite3').verbose();
 const chalk = require('chalk');
-const music = require('discord.js-music-v11');
 const Style = require('./Style.js');
 
 const bot = new Discord.Client();
-
-music(bot, {
-  prefix: config.prefix,
-});
 
 const adminPermission = 'ADMINISTRATOR';
 
@@ -66,13 +63,11 @@ const Add = require('./commands/utility/Add.js');
 const Urban = require('./commands/utility/Urban.js');
 const Define = require('./commands/utility/Define.js');
 
-/* const Leave = require('./commands/music/Leave.js');
+const Leave = require('./commands/music/Leave.js');
 const Queue = require('./commands/music/Queue.js');
 const Play = require('./commands/music/Play.js');
 const Pause = require('./commands/music/Pause.js');
-const Resume = require('./commands/music/Resume.js');
 const Skip = require('./commands/music/Skip.js');
-const ClearQueue = require('./commands/music/ClearQueue.js');*/
 
 const Delete = require('./commands/admin/Delete.js');
 const Kick = require('./commands/admin/Kick.js');
@@ -90,6 +85,30 @@ let cooldowns = [];
 let cooldownMsgs = [];
 
 const db = new sqlite.Database('./data.db');
+
+let tokenCmds = {};
+
+const server = http.createServer((req, res) => {
+  console.dir(req.param);
+
+  if (req.method == 'POST') {
+    let body = '';
+    req.on('data', function (data) {
+      body += data;
+    });
+    req.on('end', function () {
+      console.log('Body: ' + body);
+    });
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end('post received');
+  }
+});
+
+let port = 23346;
+if (config.nameIn === 'tsubaki-beta') ++port;
+host = '127.0.0.1';
+server.listen(port, host);
+console.log('Listening at http://' + host + ':' + port);
 
 function cooldownMsg(id, username, sentCooldownMsg, message) {
   let time = new Date().getTime();
@@ -117,7 +136,7 @@ function cooldownMsg(id, username, sentCooldownMsg, message) {
         setTimeout(function () { // Continue the loop
           cooldownMsg(id, username, sentMsg, message);
         }, 500);
-        }).catch(console.error);
+      }).catch(console.error);
     } else {
       sentCooldownMsg.edit({ // Update the cooldown message
         embed: embed
@@ -210,7 +229,7 @@ bot.on('ready', () => {
     ['Information', new Help(), new Stats(), new Profile(), new Invite(), new Support(), new Info(), new ChangeLog()],
     ['Fun', new EightBall(), new Say(), new Embed(), new Dice(), new Cat(), new Dog(), new Banana(), new GetBanana(), new Tts(), new Coin()],
     ['Utility', new Ping(), new Add(), new Urban(), new Define()],
-    /* ['Music', new Leave(), new Queue(), new Play(), new Pause(), new Resume(), new Skip(), new ClearQueue()],*/
+    ['Music', new Leave(), new Queue(), new Play(), new Pause(), new Skip()],
     ['_Admin_', new Delete(), new Kick(), new Ban(), new UnBan(), new Welcome()],
     ['__Owner__', new Playing(), new Guilds(), new LeaveGuild(), new Eval()],
   ];
@@ -323,6 +342,22 @@ if (!String.prototype.format) {
     return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] != 'undefined' ? args[number] : match;
     });
+  };
+}
+
+if (!Discord.TextChannel.prototype.sendTemp) {
+  Discord.TextChannel.prototype.sendTemp = function (args, duration) {
+    this.send(args).then(msg => {
+      msg.delete(duration);
+    })
+  };
+}
+
+if (!Discord.Message.prototype.editTemp) {
+  Discord.Message.prototype.editTemp = function (args, duration) {
+    this.edit(args).then(msg => {
+      msg.delete(duration);
+    })
   };
 }
 

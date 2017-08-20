@@ -31,29 +31,37 @@ module.exports = {
     return '```' + lang + '\n' + text + '\n```';
   },
 
-  success: function (text) {
+  embed: function (title, description, color, footer) {
     var embed = new Discord.RichEmbed()
-      .setDescription(':thumbsup: ' + text)
-      .setColor(Tsubaki.color.green);
-    return embed;
+      .setDescription(description);
+
+    if (title !== undefined) {
+      embed.setTitle(title);
+    }
+    if (color !== undefined) {
+      embed.setColor(color);
+    }
+    if (footer !== undefined) {
+      embed.setFooter(footer);
+    }
+
+    return { embed: embed };
   },
 
-  error: function (text) {
-    var embed = new Discord.RichEmbed()
-      .setDescription(':exclamation: ' + text)
-      .setColor(Tsubaki.color.red);
-    return embed;
+  success: function (text, footer = undefined) {
+    return this.embed(undefined, ':thumbsup: ' + text, Tsubaki.color.green, footer);
+  },
+
+  error: function (text, footer = undefined) {
+    return this.embed(undefined, ':exclamation: ' + text, Tsubaki.color.red, footer)
   },
 
   errorGeneric: function () {
-    return this.error('Whoops, I got an error! Please try again.');
+    return this.error('Whoops, I got an error! Please try again.', undefined);
   },
 
-  warn: function (text) {
-    var embed = new Discord.RichEmbed()
-      .setDescription(text)
-      .setColor(Tsubaki.color.yellow);
-    return embed;
+  warn: function (text, footer = undefined) {
+    return this.embed(undefined, text, Tsubaki.color.yellow, footer);
   },
 
   unknownUser: function () {

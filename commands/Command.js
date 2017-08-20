@@ -43,8 +43,7 @@ class Command {
 
 module.exports = Command;
 
-/*
-// TEMPLATE
+/* TEMPLATE
 
 const Tsubaki = require('../../Tsubaki.js');
 const Discord = require('discord.js');
@@ -53,7 +52,7 @@ const Command = require('../Command.js');
 
 class NAME extends Command {
   constructor() {
-    super('COMMAND', 'DESCRIPTION, 'USAGE');
+    super('COMMAND', 'DESCRIPTION', 'USAGE');
   }
 
   execute(message, args, bot, db) {

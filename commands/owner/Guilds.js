@@ -44,7 +44,7 @@ class Guilds extends Command {
     if (message.member !== undefined && (message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      return message.channel.send({ embed: Tsubaki.Style.notFound() });
+      return message.channel.send(Tsubaki.Style.notFound());
     }
   }
 }

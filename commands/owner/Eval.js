@@ -10,7 +10,6 @@ class Eval extends Command {
     this.logEval('First code: ' + (this.code = this.randString()));
   }
 
-
   executeAdmin(message, args, bot, db) {
     this.logEval(message.author.username + ' executed an eval: ');
     this.logEval(message.content, 1);
@@ -20,7 +19,7 @@ class Eval extends Command {
     try {
       result = eval(expression);
     } catch (e) {
-      message.channel.send({ embed: Tsubaki.Style.error('Whoops! I got an error: ' + e.message + '. See console for stack trace.') });
+      message.channel.send(Tsubaki.Style.error('Whoops! I got an error: ' + e.message + '. See console for stack trace.'));
       
       this.logEval('Eval threw an error!');
       this.logEval('Command:');
@@ -39,7 +38,7 @@ class Eval extends Command {
       && args[0] !== undefined && args[0] === this.code) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      message.channel.send({ embed: Tsubaki.Style.notFound() });
+      message.channel.send(Tsubaki.Style.notFound());
     }
     this.logEval('Next code: ' + (this.code = this.randString())); // Generate a new code and print to console
   }

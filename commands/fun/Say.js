@@ -10,7 +10,7 @@ class Say extends Command {
 
   execute(message, args, bot, db) {
     if (args.length == 0) {
-      message.channel.send({ embed: Tsubaki.Style.warn('Please tell me what to say!') });
+      message.channel.send(Tsubaki.Style.warn('Please tell me what to say!'));
     } else {
       message.channel.send(args.join(' '), { tts: false });
     }

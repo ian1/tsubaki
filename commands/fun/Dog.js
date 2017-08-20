@@ -12,7 +12,7 @@ class Dog extends Command {
   execute(message, args, bot, db) {
     random.dog().then(url => message.channel.send(url)).catch(err => {
       console.log(err.message);
-      message.channel.send({ embed: Tsubaki.Style.errorGeneric() });
+      message.channel.send(Tsubaki.Style.errorGeneric());
     });
   }
 }

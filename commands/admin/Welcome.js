@@ -9,7 +9,7 @@ class Welcome extends Command {
   }
 
   executeAdmin(message, args, bot, db) {
-    if (args.length == 0) return message.channel.send({ embed: Tsubaki.Style.warn('Invalid arguments! Usage: ' + this.getUsage()) });
+    if (args.length == 0) return message.channel.send(Tsubaki.Style.warn('Invalid arguments! Usage: ' + this.getUsage()));
     let guildId = message.guild.id;
     let channelId = message.channel.id;
 
@@ -18,34 +18,34 @@ class Welcome extends Command {
 
     if (status === 'enable') {
       if (!message.guild.channels.find('id', channelId)) 
-        return message.channel.send({ embed: Tsubaki.Style.warn('Sorry, I couldn\'t find a channel with the id ' + channelId + '.') });
+        return message.channel.send(Tsubaki.Style.warn('Sorry, I couldn\'t find a channel with the id ' + channelId + '.'));
       db.get('SELECT * FROM guilds WHERE guild_id = ' + guildId, function (err, row) {
         if (row === undefined) {
           db.run('INSERT INTO guilds VALUES (' + guildId + ', ' + channelId + ')');
-          message.channel.send({
-            embed: Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('enabled')
+          message.channel.send(
+            Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('enabled')
               + ' for this guild in channel <#' + channelId + '>.')
-          });
+          );
         } else if (row.channel_id == channelId) {
-          message.channel.send({
-            embed: Tsubaki.Style.warn('Welcome messages are already ' + Tsubaki.Style.code('enabled')
+          message.channel.send(
+            Tsubaki.Style.warn('Welcome messages are already ' + Tsubaki.Style.code('enabled')
               + ' for this guild in channel <#' + channelId + '>,')
-          });
+          );
         } else {
           db.run('UPDATE guilds SET channel_id = ' + channelId + ' WHERE guild_id = ' + guildId);
-          message.channel.send({
-            embed: Tsubaki.Style.success('Welcome messages have been switched to channel <#' + channelId + '> for this guild.')
-          });
+          message.channel.send(
+            Tsubaki.Style.success('Welcome messages have been switched to channel <#' + channelId + '> for this guild.')
+          );
         }
       });
     } else if (status === 'disable') {
       db.run('DELETE FROM guilds WHERE guild_id = ' + guildId, function () {
-        message.channel.send({
-          embed: Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('disabled') + ' for this guild. :frowning:')
-        });
+        message.channel.send(
+          Tsubaki.Style.success('Welcome messages are now ' + Tsubaki.Style.code('disabled') + ' for this guild. :frowning:')
+        );
       });
     } else {
-      message.channel.send({ embed: Tsubaki.Style.warn('Invalid arguments! Usage: ' + this.getUsage()) });
+      message.channel.send(Tsubaki.Style.warn('Invalid arguments! Usage: ' + this.getUsage()));
     }
   }
 
@@ -53,7 +53,7 @@ class Welcome extends Command {
     if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      return message.channel.send({ embed: Tsubaki.Style.notFound() });
+      return message.channel.send(Tsubaki.Style.notFound());
     }
   }
 }

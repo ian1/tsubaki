@@ -12,7 +12,7 @@ class Profile extends Command {
     let profileMention = message.mentions.users.first();
     
     if (profileMention == '' || profileMention === undefined) {
-      return message.channel.send({ embed: Tsubaki.Style.unknownUser() });
+      return message.channel.send(Tsubaki.Style.unknownUser());
     } else {
       let color = Tsubaki.color.gray;
       switch (profileMention.presence.status) {

@@ -45,13 +45,13 @@ class Help extends Command {
                 .setColor(Tsubaki.color.green);
               message.channel.send({ embed: embed });
             } else {
-              message.channel.send({ embed: Tsubaki.Style.notFound() });
+              message.channel.send(Tsubaki.Style.notFound());
             }
             return;
           }
         }
       }
-      message.channel.send({ embed: Tsubaki.Style.notFound() });
+      message.channel.send(Tsubaki.Style.notFound());
     }
   }
 }

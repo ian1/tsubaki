@@ -11,7 +11,7 @@ class Define extends Command {
 
   execute(message, args, bot, db) {
     let toDefine = message.content.split(' ')[1];
-    if (toDefine == '' || toDefine === undefined) return message.channel.send({ embed: Tsubaki.Style.warn('Provide a word to define! :book:') });
+    if (toDefine == '' || toDefine === undefined) return message.channel.send(Tsubaki.Style.warn('Provide a word to define! :book:'));
     else {
       webdict('dictionary', toDefine).then(resp => {
         let result = resp.definition[0];
@@ -22,7 +22,7 @@ class Define extends Command {
           .setFooter(Tsubaki.name + ' Dictionary');
         message.channel.send({ embed: embed });
       }).catch(function () {
-        message.channel.send({ embed: Tsubaki.Style.error('Hmm... I can\'t find that word. Please check your spelling!') });
+        message.channel.send(Tsubaki.Style.error('Hmm... I can\'t find that word. Please check your spelling!'));
       });
     }
   }
