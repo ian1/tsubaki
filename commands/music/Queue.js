@@ -67,7 +67,7 @@ class Queue extends Command {
           let searchString = args.join(' ');
 
           if (!searchString.toLowerCase().startsWith('http')) {
-            searchString = 'ytsearch3:' + searchString;
+            searchString = 'ytsearch5:' + searchString;
           } else {
             searchString = searchString.replace('/&list=.+/', '');
             console.log(searchString);
@@ -112,10 +112,11 @@ class Queue extends Command {
                 song.description = linesPost.join('\n'); // description is now the only element left
 
                 if (song.description.length > cutOff) {
-
                   let descTail = song.description.substring(cutOff); // Splits the desc at the cut off
                   let loc = descTail.indexOf(' '); // Finds the first instance of ' ' after cut off
                   song.description = song.description.substring(0, cutOff + loc) + ' ...'; // Set the description to that shortened version
+                } if (song.description.split('\n').length > 4) {
+                  song.description = song.description.split('\n').slice(0, 4).join('\n') + ' ...';
                 }
 
                 songs.push(song);
@@ -139,7 +140,7 @@ class Queue extends Command {
                   let embed = new Discord.RichEmbed()
                     .setDescription(Tsubaki.Style.bold(songInfo.title + ' '
                       + Tsubaki.Style.url('Play', tokenUrl)) + '\n' + songInfo.description)
-                    .setFooter(Tsubaki.Style.url('https://www.youtube.com/watch?v=' + songInfo.id, 'https://www.youtube.com/watch?v=' + songInfo.id)
+                    .setFooter('https://www.youtube.com/watch?v=' + songInfo.id
                       + ' . . . . . ' + songInfo.duration)
                     .setThumbnail(songInfo.thumbnail);
                   message.channel.sendTemp({ embed: embed }, 15000);
