@@ -17,9 +17,12 @@ class Music {
   }
 
   addToQueue(video) {
-    if (video in this.queue) {
-      return 0; // Already in queue
-    }
+    this.queue.forEach(queueVid => {
+      if (queueVid.id === video.id) {
+        return 0;
+      }
+    });
+      
     this.queue.push(video);
     if (this.play()) {
       return 1; // Start to play
