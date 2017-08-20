@@ -23,7 +23,7 @@ let cutOff = 100;
 
 class Queue extends Command {
   constructor() {
-    super('queue', 'Add a song, list, or clear the queue.', ' [song name|song url|clear]');
+    super('queue', 'Add a song to, list the songs in, or clear the queue.', ' [song name|song url|clear]');
   }
 
   execute(message, args, bot, db) {
