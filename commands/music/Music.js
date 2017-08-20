@@ -37,6 +37,10 @@ class Music {
     return this.playing;
   }
 
+  getDispatcher() {
+    return this.dispatcher;
+  }
+
   play() {
     if (this.playing != undefined) {
       return false;

@@ -40,10 +40,11 @@ class Queue extends Command {
         let status = 'Paused';
         if (music.isPlaying() && music.getPlaying() !== undefined) {
           let currSong = music.getPlaying();
-          let elapsed = (currSong.time / 60) + ':';
-          elapsed += Math.round(currSong.time % 60);
-          status = 'Playing ' + music.getPlaying().titleUrl
-            + ' (' + elapsed + ' / ' + music.getPlaying().duration + ')';
+          let elapsed = (music.getDispatcher().time / 60) + ':';
+          elapsed += Math.round(music.getDispatcher().time % 60);
+          
+          status = 'Playing ' + currSong.titleUrl
+            + ' (' + elapsed + ' / ' + currSong.duration + ')';
         }
 
         var embed = new Discord.RichEmbed()
@@ -68,9 +69,6 @@ class Queue extends Command {
 
           if (!searchString.toLowerCase().startsWith('http')) {
             searchString = 'ytsearch5:' + searchString;
-          } else {
-            searchString = searchString.replace('/&list=.+/', '');
-            console.log(searchString);
           }
           
           execFile(ytdlBinary, [searchString, '-q', '--no-warnings', '--force-ipv4', '--get-title'
