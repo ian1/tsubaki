@@ -127,7 +127,7 @@ class Queue extends Command {
                 
                 songs.forEach(songInfo => {
                   let tokenUrl = Tsubaki.createTokenCmd(() => {
-                    addQueue(music, message, songInfo);
+                    this.addQueue(music, message, songInfo);
                   });
 
                   let embed = new Discord.RichEmbed()
@@ -140,7 +140,7 @@ class Queue extends Command {
                 });
               } else {
                 response.delete();
-                addQueue(music, message, songs[0]);
+                this.addQueue(music, message, songs[0]);
               }
           });
         }).catch(console.error);
