@@ -39,7 +39,13 @@ class Queue extends Command {
 
         let status = 'Paused';
         if (music.isPlaying() && music.getPlaying() !== undefined) {
-          status = 'Playing ' + music.getPlaying().titleUrl;
+          let currSong = music.getPlaying();
+          let elapsed = Math.round(music.getDispatcher().time / 60);
+          let elapsedS = (elapsed / 60) + ':' + (elapsed % 60);
+          console.log(elapsed);
+
+          status = 'Playing ' + currSong.titleUrl
+            + ' (' + elapsedS + ' / ' + currSong.duration + ')'; 
         }
 
         var embed = new Discord.RichEmbed()
@@ -121,13 +127,7 @@ class Queue extends Command {
                 
                 songs.forEach(songInfo => {
                   let tokenUrl = Tsubaki.createTokenCmd(() => {
-                    if (music.addToQueue(songInfo)) {
-                      message.channel.sendTemp(Tsubaki.Style.success('Playing: ' + songInfo.titleUrl
-                        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
-                    } else {
-                      message.channel.sendTemp(Tsubaki.Style.success('Queued: ' + songInfo.titleUrl
-                        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
-                    }
+                    addQueue(music, message, songInfo);
                   });
 
                   let embed = new Discord.RichEmbed()
@@ -139,17 +139,26 @@ class Queue extends Command {
                   message.channel.sendTemp({ embed: embed }, 15000);
                 });
               } else {
-                if (music.addToQueue(songs[0])) {
-                  response.editTemp(Tsubaki.Style.success('Playing: ' + songs[0].titleUrl
-                    , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
-                } else {
-                  response.editTemp(Tsubaki.Style.success('Queued: ' + songs[0].titleUrl
-                    , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
-                }
+                response.delete();
+                addQueue(music, message, songs[0]);
               }
           });
         }).catch(console.error);
       }
+    }
+  }
+
+  addQueue(music, message, songInfo) {
+    let response = music.addToQueue(songInfo);
+    if (response === 0) {
+      message.channel.sendTemp(Tsubaki.Style.warn(songInfo.titleUrl + ' is already queued.'
+        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+    } else if (response === 1) {
+      message.channel.sendTemp(Tsubaki.Style.success('Playing: ' + songInfo.titleUrl
+        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+    } else if (response === 2) {
+      message.channel.sendTemp(Tsubaki.Style.success('Queued: ' + songInfo.titleUrl
+        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
     }
   }
 }

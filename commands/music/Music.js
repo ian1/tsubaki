@@ -17,11 +17,14 @@ class Music {
   }
 
   addToQueue(video) {
+    if (video in this.queue) {
+      return 0; // Already in queue
+    }
     this.queue.push(video);
     if (this.play()) {
-      return true; // Start to play
+      return 1; // Start to play
     } else {
-      return false; // Already playing
+      return 2; // Already playing
     }
   }
 
