@@ -99,7 +99,7 @@ class Queue extends Command {
 
                 song.id = linesPre.pop(); // id is the last element of the previous chunk
                 song.title = linesPre.pop(); // with id removed, title is now the last element
-                song.titleUrl = Tsubaki.Style.url(song.title, 'https://www.youtube.com/watch?v=' + id);
+                song.titleUrl = Tsubaki.Style.url(song.title, 'https://www.youtube.com/watch?v=' + song.id);
 
                 song.thumbnail = 'https://i.ytimg.com' + linesPost.shift(); // thumb is the first element of this chunk
 
