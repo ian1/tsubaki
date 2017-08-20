@@ -132,7 +132,8 @@ class Queue extends Command {
                   });
 
                   let embed = new Discord.RichEmbed()
-                    .setDescription(Tsubaki.Style.bold(songInfo.title + Tsubaki.Style.url('Play', tokenUrl)) + '\n'
+                    .setDescription(Tsubaki.Style.bold(songInfo.title + ' '
+                      + Tsubaki.Style.url('Play', tokenUrl)) + '\n'
                     + songInfo.description)
                     .setFooter('https://www.youtube.com/watch?v=' + songInfo.id + ' . . . . . ' + songInfo.duration)
                     .setThumbnail(songInfo.thumbnail);
