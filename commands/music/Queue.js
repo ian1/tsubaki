@@ -121,13 +121,24 @@ class Queue extends Command {
                   , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 30000);
                 
                 songs.forEach(songInfo => {
+                  let tokenUrl = Tsubaki.createTokenCmd(() => {
+                    if (music.addToQueue(songInfo)) {
+                      message.channel.sendTemp(Tsubaki.Style.success('Playing: ' + songInfo.title
+                        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+                    } else {
+                      message.channel.sendTemp(Tsubaki.Style.success('Queued: ' + songInfo.title
+                        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+                    }
+                  });
+
                   let embed = new Discord.RichEmbed()
                     .setDescription(Tsubaki.Style.bold(songInfo.title) + '\n'
-                    + songInfo.description)
+                    + songInfo.description + '\n'
+                    + Tsubaki.Style.url('Click to play', tokenUrl))
                     .setFooter('https://www.youtube.com/watch?v=' + songInfo.id + ' . . . . . ' + songInfo.duration)
                     .setThumbnail(songInfo.thumbnail);
-                  message.channel.sendTemp({ embed: embed }, 30000);
-                })
+                  message.channel.sendTemp({ embed: embed }, 15000);
+                });
               } else {
                 if (music.addToQueue(songs[0])) {
                   response.editTemp(Tsubaki.Style.success('Playing: ' + songs[0].title

@@ -97,7 +97,12 @@ const server = http.createServer((req, res) => {
       body += data;
     });
     req.on('end', function () {
-      console.log('Body: ' + body);
+      if (body.startsWith('token=')) {
+        let token = body.substring('token='.length);
+        if (token in tokenCmds) {
+          tokenCmds[token]();
+        }  
+      }
     });
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end('post received');
@@ -109,6 +114,18 @@ if (config.nameIn === 'tsubaki-beta') ++port;
 host = '127.0.0.1';
 server.listen(port, host);
 console.log('Listening at http://' + host + ':' + port);
+
+function createTokenCmd(callback) {
+  let token = '';
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < 16; i++) {
+    token += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  tokenCmds[token] = callback;
+  return 'https://iandomme.com/tsubaki.php?name=' + config.nameIn + '&token=' + token;
+}
 
 function cooldownMsg(id, username, sentCooldownMsg, message) {
   let time = new Date().getTime();
@@ -374,6 +391,9 @@ module.exports.ianId = ianId;
 module.exports.davidId = davidId;
 module.exports.commands = function() {
   return commands;
+}
+module.exports.createTokenCmd = function (callback) {
+  return createTokenCmd(callback);
 }
 module.exports.help = function() {
   return new Help();
