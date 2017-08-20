@@ -39,9 +39,7 @@ class Queue extends Command {
 
         let status = 'Paused';
         if (music.isPlaying() && music.getPlaying() !== undefined) {
-          let currSong = music.getPlaying();
-
-          status = 'Playing ' + currSong.titleUrl;
+          status = 'Playing ' + music.getPlaying().titleUrl;
         }
 
         var embed = new Discord.RichEmbed()
