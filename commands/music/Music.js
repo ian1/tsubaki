@@ -17,6 +17,7 @@ class Music {
   }
 
   addToQueue(video) {
+    if (this.playing.id === video.id) return 0;
     this.queue.forEach(queueVid => {
       if (queueVid.id === video.id) {
         return 0;

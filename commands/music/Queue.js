@@ -40,8 +40,9 @@ class Queue extends Command {
         let status = 'Paused';
         if (music.isPlaying() && music.getPlaying() !== undefined) {
           let currSong = music.getPlaying();
-          let elapsed = Math.round(music.getDispatcher().time);
-          let elapsedS = (elapsed / 60) + ':' + (elapsed % 60);
+          let elapsed = Math.round(music.getDispatcher().time / 1000);
+          let seconds = elapsed % 60;
+          let elapsedS = Math.floor(elapsed / 60) + ':' + (seconds < 10 ? '0' + seconds : seconds);
           console.log(elapsed);
 
           status = 'Playing ' + currSong.titleUrl
