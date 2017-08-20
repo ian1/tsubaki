@@ -20,10 +20,10 @@ class Play extends Command {
           , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
       } else {
         if (music.resume()) {
-          message.channel.sendTemp(Tsubaki.Style.success('Resumed ' + music.getPlaying().title + '.'
+          message.channel.sendTemp(Tsubaki.Style.success('Resumed ' + music.getPlaying().titleUrl + '.'
             , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
         } else {
-          message.channel.sendTemp(Tsubaki.Style.warn(music.getPlaying().title + ' is already playing.'
+          message.channel.sendTemp(Tsubaki.Style.warn(music.getPlaying().titleUrl + ' is already playing.'
             , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
         }
       }

@@ -34,12 +34,16 @@ class Queue extends Command {
     } else {
       if (args.length == 0) {
         let text = music.getQueue().map((video, index) => (
-          (index + 1) + ': ' + video.title
+          (index + 1) + ': ' + video.titleUrl + ' (' + video.duration + ')'
         )).join('\n');
 
         let status = 'Paused';
         if (music.isPlaying() && music.getPlaying() !== undefined) {
-          status = 'Playing ' + music.getPlaying().title;
+          let currSong = music.getPlaying();
+          let elapsed = (currSong.time / 60) + ':';
+          elapsed += Math.round(currSong.time % 60);
+          status = 'Playing ' + music.getPlaying().titleUrl
+            + ' (' + elapsed + ' / ' + music.getPlaying().duration + ')';
         }
 
         var embed = new Discord.RichEmbed()
@@ -95,6 +99,7 @@ class Queue extends Command {
 
                 song.id = linesPre.pop(); // id is the last element of the previous chunk
                 song.title = linesPre.pop(); // with id removed, title is now the last element
+                song.titleUrl = Tsubaki.Style.url(song.title, 'https://www.youtube.com/watch?v=' + id);
 
                 song.thumbnail = 'https://i.ytimg.com' + linesPost.shift(); // thumb is the first element of this chunk
 
@@ -123,28 +128,28 @@ class Queue extends Command {
                 songs.forEach(songInfo => {
                   let tokenUrl = Tsubaki.createTokenCmd(() => {
                     if (music.addToQueue(songInfo)) {
-                      message.channel.sendTemp(Tsubaki.Style.success('Playing: ' + songInfo.title
+                      message.channel.sendTemp(Tsubaki.Style.success('Playing: ' + songInfo.titleUrl
                         , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
                     } else {
-                      message.channel.sendTemp(Tsubaki.Style.success('Queued: ' + songInfo.title
+                      message.channel.sendTemp(Tsubaki.Style.success('Queued: ' + songInfo.titleUrl
                         , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
                     }
                   });
 
                   let embed = new Discord.RichEmbed()
                     .setDescription(Tsubaki.Style.bold(songInfo.title + ' '
-                      + Tsubaki.Style.url('Play', tokenUrl)) + '\n'
-                    + songInfo.description)
-                    .setFooter('https://www.youtube.com/watch?v=' + songInfo.id + ' . . . . . ' + songInfo.duration)
+                      + Tsubaki.Style.url('Play', tokenUrl)) + '\n' + songInfo.description)
+                    .setFooter(Tsubaki.url('https://www.youtube.com/watch?v=' + songInfo.id, 'https://www.youtube.com/watch?v=' + songInfo.id)
+                      + ' . . . . . ' + songInfo.duration)
                     .setThumbnail(songInfo.thumbnail);
                   message.channel.sendTemp({ embed: embed }, 15000);
                 });
               } else {
                 if (music.addToQueue(songs[0])) {
-                  response.editTemp(Tsubaki.Style.success('Playing: ' + songs[0].title
+                  response.editTemp(Tsubaki.Style.success('Playing: ' + songs[0].titleUrl
                     , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
                 } else {
-                  response.editTemp(Tsubaki.Style.success('Queued: ' + songs[0].title
+                  response.editTemp(Tsubaki.Style.success('Queued: ' + songs[0].titleUrl
                     , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
                 }
               }

@@ -19,7 +19,7 @@ class Skip extends Command {
         message.channel.sendTemp(Tsubaki.Style.warn('I\'m not playing anything right now.'
           , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
       } else {
-        message.channel.sendTemp(Tsubaki.Style.success('Skipped ' + music.getPlaying().title + '.'
+        message.channel.sendTemp(Tsubaki.Style.success('Skipped ' + music.getPlaying().titleUrl + '.'
           , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
         music.skip();
       }  

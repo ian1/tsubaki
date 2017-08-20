@@ -20,10 +20,10 @@ class Pause extends Command {
           , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
       } else {
         if (music.pause()) {
-          message.channel.sendTemp(Tsubaki.Style.success('Paused ' + music.getPlaying().title + '.'
+          message.channel.sendTemp(Tsubaki.Style.success('Paused ' + music.getPlaying().titleUrl + '.'
             , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
         } else {
-          message.channel.sendTemp(Tsubaki.Style.warn(music.getPlaying().title + ' is already paused.'
+          message.channel.sendTemp(Tsubaki.Style.warn(music.getPlaying().titleUrl + ' is already paused.'
             , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
         }
       } 
