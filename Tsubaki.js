@@ -127,9 +127,12 @@ function cooldownMsg(id, username, sentCooldownMsg, message) {
         }, 500);
       }).catch(console.error);
     }
-  } else if (sentCooldownMsg !== undefined) { // Delete the message if it exists, but cooldown is over
-    sentCooldownMsg.delete();
-  }
+  } else {
+    if (sentCooldownMsg !== undefined) { // Delete the message if it exists, but cooldown is over
+      sentCooldownMsg.delete();
+    }
+    return false;
+  }  
   return true;
 }
 
