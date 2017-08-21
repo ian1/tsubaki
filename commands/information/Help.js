@@ -12,19 +12,14 @@ class Help extends Command {
     let cmds = Tsubaki.commands();
 
     if (args.length == 0) {
-      let title = Tsubaki.Style.bold('Tsubaki Command List') + '\n\n'
+      let description = Tsubaki.Style.bold('Tsubaki Command List') + '\n\n'
         + 'Do ' + Tsubaki.Style.bold(this.getUsage()) + ' and replace ' + Tsubaki.Style.bold('[command]')
         + ' with any command you want to learn more about.' + '\n';
-
-      let embed = new Discord.RichEmbed()
-        .setDescription(title)
-        .setColor(Tsubaki.color.green);
-      message.channel.sendTemp({ embed: embed }, 60000);
       
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         if ((!cmds[i][0].startsWith('_') || message.member.hasPermission(Tsubaki.adminPermission))
           && (!cmds[i][0].startsWith('__') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
-          let description = '\n' + Tsubaki.Style.bold(cmds[i][0] + ': ');
+          description += '\n' + Tsubaki.Style.bold(cmds[i][0] + ': ');
 
           for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
             let cmd = cmds[i][j];
@@ -38,13 +33,13 @@ class Help extends Command {
               message.channel.sendTemp({ embed: helpEmbed }, 20000);
             })) + ' ';
           }
-
-          let embed = new Discord.RichEmbed()
-            .setDescription(description)
-            .setColor(Tsubaki.color.green);
-          message.channel.sendTemp({ embed: embed }, 60000);
-        }  
+        }
       }
+
+      let embed = new Discord.RichEmbed()
+        .setDescription(description)
+        .setColor(Tsubaki.color.green);
+      message.channel.sendTemp({ embed: embed }, 60000);
     } else {    
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {

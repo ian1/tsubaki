@@ -116,15 +116,22 @@ server.listen(port, host);
 console.log('Listening at http://' + host + ':' + port);
 
 function createTokenCmd(callback) {
-  let token = '';
+  let token;
   let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  for (let i = 0; i < 16; i++) {
-    token += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
+  do {
+    token = '';
+    for (let i = 0; i < 4; i++) {
+      token += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+  } while (token in tokenCmds); // don't allow token repeats
 
   tokenCmds[token] = callback;
-  return 'https://iandomme.com/tsubaki.php?name=' + config.nameIn + '&token=' + token;
+  setTimeout(() => {
+    delete tokensCmds[token];
+  }, 120000); // delete token after 2 minutes
+  return 'iandomme.com/t.php?n=' + config.prefix.substring(0, config.prefix.length - 1)
+    + '&t=' + token;
 }
 
 function cooldownMsg(id, username, sentCooldownMsg, message) {
