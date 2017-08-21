@@ -1,16 +1,25 @@
 const Tsubaki = require('../../Tsubaki.js');
-const Discord = require('discord.js');
+const AdminCommand = require('./AdminCommand.js');
 
-const Command = require('../Command.js');
-
-class Kick extends Command {
+/** The kick command */
+class Kick extends AdminCommand {
+  /** Create the command */
   constructor() {
     super('kick', 'Will kick the specified user.', ' <@mention> [reason]');
   }
 
+  /**
+   * @param {Discord.Message} message The sent command
+   * @param {string[]} args The arguments in the command
+   * @param {Discord.Client} bot The instance of the discord client
+   * @param {sqlite.Database} db The instance of the database
+   */
   executeAdmin(message, args, bot, db) {
     let userToKick = message.mentions.users.first();
-    if (userToKick == '' || userToKick === undefined) return message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
+    if (userToKick == '' || userToKick === undefined) {
+      message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
+      return;
+    }
     let userID = userToKick.id;
 
     let isKickable = message.guild.member(userToKick).kickable;
@@ -18,8 +27,10 @@ class Kick extends Command {
     let reason = args.slice(1).join(' ');
 
     if (isKickable || userID.kickable) {
-      message.guild.member(userToKick.id).send(':boot: You have been {0} by {1} {2}'
-        .format(Tsubaki.Style.bold('kicked'), Tsubaki.Style.bold(message.author), (reason.length > 0 ? ' for: ' + Tsubaki.Style.bold(reason) : '!')));
+      message.guild.member(userToKick.id).send(
+        `:boot: You have been **kicked** by **${message.author}`
+        + (reason.length > 0 ? ` for: **${reason}**` : ' !')
+      );
 
       if (reason.length > 0) {
         message.guild.member(userToKick).kick(reason);
@@ -27,19 +38,15 @@ class Kick extends Command {
         message.guild.member(userToKick).kick();
       }
 
-      message.channel.sendTemp(':boot: {0} has been {1} by {2} {3}'
-        .format(userToKick.username, Tsubaki.Style.bold('kicked'), Tsubaki.Style.bold(message.author.tag),
-        (reason.length > 0 ? 'for: ' + Tsubaki.Style.bold(reason) : '!')), 30000);
+      message.channel.sendTemp(
+        `:boot: ${userToKick.tag} has been **kicked** by **${message.author}**`
+        + (reason.length > 0 ? ` for: **${reason}**` : ' !')
+        , 30000
+      );
     } else if (!isKickable || !(userID.kickable)) {
-      message.channel.sendTemp(Tsubaki.Style.error('You can\'t kick that user!'), 10000);
-    }
-  }
-
-  execute(message, args, bot, db) {
-    if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
-      this.executeAdmin(message, args, bot, db);
-    } else {
-      return message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
+      message.channel.sendTemp(Tsubaki.Style.error(
+        'You can\'t kick that user!'
+      ), 10000);
     }
   }
 }

@@ -1,27 +1,30 @@
 const Tsubaki = require('../../Tsubaki.js');
-const Discord = require('discord.js');
+const OwnerCommand = require('./OwnerCommand.js');
 
-const Command = require('../Command.js');
-
-class LeaveGuild extends Command {
+/** The leaveguild command */
+class LeaveGuild extends OwnerCommand {
+  /** Create the command */
   constructor() {
-    super('leaveguild', 'Remove ' + Tsubaki.name + ' from a guild.', ' <guild id>');
+    super('leaveguild', `Remove ${Tsubaki.name} from a guild.`, ' <guild id>');
   }
 
-  executeAdmin(message, args, bot, db) {
+  /**
+   * @param {Discord.Message} message The sent command
+   * @param {string[]} args The arguments in the command
+   * @param {Discord.Client} bot The instance of the discord client
+   * @param {sqlite.Database} db The instance of the database
+   */
+  executeOwner(message, args, bot, db) {
     if (args.length > 0) {
       let guild = bot.guilds.get(args[0]);
       guild.leave();
-      message.channel.sendTemp(Tsubaki.Style.success('Left server ' + guild.name), 10000);
-    }
-    else message.channel.sendTemp(Tsubaki.Style.warn('Please provide a guild id'), 10000);
-  }
-
-  execute(message, args, bot, db) {
-    if (message.member !== undefined && (message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
-      this.executeAdmin(message, args, bot, db);
+      message.channel.sendTemp(Tsubaki.Style.success(
+        `Left server ${guild.name}.`
+      ), 10000);
     } else {
-      return message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
+      message.channel.sendTemp(Tsubaki.Style.warn(
+        'Please provide a guild id.'
+      ), 10000);
     }
   }
 }

@@ -4,7 +4,6 @@ const Discord = require('discord.js');
 const Command = require('../Command.js');
 
 const execFile = require('child_process').execFile;
-let http = require('http');
 let path = require('path');
 let fs = require('fs');
 
@@ -16,24 +15,42 @@ let ytdlBinary;
 
 if (fs.existsSync(detailsPath)) {
   let details = JSON.parse(fs.readFileSync(detailsPath));
-  ytdlBinary = (details.path) ? details.path : path.resolve(binPath, details.exec);
+  if (details.path) {
+    ytdlBinary = details.path;
+  } else {
+    ytdlBinary = path.resolve(binPath, details.exec);
+  }
 }
 
 let cutOff = 100;
 
+/** The queue command */
 class Queue extends Command {
+  /** Create the command */
   constructor() {
-    super('queue', 'Add a song to, list the songs in, or clear the queue.', ' [song name|song url|clear]');
+    super(
+      'queue'
+      , 'Add a song to, list the songs in, or clear the queue.'
+      , ' [song name|song url|clear]'
+    );
   }
 
+  /**
+   * @param {Discord.Message} message The sent command
+   * @param {string[]} args The arguments in the command
+   * @param {Discord.Client} bot The instance of the discord client
+   * @param {sqlite.Database} db The instance of the database
+   */
   execute(message, args, bot, db) {
     let music = Music.getMusic(message.member.voiceChannel);
     if (music === undefined) {
-      message.channel.sendTemp(Tsubaki.Style.warn('You aren\'t in a voice channel!'
-        , Tsubaki.name + ' music'), 10000);
+      message.channel.sendTemp(Tsubaki.Style.warn(
+        'You aren\'t in a voice channel!'
+        , `${Tsubaki.name} music`
+      ), 10000);
     } else {
       if (args.length == 0) {
-        message.channel.send(Queue.getQueue(music)).then(msg => {
+        message.channel.send(Queue.getQueue(music)).then((msg) => {
           for (let i = 1; i <= 30; i++) {
             setTimeout(() => {
               msg.edit(Queue.getQueue(music));
@@ -44,35 +61,52 @@ class Queue extends Command {
         return;
       }
 
-      if (args[0].toLowerCase() === "clear"
-        && message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
+      if (args[0].toLowerCase() === 'clear'
+        && message.member !== undefined
+        && message.member.hasPermission(Tsubaki.adminPermission)) {
         music.clearQueue();
-        message.channel.sendTemp(Tsubaki.Style.success('Queue cleared!'
-          , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+        message.channel.sendTemp(Tsubaki.Style.success(
+          'Queue cleared!'
+          , `${Tsubaki.name} music on ${music.getMusicChannel().name}`), 10000);
       } else {
-        message.channel.send(Tsubaki.Style.embed(undefined, 'Searching...', Tsubaki.color.gray
-          , Tsubaki.name + ' music on ' + music.getMusicChannel().name)).then(response => {
+        message.channel.send(Tsubaki.Style.embed(
+          undefined, 'Searching...', Tsubaki.color.gray
+          , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
+        )).then((response) => {
           let searchString = args.join(' ');
 
           if (!searchString.toLowerCase().startsWith('http')) {
             searchString = 'ytsearch5:' + searchString;
           }
-          
-          execFile(ytdlBinary, [searchString, '-q', '--no-warnings', '--force-ipv4', '--get-title'
-            , '--get-id', '--get-thumbnail', '--get-description', '--get-duration'], {
+
+          execFile(ytdlBinary
+            , [
+              searchString,
+              '-q',
+              '--no-warnings',
+              '--force-ipv4',
+              '--get-title',
+              '--get-id',
+              '--get-thumbnail',
+              '--get-description',
+              '--get-duration',
+            ], {
               timeout: 60000,
             }, (err, stdout, stderr) => {
               if (err || stderr.length > 5) {
                 console.log(err);
                 console.log(stderr);
-                return response.editTemp(Tsubaki.Style.error('Invalid video!'), 10000);
+                response.editTemp(Tsubaki.Style.error('Invalid video!'), 10000);
+                return;
               }
 
-              let chunk = stdout.split('\nhttps://i.ytimg.com'); // 5 chunks: title, id, thumbnail, [description], duration
-              // Split by finding the thumbnail url, then get elements above and below
+              // Split on thumbnail url, then get elements above and below
+              // 5 chunks: title, id, thumbnail, [description], duration
+              let chunk = stdout.split('\nhttps://i.ytimg.com');
 
               if (chunk.length < 2) {
-                return response.editTemp(Tsubaki.Style.error('Invalid video!'), 10000);
+                response.editTemp(Tsubaki.Style.error('Invalid video!'), 10000);
+                return;
               }
 
               let songs = [];
@@ -82,47 +116,73 @@ class Queue extends Command {
 
                 let song = {};
 
-                song.id = linesPre.pop(); // id is the last element of the previous chunk
-                song.title = linesPre.pop(); // with id removed, title is now the last element
-                song.titleUrl = Tsubaki.Style.url(song.title, 'https://www.youtube.com/watch?v=' + song.id);
+                // id is the last element of the previous chunk
+                song.id = linesPre.pop();
 
-                song.thumbnail = 'https://i.ytimg.com' + linesPost.shift(); // thumb is the first element of this chunk
+                // with id removed, title is now the last element
+                song.title = linesPre.pop();
+                song.titleUrl = `[${song.title}]`
+                  + `(https://www.youtube.com/watch?v=${song.id})`;
+
+                // thumb is the first element of this chunk
+                song.thumbnail = 'https://i.ytimg.com' + linesPost.shift();
 
                 if (i != len - 1) {
-                  linesPost.pop(); // remove the last 2 elements (they're for next section)
+                  linesPost.pop(); // remove the last element (for next section)
                 }
-                linesPost.pop(); // last section ends with new line, so remove anyways
+                // last chunk ends with new line, so remove for both
+                linesPost.pop();
 
-                song.duration = linesPost.pop(); // duration is now the last element of this chunk
-                song.description = linesPost.join('\n'); // description is now the only element left
+                // duration is now the last element of this chunk
+                song.duration = linesPost.pop();
+
+                // description is now the only element left. Join into 1 string
+                song.description = linesPost.join('\n');
 
                 if (song.description.length > cutOff) {
-                  let descTail = song.description.substring(cutOff); // Splits the desc at the cut off
-                  let loc = descTail.indexOf(' '); // Finds the first instance of ' ' after cut off
-                  song.description = song.description.substring(0, cutOff + loc) + ' ...'; // Set the description to that shortened version
+                  // Splits the desc at the cut off
+                  let descTail = song.description.substring(cutOff);
+
+                   // Finds the first instance of ' ' after cut off
+                  let loc = descTail.indexOf(' ');
+
+                  // Set the description to that shortened version
+                  song.description = song.description
+                    .substring(0, cutOff + loc)
+                    + ' ...';
                 } if (song.description.split('\n').length > 4) {
-                  song.description = song.description.split('\n').slice(0, 4).join('\n') + ' ...';
+                  song.description = song.description
+                    .split('\n')
+                    .slice(0, 4)
+                    .join('\n')
+                    + ' ...';
                 }
 
                 songs.push(song);
               }
 
               if (songs.length > 1) {
-                response.editTemp(Tsubaki.Style.embed(undefined, 'Search results for ' + searchString, Tsubaki.color.green
-                  , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 30000);
-                
-                songs.forEach(songInfo => {
+                response.editTemp(Tsubaki.Style.embed(undefined
+                  , 'Search results for ' + searchString, Tsubaki.color.green
+                  , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
+                ), 30000);
+
+                songs.forEach((songInfo) => {
                   let tokenUrl = Tsubaki.createTokenCmd(() => {
                     this.addQueue(music, message, songInfo);
                   });
 
                   let embed = new Discord.RichEmbed()
-                    .setDescription(Tsubaki.Style.bold(songInfo.title + ' '
-                      + Tsubaki.Style.url('Play', tokenUrl)) + '\n' + songInfo.description)
-                    .setFooter('https://www.youtube.com/watch?v=' + songInfo.id
-                      + ' . . . . . ' + songInfo.duration)
-                    .setThumbnail(songInfo.thumbnail);
-                  message.channel.sendTemp({ embed: embed }, 15000);
+                    .setDescription(
+                      `**${songInfo.title}**`
+                      + ` [Play](${tokenUrl})`
+                      + `\n ${songInfo.description}`
+                    ).setFooter(
+                      `https://www.youtube.com/watch?v=${songInfo.id}`
+                      + ' . . . . . '
+                      + songInfo.duration
+                    ).setThumbnail(songInfo.thumbnail);
+                  message.channel.sendTemp({embed: embed}, 15000);
                 });
               } else {
                 response.delete();
@@ -134,20 +194,38 @@ class Queue extends Command {
     }
   }
 
+  /**
+   * Add a song to the queue
+   * @param {Music} music The instance of the music class
+   * @param {Discord.Message} message The message
+   * @param {Object} songInfo The song's info
+   * @param {string} songInfo.titleUrl The song's title and url
+   */
   addQueue(music, message, songInfo) {
     let response = music.addToQueue(songInfo);
     if (response === 0) {
-      message.channel.sendTemp(Tsubaki.Style.warn(songInfo.titleUrl + ' is already queued.'
-        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+      message.channel.sendTemp(Tsubaki.Style.warn(
+        songInfo.titleUrl + ' is already queued.'
+        , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
+      ), 10000);
     } else if (response === 1) {
-      message.channel.sendTemp(Tsubaki.Style.success('Playing: ' + songInfo.titleUrl
-        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+      message.channel.sendTemp(Tsubaki.Style.success(
+        `Playing: ${songInfo.titleUrl}`
+        , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
+      ), 10000);
     } else if (response === 2) {
-      message.channel.sendTemp(Tsubaki.Style.success('Queued: ' + songInfo.titleUrl
-        , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
+      message.channel.sendTemp(Tsubaki.Style.success(
+        `Queued: ${songInfo.titleUrl}`
+        , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
+      ), 10000);
     }
   }
 
+  /**
+   * Get the queue list
+   * @param {Music} music The instance of the music class
+   * @return {string} The queue list
+   */
   static getQueue(music) {
     let text = music.getQueue().map((video, index) => (
       (index + 1) + ': ' + video.titleUrl + ' (' + video.duration + ')'
@@ -158,12 +236,12 @@ class Queue extends Command {
       let currSong = music.getPlaying();
       let elapsed = Queue.getTime(music.getDispatcher().time);
 
-      status = 'Playing ' + currSong.titleUrl
-        + ' (' + elapsed + ' / ' + currSong.duration + ')';
+      status = `Playing ${currSong.titleUrl}`
+        + ` (${elapsed} / ${currSong.duration})`;
     }
 
     let embed = new Discord.RichEmbed()
-      .setTitle(Tsubaki.name + ' music')
+      .setTitle(`${Tsubaki.name} music`)
       .addField('Status', status);
     if (text !== undefined && text != '') {
       embed.addField('Queue', text);
@@ -171,22 +249,27 @@ class Queue extends Command {
       embed.addField('Queue', 'Empty');
     }
 
-    return { embed: embed };
+    return {embed: embed};
   }
 
+  /**
+   * Formats time (duration)
+   * @param {number} milliseconds The time in milliseconds
+   * @return {string} The time as H:MM:ss
+   */
   static getTime(milliseconds) {
-    let seconds = parseInt((milliseconds / 1000) % 60)
+    let seconds = parseInt((milliseconds / 1000) % 60);
     seconds = (seconds < 10) ? '0' + seconds : seconds;
-    let minutes = parseInt((milliseconds / (1000 * 60)) % 60)
+    let minutes = parseInt((milliseconds / (1000 * 60)) % 60);
     let hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24);
 
     let time = '';
 
     if (hours > 0) {
       minutes = (minutes < 10) ? '0' + minutes : minutes;
-      time = hours + ":" + minutes + ":" + seconds;
+      time = `${hours}:${minutes}:${seconds}`;
     } else {
-      time = minutes + ":" + seconds;
+      time = `${minutes}:${seconds}`;
     }
 
     return time;
