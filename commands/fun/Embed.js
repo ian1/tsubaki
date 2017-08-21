@@ -17,7 +17,7 @@ class Embed extends Command {
     } else if (args.length >= 1) {
       msg = args.join(' ')
     } else {
-      return message.channel.send(Tsubaki.Style.warn('Please tell me what to say!'));
+      return message.channel.sendTemp(Tsubaki.Style.warn('Please tell me what to say!'), 10000);
     }
     
     let embed = new Discord.RichEmbed()

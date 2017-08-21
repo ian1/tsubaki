@@ -16,7 +16,7 @@ class Stats extends Command {
       .addField('Channels', bot.channels.size)
       .setColor(Tsubaki.color.green)
       .setFooter(Tsubaki.name + ' Stats');
-    message.channel.send({ embed: embed });
+    message.channel.sendTemp({ embed: embed }, 20000);
   }
 }
 

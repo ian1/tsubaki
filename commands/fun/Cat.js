@@ -10,9 +10,9 @@ class Cat extends Command {
   }
 
   execute(message, args, bot, db) {
-    random.cat().then(url => message.channel.send(url)).catch(err => {
+    random.cat().then(url => message.channel.sendTemp(url, 30000)).catch(err => {
       console.log(err.message);
-      message.channel.send(Tsubaki.Style.errorGeneric());
+      message.channel.sendTemp(Tsubaki.Style.errorGeneric(), 10000);
     });
   }
 }

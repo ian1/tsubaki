@@ -9,7 +9,7 @@ class Dice extends Command {
   }
 
   execute(message, args, bot, db) {
-    message.channel.send(':game_die: You rolled a ' + (Math.ceil(Math.random() * 6)));
+    message.channel.sendTemp(':game_die: You rolled a ' + (Math.ceil(Math.random() * 6)), 10000);
   }
 }
 

@@ -17,7 +17,7 @@ class Info extends Command {
         + 'Github Repository: https://github.com/ian1/tsubaki' + '\n')
       .setFooter('Created by ' + Tsubaki.author)
       .setColor(Tsubaki.color.white);
-    message.channel.send({ embed: embed });
+    message.channel.sendTemp({ embed: embed }, 30000);
   }
 }
 

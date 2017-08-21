@@ -13,7 +13,11 @@ class Coin extends Command {
       'Heads',
       'Tails',
     ]
-    message.channel.send(':fingers_crossed: You flipped a coin and it landed on...  ' + Tsubaki.Style.bold(coins[Math.floor(Math.random() * coins.length)] + '!'));
+    message.channel.send(':fingers_crossed: You flipped a coin and it landed on...  ').then(msg => {
+      setTimeout(() => {
+        msg.editTemp(Tsubaki.Style.bold(coins[Math.floor(Math.random() * coins.length)] + '!'), 10000);
+      }, 1000);
+    });
   }
 }
 

@@ -12,7 +12,7 @@ class ChangeLog extends Command {
     let embed = new Discord.RichEmbed()
       .setDescription('not done ;)')
       .setColor(Tsubaki.color.white);
-    message.channel.send({ embed: embed });
+    message.channel.sendTemp({ embed: embed }, 20000);
   }
 }
 

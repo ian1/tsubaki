@@ -193,7 +193,7 @@ function getPoints(id, callback) {
 function setPoints(id, points, channel) {
   db.run('UPDATE members SET points = ' + points + ' WHERE member_id = ' + id, function () {
     if (getLevel(points) === getLevelR(points)) {
-      channel.send(Style.success(' :arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!')));
+      channel.sendTemp(Style.success(' :arrow_up: ' + Style.italicize('<@' + id + '> just leveled up to level ' + getLevelR(points) + '!')), 10000);
     }
   });
 }
@@ -281,13 +281,13 @@ bot.on('guildMemberAdd', (member) => {
           let welcomeEmbed = new Discord.RichEmbed()
             .setDescription('Welcome to ' + Style.bold('{0}, {1}!').format(guild.name, member))
             .setColor(color.white);
-          bot.channels.get(channelId).send({ embed: welcomeEmbed });
+          bot.channels.get(channelId).sendTemp({ embed: welcomeEmbed }, 60000);
           db.run('INSERT INTO guild_join VALUES (' + member.id + ', ' + guild.id + ')');
         } else {
           let welcomeEmbed = new Discord.RichEmbed()
             .setDescription('Welcome back to ' + Style.bold('{0}, {1}!').format(guild.name, member))
             .setColor(color.white);
-          bot.channels.get(channelId).send({ embed: welcomeEmbed });
+          bot.channels.get(channelId).sendTemp({ embed: welcomeEmbed }, 60000);
         }
     });
   });
@@ -349,7 +349,7 @@ bot.on('message', (message) => {
     }
   }
   if (!found) {
-    message.channel.send(Style.notFound());
+    message.channel.sendTemp(Style.notFound(), 10000);
   }
 });
 

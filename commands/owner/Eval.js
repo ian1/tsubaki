@@ -19,7 +19,8 @@ class Eval extends Command {
     try {
       result = eval(expression);
     } catch (e) {
-      message.channel.send(Tsubaki.Style.error('Whoops! I got an error: ' + e.message + '. See console for stack trace.'));
+      message.channel.sendTemp(Tsubaki.Style.error('Whoops! I got an error: '
+        + e.message + '. See console for stack trace.'), 10000);
       
       this.logEval('Eval threw an error!');
       this.logEval('Command:');
@@ -29,7 +30,7 @@ class Eval extends Command {
       return;
     }
     if (result !== Object(result)) {
-      message.channel.send(Tsubaki.Style.codeBlock(result, ''));
+      message.channel.sendTemp(Tsubaki.Style.codeBlock(result, ''), 20000);
     }
   }
 
@@ -38,7 +39,7 @@ class Eval extends Command {
       && args[0] !== undefined && args[0] === this.code) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      message.channel.send(Tsubaki.Style.notFound());
+      message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
     }
     this.logEval('Next code: ' + (this.code = this.randString())); // Generate a new code and print to console
   }

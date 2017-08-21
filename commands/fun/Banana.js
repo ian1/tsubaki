@@ -10,11 +10,11 @@ class Banana extends Command {
 
   execute(message, args, bot, db) {
     let memberMention = message.mentions.users.first();
-    if (memberMention == message.author) return message.channel.send(':x: Don\'t be greedy, sweetie~ :kissing_heart:');
+    if (memberMention == message.author) return message.channel.sendTemp(Tsubaki.Style.embed(':x: Don\'t be greedy, sweetie~ :kissing_heart:'), 10000);
 
-    if (memberMention == '' || memberMention === undefined) return message.channel.send(Tsubaki.Style.unknownUser());
+    if (memberMention == '' || memberMention === undefined) return message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
     else {
-      message.channel.send(':banana: ' + message.author.tag + ' has given ' + memberMention + ' a banana!');
+      message.channel.sendTemp(':banana: ' + message.author.tag + ' has given ' + memberMention + ' a banana!', 20000);
       Tsubaki.getPoints(memberMention.id, function (points) {
         Tsubaki.setPoints(memberMention.id, points + 1, message.channel);
       });

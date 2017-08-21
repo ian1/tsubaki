@@ -40,13 +40,15 @@ class EightBall extends Command {
       'I\'m not sure about this one...',
       'Oh, this one\'s easy!'
     ]
-    if (question == '' || question === undefined) return message.channel.send(Tsubaki.Style.warn(':eye_in_speech_bubble: _Give me a question!_'));
+    if (question == '' || question === undefined) return message.channel.sendTemp(Tsubaki.Style.warn(':eye_in_speech_bubble: _Give me a question!_'), 10000);
     else {
       message.channel.send(':thinking: ' + Tsubaki.Style.italicize(thinking[Math.floor(Math.random() * thinking.length)])).then(msg => {
         // Wait for 1 second before sending response.
+        message.channel.startTyping();
         setTimeout(function () {
-          message.channel.edit(Tsubaki.Style.bold(balls[Math.floor(Math.random() * balls.length)]));
-        }, 1000);  
+          message.channel.stopTyping();
+          msg.editTemp(Tsubaki.Style.bold(balls[Math.floor(Math.random() * balls.length)]), 20000);
+        }, 1000);
       });
     }
   }

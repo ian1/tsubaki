@@ -50,7 +50,8 @@ class Queue extends Command {
         message.channel.sendTemp(Tsubaki.Style.success('Queue cleared!'
           , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 10000);
       } else {
-        message.channel.send('Searching...').then(response => {
+        message.channel.send(Tsubaki.Style.embed(undefined, 'Searching...', Tsubaki.color.gray
+          , Tsubaki.name + ' music on ' + music.getMusicChannel().name)).then(response => {
           let searchString = args.join(' ');
 
           if (!searchString.toLowerCase().startsWith('http')) {
@@ -64,14 +65,14 @@ class Queue extends Command {
               if (err || stderr.length > 5) {
                 console.log(err);
                 console.log(stderr);
-                return response.editTemp(Tsubaki.Style.warn('Invalid video!'), 10000);
+                return response.editTemp(Tsubaki.Style.error('Invalid video!'), 10000);
               }
 
               let chunk = stdout.split('\nhttps://i.ytimg.com'); // 5 chunks: title, id, thumbnail, [description], duration
               // Split by finding the thumbnail url, then get elements above and below
 
               if (chunk.length < 2) {
-                return response.editTemp(Tsubaki.Style.warn('Invalid video!'), 10000);
+                return response.editTemp(Tsubaki.Style.error('Invalid video!'), 10000);
               }
 
               let songs = [];
@@ -107,7 +108,7 @@ class Queue extends Command {
               }
 
               if (songs.length > 1) {
-                response.editTemp(Tsubaki.Style.embed(undefined, 'Search results for ' + searchString, Tsubaki.Style.green
+                response.editTemp(Tsubaki.Style.embed(undefined, 'Search results for ' + searchString, Tsubaki.color.green
                   , Tsubaki.name + ' music on ' + music.getMusicChannel().name), 30000);
                 
                 songs.forEach(songInfo => {

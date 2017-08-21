@@ -20,7 +20,7 @@ class Ping extends Command {
     let embed = new Discord.RichEmbed()
       .setDescription('Pong! ' + Tsubaki.Style.code(Number(Math.round(ping + 'e2') + 'e-2') + ' ms') + '.')
       .setColor(color);
-    message.channel.send({ embed: embed });
+    message.channel.sendTemp({ embed: embed }, 5000);
   }
 }
 

@@ -36,7 +36,7 @@ class Guilds extends Command {
         .setTitle(title)
         .setDescription(guildsList[i])
         .setColor(Tsubaki.color.green);
-      message.channel.send({embed: embed});
+      message.channel.sendTemp({embed: embed}, 60000);
     }
   }
 
@@ -44,7 +44,7 @@ class Guilds extends Command {
     if (message.member !== undefined && (message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      return message.channel.send(Tsubaki.Style.notFound());
+      return message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
     }
   }
 }

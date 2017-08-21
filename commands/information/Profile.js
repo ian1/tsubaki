@@ -12,7 +12,7 @@ class Profile extends Command {
     let profileMention = message.mentions.users.first();
     
     if (profileMention == '' || profileMention === undefined) {
-      return message.channel.send(Tsubaki.Style.unknownUser());
+      return message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
     } else {
       let color = Tsubaki.color.gray;
       switch (profileMention.presence.status) {
@@ -40,7 +40,7 @@ class Profile extends Command {
           .setThumbnail(profileMention.displayAvatarURL)
           .setFooter('Member since ' + Profile.formatDate(guildMember.joinedAt) + ', Discorder since ' + Profile.formatDate(profileMention.createdAt))
           .setColor(color);
-        message.channel.send({ embed: profileEmbed });
+        message.channel.sendTemp({ embed: profileEmbed }, 20000);
       });
     }
   }

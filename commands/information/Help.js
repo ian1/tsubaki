@@ -29,7 +29,7 @@ class Help extends Command {
       let embed = new Discord.RichEmbed()
         .setDescription(description)
         .setColor(Tsubaki.color.green);
-      message.channel.send({ embed: embed });
+      message.channel.sendTemp({ embed: embed }, 30000);
     } else {    
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
@@ -43,15 +43,15 @@ class Help extends Command {
                 + Tsubaki.Style.bold('Category: ') + cmds[i][0] + '\n\n'
                 + Tsubaki.Style.bold('Usage: ') + cmd.getUsage())
                 .setColor(Tsubaki.color.green);
-              message.channel.send({ embed: embed });
+              message.channel.sendTemp({ embed: embed }, 20000);
             } else {
-              message.channel.send(Tsubaki.Style.notFound());
+              message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
             }
             return;
           }
         }
       }
-      message.channel.send(Tsubaki.Style.notFound());
+      message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
     }
   }
 }

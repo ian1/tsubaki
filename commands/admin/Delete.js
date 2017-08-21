@@ -10,12 +10,12 @@ class Delete extends Command {
 
   executeAdmin(message, args, bot, db) {
     if (args.length == 0 || parseInt(args[0]) < 1) {
-      message.channel.send(Tsubaki.Style.warn(':grey_question: How many messages do you want to delete?'));
+      message.channel.sendTemp(Tsubaki.Style.warn(':grey_question: How many messages do you want to delete?'), 30000);
     } else if (parseInt(args[0]) > 100) {
-      message.channel.send(Tsubaki.Style.warn('I can\'t delete more than 100 messages!'));
+      message.channel.sendTemp(Tsubaki.Style.warn('I can\'t delete more than 100 messages!'), 10000);
     } else {
       message.channel.fetchMessages({ limit: parseInt(args[0]) + 1 }).then(messages => message.channel.bulkDelete(messages)).catch(function () {
-        message.channel.send(Tsubaki.Style.errorGeneric());
+        message.channel.sendTemp(Tsubaki.Style.errorGeneric(), 10000);
         console.error;
       });
     }
@@ -25,7 +25,7 @@ class Delete extends Command {
     if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      return message.channel.send(Tsubaki.Style.notFound());
+      return message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
     }
   }
 }

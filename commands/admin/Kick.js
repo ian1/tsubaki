@@ -10,7 +10,7 @@ class Kick extends Command {
 
   executeAdmin(message, args, bot, db) {
     let userToKick = message.mentions.users.first();
-    if (userToKick == '' || userToKick === undefined) return message.channel.send(Tsubaki.Style.unknownUser());
+    if (userToKick == '' || userToKick === undefined) return message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
     let userID = userToKick.id;
 
     let isKickable = message.guild.member(userToKick).kickable;
@@ -27,13 +27,11 @@ class Kick extends Command {
         message.guild.member(userToKick).kick();
       }
 
-      message.channel.send(':boot: {0} has been {1} by {2} {3}'
+      message.channel.sendTemp(':boot: {0} has been {1} by {2} {3}'
         .format(userToKick.username, Tsubaki.Style.bold('kicked'), Tsubaki.Style.bold(message.author.tag),
-        (reason.length > 0 ? 'for: ' + Tsubaki.Style.bold(reason) : '!')));
+        (reason.length > 0 ? 'for: ' + Tsubaki.Style.bold(reason) : '!')), 30000);
     } else if (!isKickable || !(userID.kickable)) {
-      message.channel.send(Tsubaki.Style.error('You can\'t kick that user!'));
-    } else {
-      message.channel.send('Bigger Problem Inside')
+      message.channel.sendTemp(Tsubaki.Style.error('You can\'t kick that user!'), 10000);
     }
   }
 
@@ -41,7 +39,7 @@ class Kick extends Command {
     if (message.member !== undefined && message.member.hasPermission(Tsubaki.adminPermission)) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      return message.channel.send(Tsubaki.Style.notFound());
+      return message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
     }
   }
 }
