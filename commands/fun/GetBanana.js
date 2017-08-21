@@ -16,10 +16,10 @@ class GetBanana extends Command {
    */
   execute(message, args, bot, db) {
     Tsubaki.getPoints(message.author.id, (points) => {
-      message.channel.sendType(`${message.author}`
+      message.channel.sendTemp(`${message.author}`
         + `, :banana: *You are currently Banana level*`
         + ` \`${Tsubaki.getLevelR(points)}\`, *with*`
-        + ` \`${points}\` Bananas!`);
+        + ` \`${points}\` Bananas!`, 10000);
     });
   }
 }
