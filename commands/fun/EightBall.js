@@ -54,15 +54,14 @@ class EightBall extends Command {
         ':eye_in_speech_bubble: *Give me a question!*'
       ), 10000);
     } else {
-      message.channel.send(
-        `:thinking: *${thinking[Math.floor(Math.random() * thinking.length)]}`
+      message.channel.sendType(
+        `:thinking: *${thinking[Math.floor(Math.random() * thinking.length)]}* `
       ).then((msg) => {
         // Wait for 1 second before sending response.
-        message.channel.startTyping();
         setTimeout(() => {
-          message.channel.stopTyping();
           msg.editTemp(
-            `**${balls[Math.floor(Math.random() * balls.length)]}`
+            msg.content
+            + `  **${balls[Math.floor(Math.random() * balls.length)]}**`
             , 20000);
         }, 1000);
       });

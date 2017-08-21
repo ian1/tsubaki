@@ -26,7 +26,7 @@ class Support extends Command {
       .addField(`**${Tsubaki.name}**'s Help Server`
       , '[Click Here to join](https://discord.gg/Gf7hb33)')
       .setColor(Tsubaki.color.green);
-    message.author.send({embed: embed});
+    message.author.sendType({embed: embed});
   }
 }
 

@@ -20,9 +20,7 @@ class Tts extends Command {
         'Please tell me what to say!'
       ), 10000);
     } else {
-      message.channel.send(args.join(' '), {tts: true}).then((msg) => {
-        msg.delete(10000);
-      });
+      message.channel.sendTemp(args.join(' '), {tts: true}, 10000);
     }
   }
 }

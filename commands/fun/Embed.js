@@ -33,7 +33,7 @@ class Embed extends Command {
     let embed = new Discord.RichEmbed()
       .setDescription(msg)
       .setColor(color);
-    message.channel.send({embed: embed});
+    message.channel.sendType({embed: embed});
   }
 }
 

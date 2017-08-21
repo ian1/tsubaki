@@ -19,7 +19,7 @@ class Dog extends Command {
     random.dog().then(
       (url) => message.channel.sendTemp(url, 30000)
     ).catch((err) => {
-      console.error;
+      console.log(err);
       message.channel.sendTemp(Tsubaki.Style.errorGeneric(), 10000);
     });
   }

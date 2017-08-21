@@ -175,7 +175,7 @@ function cooldownMsg(id, username, sentCooldownMsg, message) {
     if (sentCooldownMsg === undefined) {
       message.delete();
 
-      message.channel.send({ // Create the cooldown message
+      message.channel.sendType({ // Create the cooldown message
         embed: embed,
       }).then((sentMsg) => {
         setTimeout(function() { // Continue the loop
@@ -268,7 +268,7 @@ function getLevelR(points) {
  */
 function cmdLogger(message, bot) {
   if (message.content.startsWith(config.prefix) && message.guild.id !== '') {
-    bot.channels.get(commandLogger).send(
+    bot.channels.get(commandLogger).sendType(
       `**${message.author.tag}** » __${message.guild.name}__`
       + ` » \`${message.content}\``
     );
@@ -302,7 +302,7 @@ bot.on('ready', () => {
       + `\n\nDo \`${new Help().getUsage()}\` to see my commands!`)
       .setFooter(`Created by ${info.author}`)
       .setColor(color.green);
-    bot.channels.get(logger).send({embed: embed});
+    bot.channels.get(logger).sendType({embed: embed});
   }, 3000);
 
   db.serialize(function() {
@@ -372,7 +372,7 @@ setPlaying();
 // Log guild create and delete
 bot.on('guildCreate', (guild) => {
   let log = bot.channels.get(guildLogger);
-  log.send(
+  log.sendType(
     `:thumbsup: New guild joined: ${guild.name} (id: ${guild.id}, owned by`
     + ` ${guild.owner}). This guild has ${guild.memberCount} members!`
   );
@@ -380,7 +380,7 @@ bot.on('guildCreate', (guild) => {
 
 bot.on('guildDelete', (guild) => {
   let log = bot.channels.get(guildLogger);
-  log.send(
+  log.sendType(
     `:thumbsdown: I have been removed from ${guild.name} (id: ${guild.id})`
   );
 });
@@ -425,7 +425,7 @@ bot.on('message', (message) => {
   /* let lowerMsg = message.content.toLowerCase();
 
    if (lowerMsg.toLowerCase() === 'help tsubaki') {
-    message.channel.send('Hi there, if you need help do  ``t-help``!');
+    message.channel.sendType('Hi there, if you need help do  ``t-help``!');
   }
 
   // Reacts
@@ -482,28 +482,55 @@ bot.on('message', (message) => {
   }
 });
 
-if (!String.prototype.format) {
-  String.prototype.format = function() {
-    let args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] != 'undefined' ? args[number] : match;
-    });
-  };
-}
-
 if (!Discord.TextChannel.prototype.sendTemp) {
-  Discord.TextChannel.prototype.sendTemp = function (args, duration) {
-    this.send(args).then(msg => {
-      msg.delete(duration);
-    })
+  Discord.TextChannel.prototype.sendTemp = function(...args) {
+    let duration = args.pop();
+    let promise = new Promise((resolve, reject) => {
+      this.sendType(...args).then((msg) => {
+        resolve(msg);
+        msg.delete(duration);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+
+    return promise;
   };
 }
 
 if (!Discord.Message.prototype.editTemp) {
-  Discord.Message.prototype.editTemp = function (args, duration) {
-    this.edit(args).then(msg => {
-      msg.delete(duration);
-    })
+  Discord.Message.prototype.editTemp = function(...args) {
+    let duration = args.pop();
+    let promise = new Promise((resolve, reject) => {
+      this.edit(...args).then((msg) => {
+        resolve(msg);
+        msg.delete(duration);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+
+    return promise;
+  };
+}
+
+if (!Discord.TextChannel.prototype.sendType) {
+  Discord.TextChannel.prototype.sendType = function(...args) {
+    let channel = this;
+    channel.startTyping();
+
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        channel.send.apply(this, args).then((msg) => {
+          channel.stopTyping();
+          resolve(msg);
+        }).catch((err) => {
+          reject(err);
+        });
+      }, 500);
+    });
+
+    return promise;
   };
 }
 

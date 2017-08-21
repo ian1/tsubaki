@@ -24,14 +24,14 @@ class Invite extends Command {
     let embed = new Discord.RichEmbed()
       .setDescription(Tsubaki.Style.codeBlock(
         `Invite ${Tsubaki.name} to your server!`, 'css'
-      ) + `\n\n ${this.getInformation()}`)
+      ) + `\n\n${this.getInformation()}`)
       .addField(`${Tsubaki.name }'s Help Server`,
         '[Click here to join](https://discord.gg/Gf7hb33)')
       .addField(`${Tsubaki.name}'s Invitation Link`,
         '[Click here to invite](https://discordapp.com/oauth2/authorize'
         + '?client_id=334386617626263553&scope=bot&permissions=305196094)')
       .setColor(Tsubaki.color.green);
-    message.author.send({embed: embed});
+    message.author.sendType({embed: embed});
   }
 }
 

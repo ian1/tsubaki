@@ -28,9 +28,9 @@ class Delete extends AdminCommand {
       ), 10000);
     } else {
       message.channel.fetchMessages({limit: parseInt(args[0]) + 1})
-        .then((messages) => message.channel.bulkDelete(messages)).catch(() => {
+        .then((messages) => message.channel.bulkDelete(messages)).catch((err) => {
         message.channel.sendTemp(Tsubaki.Style.errorGeneric(), 10000);
-        console.error;
+        console.log(err);
       });
     }
   }

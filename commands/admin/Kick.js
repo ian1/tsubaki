@@ -27,7 +27,7 @@ class Kick extends AdminCommand {
     let reason = args.slice(1).join(' ');
 
     if (isKickable || userID.kickable) {
-      message.guild.member(userToKick.id).send(
+      message.guild.member(userToKick.id).sendType(
         `:boot: You have been **kicked** by **${message.author}`
         + (reason.length > 0 ? ` for: **${reason}**` : ' !')
       );

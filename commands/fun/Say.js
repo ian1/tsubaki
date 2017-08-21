@@ -20,7 +20,7 @@ class Say extends Command {
         'Please tell me what to say!'
       ), 10000);
     } else {
-      message.channel.send(args.join(' '), {tts: false});
+      message.channel.sendType(args.join(' '), {tts: false});
     }
   }
 }

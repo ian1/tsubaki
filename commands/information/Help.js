@@ -19,19 +19,19 @@ class Help extends Command {
     let cmds = Tsubaki.commands();
 
     if (args.length == 0) {
-      let description = '**Tsubaki Command List**'
-        + `\n\n Do \`${this.getUsage}\` and replace \`[command]\``
+      let description = `**${Tsubaki.name} Command List**`
+        + `\n\nDo \`${this.getUsage()}\` and replace \`[command]\``
         + ' with any command you want to learn more about. \n';
 
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         if (cmds[i][0].startsWith('_')) continue;
-        description += `\n **${cmds[i][0]}:**`;
+        description += `\n**${cmds[i][0]}:** `;
 
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
           let cmd = cmds[i][j];
           description += `[${cmd.getCommand()}](${
             Tsubaki.createTokenCmd(() => {
-              message.channel.sendTemp({embed: this.helpEmbed(cmd)}, 20000);
+              message.channel.sendTemp({embed: this.helpEmbed(cmd, cmds[i][0])}, 20000);
             })
           })` + ' ';
         }
@@ -52,13 +52,13 @@ class Help extends Command {
 
         if (!cmds[i][0].startsWith('__') || (message.member.id === Tsubaki.ianId
           || message.member.id === Tsubaki.davidId)) {
-          description += `\n **${cmds[i][0]}**: `;
+          description += `\n**${cmds[i][0]}**: `;
 
           for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
             let cmd = cmds[i][j];
             description += `[${cmd.getCommand()}](${
               Tsubaki.createTokenCmd(() => {
-                message.channel.sendTemp({embed: this.helpEmbed(cmd)}, 20000);
+                message.channel.sendTemp({embed: this.helpEmbed(cmd, cmds[i][0])}, 20000);
               })
             })` + ' ';
           }
@@ -81,7 +81,9 @@ class Help extends Command {
                 || message.member.id === Tsubaki.ianId
                 || message.member.id === Tsubaki.davidId
               )) {
-              message.channel.sendTemp({embed: helpEmbed(cmds[i][j])}, 20000);
+              message.channel.sendTemp(
+                {embed: this.helpEmbed(cmds[i][j], cmds[i][0])}
+                , 20000);
             } else {
               message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
             }
@@ -96,14 +98,15 @@ class Help extends Command {
   /**
    * Get the help info for a command
    * @param {Command} cmd The command
+   * @param {string} category The command's category
    * @return {Discord.RichEmbed} The help info in an embed
    */
-  helpEmbed(cmd) {
+  helpEmbed(cmd, category) {
     let helpEmbed = new Discord.RichEmbed()
-      .setDescription(/* Style.bold*/('Command: ') + cmd.getCommand() + '\n'
-      + /* Style.bold*/('Description: ') + cmd.getDescription() + '\n'
-      + /* Style.bold*/('Category: ') + cmds[i][0] + '\n\n'
-      + /* Style.bold*/('Usage: ') + cmd.getUsage())
+      .setDescription(`**Command:** ${cmd.getCommand()}`
+      + `\n**Description:** ${cmd.getDescription()}`
+      + `\n**Category:** ${category}`
+      + `\n\n**Usage:** \`${cmd.getUsage()}\``)
       .setColor(Tsubaki.color.green);
     return helpEmbed;
   }

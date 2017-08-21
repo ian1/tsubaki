@@ -19,11 +19,11 @@ class Info extends Command {
   execute(message, args, bot, db) {
     let embed = new Discord.RichEmbed()
       .setDescription(`**Information About ${Tsubaki.name}:**`
-      + `\n\n ${Tsubaki.name} is a **Discord.js** bot. She can be used for`
+      + `\n\n${Tsubaki.name} is a **Discord.js** bot. She can be used for`
       + ' moderation, administration, utility, and just for fun. She has a wide'
       + ' range of commands everyone will enjoy, and she is constantly being'
       + ' updated and added to.'
-      + '\n Github Repository: https://github.com/ian1/tsubaki \n')
+      + '\nGithub Repository: https://github.com/ian1/tsubaki \n')
       .setFooter('Created by ' + Tsubaki.author)
       .setColor(Tsubaki.color.white);
     message.channel.sendTemp({embed: embed}, 30000);

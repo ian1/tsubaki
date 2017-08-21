@@ -19,13 +19,14 @@ class Coin extends Command {
       'Heads',
       'Tails',
     ];
-
-    message.channel.send(
+    
+    message.channel.sendType(
       ':fingers_crossed: You flipped a coin and it landed on...  '
     ).then((msg) => {
       setTimeout(() => {
         msg.editTemp(
-          `**${coins[Math.floor(Math.random() * coins.length)]}**!`
+          msg.content
+          + `  **${coins[Math.floor(Math.random() * coins.length)]}**!`
           , 10000);
       }, 1000);
     });

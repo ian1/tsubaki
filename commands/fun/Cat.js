@@ -16,10 +16,10 @@ class Cat extends Command {
    * @param {sqlite.Database} db The instance of the database
    */
   execute(message, args, bot, db) {
-    random.cat().then(
+    random.dog().then(
       (url) => message.channel.sendTemp(url, 30000)
     ).catch((err) => {
-      console.error;
+      console.log(err);
       message.channel.sendTemp(Tsubaki.Style.errorGeneric(), 10000);
     });
   }

@@ -66,7 +66,7 @@ class Command {
    */
   getInformation() {
     return `**${Tsubaki.name} Information:**`
-      + `\n ${Tsubaki.name} is a Discord.js bot that you can have fun with`
+      + `\n${Tsubaki.name} is a Discord.js bot that you can have fun with`
       + ` *and* moderate with. Do \`${Tsubaki.help().getUsage()}\``
       + ` and a list of all my commands will pop up.`;
   };

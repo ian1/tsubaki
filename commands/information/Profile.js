@@ -22,7 +22,7 @@ class Profile extends Command {
   execute(message, args, bot, db) {
     let profileMention = message.mentions.users.first();
     if (profileMention == '' || profileMention === undefined) {
-      profileMention = mmessage.author;
+      profileMention = message.author;
     }
 
     let color = Tsubaki.color.gray;

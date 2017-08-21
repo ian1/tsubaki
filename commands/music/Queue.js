@@ -50,14 +50,13 @@ class Queue extends Command {
       ), 10000);
     } else {
       if (args.length == 0) {
-        message.channel.send(Queue.getQueue(music)).then((msg) => {
+        message.channel.sendType(Queue.getQueue(music)).then((msg) => {
           for (let i = 1; i <= 30; i++) {
             setTimeout(() => {
               msg.edit(Queue.getQueue(music));
             }, i * 1000);
           }
-          msg.delete(31000);
-        });
+        }, 31000);
         return;
       }
 
@@ -69,7 +68,7 @@ class Queue extends Command {
           'Queue cleared!'
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`), 10000);
       } else {
-        message.channel.send(Tsubaki.Style.embed(
+        message.channel.sendType(Tsubaki.Style.embed(
           undefined, 'Searching...', Tsubaki.color.gray
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
         )).then((response) => {
@@ -176,7 +175,7 @@ class Queue extends Command {
                     .setDescription(
                       `**${songInfo.title}**`
                       + ` [Play](${tokenUrl})`
-                      + `\n ${songInfo.description}`
+                      + `\n${songInfo.description}`
                     ).setFooter(
                       `https://www.youtube.com/watch?v=${songInfo.id}`
                       + ' . . . . . '

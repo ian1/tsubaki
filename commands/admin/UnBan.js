@@ -22,7 +22,7 @@ class UnBan extends AdminCommand {
     }
 
     let reason = args.slice(1).join(' ');
-    userToUnBan.send(
+    userToUnBan.sendType(
       `You have been **unbanned** by **${message.author}**`
       + (reason.length > 0 ? ` for: **${reason}**` : ' !')
     );
