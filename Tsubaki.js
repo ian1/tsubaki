@@ -130,7 +130,7 @@ function createTokenCmd(callback) {
   setTimeout(() => {
     delete tokensCmds[token];
   }, 120000); // delete token after 2 minutes
-  return 'iandomme.com/t.php?n=' + config.prefix.substring(0, config.prefix.length - 1)
+  return '//iandomme.com/t.php?n=' + config.prefix.substring(0, config.prefix.length - 1)
     + '&t=' + token;
 }
 
