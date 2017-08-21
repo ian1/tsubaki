@@ -16,7 +16,7 @@ class Cat extends Command {
    * @param {sqlite.Database} db The instance of the database
    */
   execute(message, args, bot, db) {
-    random.dog().then(
+    random.cat().then(
       (url) => message.channel.sendTemp(url, 30000)
     ).catch((err) => {
       console.log(err);
