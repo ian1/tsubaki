@@ -17,22 +17,14 @@ class Help extends Command {
         + ' with any command you want to learn more about.' + '\n';
       
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
-        if ((!cmds[i][0].startsWith('_') || message.member.hasPermission(Tsubaki.adminPermission))
-          && (!cmds[i][0].startsWith('__') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
-          description += '\n' + Tsubaki.Style.bold(cmds[i][0] + ': ');
+        if (cmds[i][0].startsWith('_')) continue;
+        description += '\n' + Tsubaki.Style.bold(cmds[i][0] + ': ');
 
-          for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
-            let cmd = cmds[i][j];
-            description += Tsubaki.Style.url(cmd.getCommand(), Tsubaki.createTokenCmd(() => {
-              let helpEmbed = new Discord.RichEmbed()
-                .setDescription(Tsubaki.Style.bold('Command: ') + cmd.getCommand() + '\n'
-                + Tsubaki.Style.bold('Description: ') + cmd.getDescription() + '\n'
-                + Tsubaki.Style.bold('Category: ') + cmds[i][0] + '\n\n'
-                + Tsubaki.Style.bold('Usage: ') + cmd.getUsage())
-                .setColor(Tsubaki.color.green);
-              message.channel.sendTemp({ embed: helpEmbed }, 20000);
-            })) + ' ';
-          }
+        for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
+          let cmd = cmds[i][j];
+          description += Tsubaki.Style.url(cmd.getCommand(), Tsubaki.createTokenCmd(() => {
+            message.channel.sendTemp({ embed: this.helpEmbed(cmd) }, 20000);
+          })) + ' ';
         }
       }
 
@@ -40,20 +32,35 @@ class Help extends Command {
         .setDescription(description)
         .setColor(Tsubaki.color.green);
       message.channel.sendTemp({ embed: embed }, 60000);
+
+      description = '';
+
+      for (let i = 0, lenI = cmds.length; i < lenI; i++) {
+        if (!cmds[i][0].startsWith('_') || !message.member.hasPermission(Tsubaki.adminPermission)) continue;
+        if (!cmds[i][0].startsWith('__') || (message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
+          description += '\n' + Tsubaki.Style.bold(cmds[i][0] + ': ');
+
+          for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
+            let cmd = cmds[i][j];
+            description += Tsubaki.Style.url(cmd.getCommand(), Tsubaki.createTokenCmd(() => {
+              message.channel.sendTemp({ embed: this.helpEmbed(cmd) }, 20000);
+            })) + ' ';
+          }
+        }
+      }
+
+      embed = new Discord.RichEmbed()
+        .setDescription(description)
+        .setColor(Tsubaki.color.green);
+      message.channel.sendTemp({ embed: embed }, 20000);
+
     } else {    
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
           if (args[0] === cmds[i][j].getCommand()) {
             if ((!cmds[i][0].startsWith('_') || message.member.hasPermission(Tsubaki.adminPermission))
               && (!cmds[i][0].startsWith('__') || message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
-              let cmd = cmds[i][j];
-              let embed = new Discord.RichEmbed()
-                .setDescription(Tsubaki.Style.bold('Command: ') + cmd.getCommand() + '\n'
-                + Tsubaki.Style.bold('Description: ') + cmd.getDescription() + '\n'
-                + Tsubaki.Style.bold('Category: ') + cmds[i][0] + '\n\n'
-                + Tsubaki.Style.bold('Usage: ') + cmd.getUsage())
-                .setColor(Tsubaki.color.green);
-              message.channel.sendTemp({ embed: embed }, 20000);
+              message.channel.sendTemp({ embed: helpEmbed(cmds[i][j]) }, 20000);
             } else {
               message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
             }
@@ -63,6 +70,16 @@ class Help extends Command {
       }
       message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
     }
+  }
+
+  helpEmbed(cmd) {
+    let helpEmbed = new Discord.RichEmbed()
+      .setDescription(Tsubaki.Style.bold('Command: ') + cmd.getCommand() + '\n'
+      + Tsubaki.Style.bold('Description: ') + cmd.getDescription() + '\n'
+      + Tsubaki.Style.bold('Category: ') + cmds[i][0] + '\n\n'
+      + Tsubaki.Style.bold('Usage: ') + cmd.getUsage())
+      .setColor(Tsubaki.color.green);
+    return helpEmbed;
   }
 }
 

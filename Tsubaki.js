@@ -88,6 +88,7 @@ const db = new sqlite.Database('./data.db');
 
 let tokenCmds = {};
 
+// Setup server for token commands
 const server = http.createServer((req, res) => {
   console.dir(req.param);
 
