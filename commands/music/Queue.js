@@ -162,7 +162,7 @@ class Queue extends Command {
 
               if (songs.length > 1) {
                 response.editTemp(Tsubaki.Style.embed(undefined
-                  , 'Search results for ' + searchString, Tsubaki.color.green
+                  , 'Search results for ' + args.join(' '), Tsubaki.color.green
                   , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
                 ), 30000);
 
