@@ -140,7 +140,7 @@ function cooldownMsg(id, username, sentCooldownMsg, message) {
       diff = diff + ' seconds';
     }
 
-    var embed = Style.error(username + ', please wait ' + diff
+    let embed = Style.error(username + ', please wait ' + diff
       + ' before executing your next command!');
 
     // First iteration of loop: sentCooldownMsg hasn't been created yet

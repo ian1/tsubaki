@@ -76,7 +76,7 @@ class Queue extends Command {
               }
 
               let songs = [];
-              for (var i = 1, len = chunk.length; i < len; i++) {
+              for (let i = 1, len = chunk.length; i < len; i++) {
                 let linesPre = chunk[i - 1].split('\n');
                 let linesPost = chunk[i].split('\n');
 
@@ -162,7 +162,7 @@ class Queue extends Command {
         + ' (' + elapsed + ' / ' + currSong.duration + ')';
     }
 
-    var embed = new Discord.RichEmbed()
+    let embed = new Discord.RichEmbed()
       .setTitle(Tsubaki.name + ' music')
       .addField('Status', status);
     if (text !== undefined && text != '') {

@@ -32,7 +32,7 @@ module.exports = {
   },
 
   embed: function (title, description, color, footer) {
-    var embed = new Discord.RichEmbed()
+    let embed = new Discord.RichEmbed()
       .setDescription(description);
 
     if (title !== undefined) {
