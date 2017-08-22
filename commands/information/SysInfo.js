@@ -92,7 +92,7 @@ class SysInfo extends Command {
 
       if (j < avgLoad) {
         lines[i] += ':';
-      } else if (j - 0.5 < avgload) {
+      } else if (j - 0.5 < avgLoad) {
         lines[i] += '.';
       } else {
         lines[i] += ' ';
