@@ -66,20 +66,10 @@ class SysInfo extends Command {
 
       embed.addField(`CPU ${index++}`, bar, true);
     });
-    let avgLoad = total / ((index - 1) * 5); // Max load will be 20
+    let avgLoad = total / ((index - 1) * 10); // Max load will be 10
     if (prevGraph === '') {
       prevGraph = `**${Tsubaki.name} System Info:**`
         + '\nCPU Load:```'
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
         + '\n                                                            '
         + '\n                                                            '
         + '\n                                                            '
@@ -95,11 +85,22 @@ class SysInfo extends Command {
 
     let lines = prevGraph.split('\n');
     lines = lines.slice(2, -1);
+    console.log(avgLoad);
     for (let i = 0, len = lines.length; i < len; i++) {
-      let j = lines.length - 1 - i;
+      let j = lines.length - i;
       lines[i] = lines[i].substring(1);
-      if (j + 1 <= avgLoad) lines[i] += '.';
-      else lines[i] += ' ';
+
+      if (j + 1 < avgLoad) {
+        lines[i] += '|';
+      } else if (j + 0.75 < avgLoad) {
+        lines[i] += '"';
+      } else if (j + 0.5 < avgLoad) {
+        lines[i] += '-';
+      } else if (j + 0.25 < avgLoad) {
+        lines[i] += '.';
+      } else {
+        lines[i] += ' ';
+      }
     }
 
     let newGraph = '**System Info:**'
