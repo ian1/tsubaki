@@ -141,7 +141,7 @@ function createTokenCmd(callback) {
     delete this.tokensCmds[token];
   }, 120000); // delete token after 2 minutes
 
-  return '//iandomme.com/t.php?n='
+  return 'http://iandomme.com/t?n='
     + config.prefix.substring(0, config.prefix.length - 1)
     + '&t=' + token;
 }
