@@ -91,6 +91,8 @@ class SysInfo extends Command {
       lines[i] = lines[i].substring(1);
 
       if (j < avgLoad) {
+        lines[i] += ':';
+      } else if (j - 0.5 < avgload) {
         lines[i] += '.';
       } else {
         lines[i] += ' ';
