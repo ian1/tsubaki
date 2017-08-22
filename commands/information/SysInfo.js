@@ -30,9 +30,12 @@ class SysInfo extends Command {
    */
   static sendEmbeds(msg, iter) {
     setTimeout(() => {
-      if (iter < 60) {
+      if (iter < 600) {
         msg.edit({embed: SysInfo.getInfo(msg.embeds[0].description)})
-          .then((edited) => SysInfo.sendEmbeds(edited, iter + 1));
+          .then((edited) => SysInfo.sendEmbeds(edited, iter + 1))
+          .catch(() => {
+            return;
+          });
       } else {
         msg.delete();
       }
@@ -133,7 +136,7 @@ class SysInfo extends Command {
     let minutes = Math.floor(uptime / 60) % 60;
     uptime -= minutes * 60;
 
-    let seconds = uptime % 60;
+    let seconds = Math.round(uptime % 60);
 
     embed.addField('Uptime', `${days}:${hours}:${minutes}:${seconds}`, true);
     return embed;
