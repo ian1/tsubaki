@@ -29,7 +29,7 @@ class Invite extends Command {
         '[Click here to join](https://discord.gg/Gf7hb33)')
       .addField(`${Tsubaki.name}'s Invitation Link`,
         '[Click here to invite](https://discordapp.com/oauth2/authorize'
-        + '?client_id=334386617626263553&scope=bot&permissions=305196094)')
+        + `?client_id=${Tsubaki.botId}&scope=bot&permissions=305196094)`)
       .setColor(Tsubaki.color.green);
     message.author.send({embed: embed});
   }

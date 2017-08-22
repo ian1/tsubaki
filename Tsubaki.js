@@ -21,7 +21,7 @@ const guildLogger = '342832229510021120';
 const discordBotGuild = '110373943822540800';
 const tsubakiPalaceGuild = '337747052878626816';
 
-// const tsubakiTag = '334386617626263553';
+// const tsubakiTag = config.botID;
 // const tsubakiReact = '343292881689378816';
 const ianId = '135529980011610112';
 // const ianReact = '343292371749961728';
@@ -539,6 +539,7 @@ bot.login(config.token);
 module.exports.prefix = config.prefix;
 module.exports.name = config.name;
 module.exports.nameIn = config.nameIn;
+module.exports.botId = config.botID;
 module.exports.author = info.author;
 module.exports.adminPermission = adminPermission;
 module.exports.color = color;
