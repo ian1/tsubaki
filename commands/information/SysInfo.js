@@ -73,18 +73,14 @@ class SysInfo extends Command {
     let avgLoad = total / ((index - 1) * 10); // Max load will be 10
     if (prevGraph === '') {
       prevGraph = `**${Tsubaki.name} System Info:**`
-        + '\nCPU Load:```'
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n                                                            '
-        + '\n```';
+        + '\nCPU Load:```';
+      for (let i = 0; i < 10; i++) {
+        prevGraph += '\n';
+        for (let j = 0; j < 60; j++) {
+          prevGraph += ' ';
+        }
+      }
+      prevGraph += '\n```';
     }
 
     let lines = prevGraph.split('\n');
