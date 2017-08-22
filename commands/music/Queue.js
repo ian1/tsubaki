@@ -50,7 +50,7 @@ class Queue extends Command {
       ), 10000);
     } else {
       if (args.length == 0) {
-        message.channel.sendType(Queue.getQueue(music)).then((msg) => {
+        message.channel.sendTemp(Queue.getQueue(music)).then((msg) => {
           for (let i = 1; i <= 30; i++) {
             setTimeout(() => {
               msg.edit(Queue.getQueue(music));

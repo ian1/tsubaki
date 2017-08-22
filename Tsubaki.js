@@ -39,40 +39,41 @@ const color = {
 
 // Load commands
 const Help = require('./commands/information/Help.js');
+const Info = require('./commands/information/Info.js');
 const Stats = require('./commands/information/Stats.js');
+const SysInfo = require('./commands/information/SysInfo.js');
 const Profile = require('./commands/information/Profile.js');
 const Invite = require('./commands/information/Invite.js');
 const Support = require('./commands/information/Support.js');
-const Info = require('./commands/information/Info.js');
 const ChangeLog = require('./commands/information/ChangeLog.js');
 
-const EightBall = require('./commands/fun/EightBall.js');
-const Say = require('./commands/fun/Say.js');
 const Embed = require('./commands/fun/Embed.js');
+const Tts = require('./commands/fun/Tts.js');
+const Say = require('./commands/fun/Say.js');
+const Coin = require('./commands/fun/Coin.js');
 const Dice = require('./commands/fun/Dice.js');
+const EightBall = require('./commands/fun/EightBall.js');
 const Cat = require('./commands/fun/Cat.js');
 const Dog = require('./commands/fun/Dog.js');
 const Banana = require('./commands/fun/Banana.js');
 const GetBanana = require('./commands/fun/GetBanana.js');
-const Tts = require('./commands/fun/Tts.js');
-const Coin = require('./commands/fun/Coin.js');
 
 const Ping = require('./commands/utility/Ping.js');
-const Add = require('./commands/utility/Add.js');
-const Urban = require('./commands/utility/Urban.js');
 const Define = require('./commands/utility/Define.js');
+const Urban = require('./commands/utility/Urban.js');
+const Add = require('./commands/utility/Add.js');
 
-const Leave = require('./commands/music/Leave.js');
 const Queue = require('./commands/music/Queue.js');
 const Play = require('./commands/music/Play.js');
 const Pause = require('./commands/music/Pause.js');
 const Skip = require('./commands/music/Skip.js');
+const Leave = require('./commands/music/Leave.js');
 
+const Welcome = require('./commands/admin/Welcome.js');
 const Delete = require('./commands/admin/Delete.js');
 const Kick = require('./commands/admin/Kick.js');
 const Ban = require('./commands/admin/Ban.js');
 const UnBan = require('./commands/admin/UnBan.js');
-const Welcome = require('./commands/admin/Welcome.js');
 
 const Playing = require('./commands/owner/Playing.js');
 const Guilds = require('./commands/owner/Guilds.js');
@@ -328,6 +329,7 @@ setPlaying();
       new Help(),
       new Info(),
       new Stats(),
+      new SysInfo(),
       new Profile(),
       new Invite(),
       new Support(),
