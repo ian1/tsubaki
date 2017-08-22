@@ -28,7 +28,7 @@ class Ban extends AdminCommand {
     let reason = args.slice(1).join(' ');
 
     if (isBannable || userID.bannable) {
-      message.guild.member(userToBan.id).sendType(
+      message.guild.member(userToBan.id).send(
         `You have been **banned** by **${message.author}**`
         + (reason.length > 0 ? ` for: **${reason}**` : ' !')
       );

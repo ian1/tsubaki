@@ -31,7 +31,7 @@ class Invite extends Command {
         '[Click here to invite](https://discordapp.com/oauth2/authorize'
         + '?client_id=334386617626263553&scope=bot&permissions=305196094)')
       .setColor(Tsubaki.color.green);
-    message.author.sendType({embed: embed});
+    message.author.send({embed: embed});
   }
 }
 
