@@ -546,29 +546,15 @@ module.exports.color = color;
 module.exports.Style = Style;
 module.exports.ianId = ianId;
 module.exports.davidId = davidId;
-module.exports.commands = function() {
-  return commands;
-};
-module.exports.createTokenCmd = function(callback) {
-  return createTokenCmd(callback);
-};
+module.exports.commands = commands;
+module.exports.createTokenCmd = createTokenCmd;
+module.exports.getPoints = getPoints;
+module.exports.setPoints = setPoints;
+module.exports.getLevel = getLevel;
+module.exports.getLevelR = getLevelR;
+module.exports.setPlaying = setPlaying;
 module.exports.help = function() {
   return new Help();
-};
-module.exports.getPoints = function(id, callback) {
-  return getPoints(id, callback);
-};
-module.exports.setPoints = function(id, points, channel) {
-  setPoints(id, points, channel);
-};
-module.exports.getLevel = function(points) {
-  return getLevel(points);
-};
-module.exports.getLevelR = function(points) {
-  return getLevelR(points);
-};
-module.exports.setPlaying = function(message) {
-  return setPlaying(message);
 };
 
 process.stdin.resume();
