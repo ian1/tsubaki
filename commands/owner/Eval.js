@@ -35,7 +35,6 @@ class Eval extends OwnerCommand {
         this.logEval(expression, 1);
         this.logEval('Error:');
         this.logEval(e.stack, 1);
-        return;
       }
       if (result !== Object(result)) {
         message.channel.sendTemp(Tsubaki.Style.codeBlock(result), 20000);
