@@ -553,6 +553,9 @@ module.exports.setPoints = setPoints;
 module.exports.getLevel = getLevel;
 module.exports.getLevelR = getLevelR;
 module.exports.setPlaying = setPlaying;
+module.exports.commands = function() {
+  return commands;
+};
 module.exports.help = function() {
   return new Help();
 };
