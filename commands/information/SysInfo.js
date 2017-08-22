@@ -17,6 +17,7 @@ class SysInfo extends Command {
    * @param {sqlite.Database} db The instance of the database
    */
   execute(message, args, bot, db) {
+    SysInfo.cores = [];
     message.channel.sendType({embed: SysInfo.getInfo('')}).then((msg) => {
       SysInfo.sendEmbeds(msg, 1);
     });
@@ -51,7 +52,7 @@ class SysInfo extends Command {
     let total = 0;
 
     cpus.forEach((cpu) => {
-      let load = SysInfo.getCoreLoad(cpu.times); // From 0 to 100
+      let load = SysInfo.getCoreLoad(cpu.times, index); // From 0 to 100
       total += load;
 
       let bar = '`[';
@@ -85,18 +86,11 @@ class SysInfo extends Command {
 
     let lines = prevGraph.split('\n');
     lines = lines.slice(2, -1);
-    console.log(avgLoad);
     for (let i = 0, len = lines.length; i < len; i++) {
-      let j = lines.length - i;
+      let j = lines.length - i - 1;
       lines[i] = lines[i].substring(1);
 
-      if (j + 1 < avgLoad) {
-        lines[i] += '|';
-      } else if (j + 0.75 < avgLoad) {
-        lines[i] += '"';
-      } else if (j + 0.5 < avgLoad) {
-        lines[i] += '-';
-      } else if (j + 0.25 < avgLoad) {
+      if (j < avgLoad) {
         lines[i] += '.';
       } else {
         lines[i] += ' ';
@@ -151,11 +145,27 @@ class SysInfo extends Command {
    * @param {number} times.sys sys mode
    * @param {number} times.idle idle mode
    * @param {number} times.irq irq mode
+   * @param {number} core The core number (starting from 1)
    * @return {number} The load percentage, as a decimal between 0 and 100
    */
-  static getCoreLoad(times) {
+  static getCoreLoad(times, core) {
+    core = core - 1;
+    if (SysInfo.cores.length <= core) {
+      SysInfo.cores[core] = {};
+      SysInfo.cores[core].load = 0;
+      SysInfo.cores[core].idle = 0;
+    }
+
     let load = times.user + times.nice + times.sys + times.irq;
+    let loadRaw = load;
+    load = load - SysInfo.cores[core].load;
+    SysInfo.cores[core].load = loadRaw;
+
     let idle = times.idle;
+    let idleRaw = idle;
+    idle = idle - SysInfo.cores[core].idle;
+    SysInfo.cores[core].idle = idleRaw;
+
     let total = load + idle;
     return Math.round(load * 1000.0 / total) / 10; // Round to 1 decimal place
   }
