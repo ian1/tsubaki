@@ -29,7 +29,7 @@ class SysInfo extends Command {
    */
   static sendEmbeds(msg, iter) {
     setTimeout(() => {
-      if (iter < 30) {
+      if (iter < 60) {
         msg.edit({embed: SysInfo.getInfo(msg.embeds[0].description)})
           .then((edited) => SysInfo.sendEmbeds(edited, iter + 1));
       } else {
@@ -66,23 +66,39 @@ class SysInfo extends Command {
 
       embed.addField(`CPU ${index++}`, bar, true);
     });
-    let avgLoad = total / ((index - 1) * 20); // Max load will be 5
+    let avgLoad = total / ((index - 1) * 5); // Max load will be 20
     if (prevGraph === '') {
       prevGraph = `**${Tsubaki.name} System Info:**`
         + '\nCPU Load:```'
-        + '\n                                                  '
-        + '\n                                                  '
-        + '\n                                                  '
-        + '\n                                                  '
-        + '\n                                                  '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
+        + '\n                                                            '
         + '\n```';
     }
 
     let lines = prevGraph.split('\n');
     lines = lines.slice(2, -1);
-    for (let i = lines.length - 1; i >= 0; i--) {
+    for (let i = 0, len = lines.length; i < len; i++) {
+      let j = lines.length - 1 - i;
       lines[i] = lines[i].substring(1);
-      if (i + 1 <= avgLoad) lines[i] += '.';
+      if (j + 1 <= avgLoad) lines[i] += '.';
       else lines[i] += ' ';
     }
 
