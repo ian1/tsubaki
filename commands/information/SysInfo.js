@@ -83,6 +83,56 @@ class SysInfo extends Command {
       prevGraph += '\n```';
     }
 
+    /* for (let i = 0, len = lines.length; i < len; i++) {
+      let line = lines[i];
+      let nums = [];
+      for (let j = 1; j < line.length; j++) {
+        let vals = parseInt(line
+          .charCodeAt(j) // Get the char code of that character (base 10 int)
+          .toString(16) // Convert it to a base 16 int string
+          .substring(2) // Cut out the first 2 chars ('28')
+          , 16) // Parse it as base 16 int (without first 2 chars)
+          .toString(2) // Convert to base 2 int string
+          .split(''); // Convert to array
+
+        let left = 0;
+        let right = 0;
+
+        for (let i = 0; i < vals.length; i++) {
+          if (vals[i] === '1') {
+            // Values of i:
+            // 74
+            // 63
+            // 52
+            // 10
+
+            if (i <= 4 && i !== 1) {
+              ++right;
+            } else {
+              ++left;
+            }
+          }
+        }
+        nums.push(left);
+        nums.push(right);
+      }
+
+      nums.shift();
+      if (lines.length - i - 1 < avgLoad) {
+        nums.push(4);
+      } else if (lines.length - i - 1.25 < avgLoad) {
+        nums.push(3);
+      } else if (lines.length - i - 1.5 < avgLoad) {
+        nums.push(2);
+      } else if (lines.length - i - 1.75 < avgLoad) {
+        nums.push(1);
+      } else {
+        nums.push(0);
+      }
+
+      //for num in nums, convert back to braille
+    }*/
+
     let lines = prevGraph.split('\n');
     lines = lines.slice(2, -1);
     for (let i = 0, len = lines.length; i < len; i++) {

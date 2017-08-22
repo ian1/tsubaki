@@ -543,6 +543,7 @@ module.exports.name = config.name;
 module.exports.nameIn = config.nameIn;
 module.exports.botId = config.botID;
 module.exports.author = info.author;
+module.exports.version = info.version;
 module.exports.adminPermission = adminPermission;
 module.exports.color = color;
 module.exports.Style = Style;

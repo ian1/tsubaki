@@ -23,7 +23,8 @@ class Info extends Command {
       + ' moderation, administration, utility, and just for fun. She has a wide'
       + ' range of commands everyone will enjoy, and she is constantly being'
       + ' updated and added to.'
-      + '\nGithub Repository: https://github.com/ian1/tsubaki \n')
+      + `\n\nThis is ${Tsubaki.name} version ${Tsubaki.version}.`
+      + '\n\nGithub Repository: https://github.com/ian1/tsubaki \n')
       .setFooter('Created by ' + Tsubaki.author)
       .setColor(Tsubaki.color.white);
     message.channel.sendTemp({embed: embed}, 30000);
