@@ -1,6 +1,7 @@
 const Tsubaki = require('../../Tsubaki.js');
 const Discord = require('discord.js');
 const os = require('os');
+const disk = require('diskusage');
 const Command = require('../Command.js');
 
 /** The sysinfo command  */
@@ -228,22 +229,36 @@ class SysInfo extends Command {
 
     let freeMem = os.freemem();
     let totalMem = os.totalmem();
-    let memUsage = freeMem / totalMem;
+    let usedMem = totalMem - freeMem;
+    let memUsage = usedMem / totalMem;
 
-    freeMem = (freeMem / Math.pow(1024, 3)).toFixed(2);
+    usedMem = (usedMem / Math.pow(1024, 3)).toFixed(2);
     totalMem = Math.round(totalMem / Math.pow(1024, 3));
 
-    let bar = '`' + SysInfo.createBar(memUsage, 25)
-      + `| ${freeMem}G/${totalMem}G\``;
+    let memBar = '`' + SysInfo.createBar(memUsage, 20)
+      + `| ${usedMem} / ${totalMem} G\``;
 
-    embed.addField('Mem', bar, true)
-      .addField('Ping', `${Math.round(delay * 10) / 10.0}ms`, true)
+    let diskInfo = disk.checkSync('/');
+    let freeDisk = diskInfo.available;
+    let totalDisk = diskInfo.total;
+    let usedDisk = totalDisk - freeDisk;
+    let diskUsage = usedDisk / totalDisk;
+
+    usedDisk = (usedDisk / Math.pow(1024, 3)).toFixed(2);
+    totalDisk = Math.round(totalDisk / Math.pow(1024, 3));
+
+    let diskBar = '`' + SysInfo.createBar(diskUsage, 20)
+      + `| ${usedDisk} / ${totalDisk} G\``;
+
+    embed.addField('Mem', memBar, true)
+      .addField('Disk', diskBar, true)
       .addField('System Uptime', SysInfo.toTimeString(os.uptime()), true)
       .addField('Bot Uptime', SysInfo.toTimeString(bot.uptime / 1000), true)
       .addField('Bot Version', `${Tsubaki.name} v${Tsubaki.version}`, true)
       .addField('Guilds', bot.guilds.size, true)
       .addField('Users', bot.users.size, true)
-      .addField('Channels', bot.channels.size, true);
+      .addField('Channels', bot.channels.size, true)
+      .addField('Ping', `${Math.round(delay * 10) / 10.0}ms`, true);
     return embed;
   }
 
