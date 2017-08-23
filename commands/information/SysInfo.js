@@ -57,7 +57,6 @@ class SysInfo extends Command {
     cpus.forEach((cpu) => {
       let load = SysInfo.getCoreLoad(cpu.times, index); // From 0 to 100
       total += load;
-
       let bar = '`[';
       for (let i = 0; i < 25; i++) {
         if (i < load / 4) {
@@ -70,43 +69,57 @@ class SysInfo extends Command {
 
       embed.addField(`CPU ${index++}`, bar, true);
     });
+
+    let spacer = '\u2808';
+
     let avgLoad = total / ((index - 1) * 10); // Max load will be 10
     if (prevGraph === '') {
       prevGraph = `**${Tsubaki.name} System Info:**`
         + '\nCPU Load:```';
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 9; i++) {
         prevGraph += '\n';
-        for (let j = 0; j < 60; j++) {
-          prevGraph += ' ';
+        for (let i = 0; i < 45; i++) {
+          prevGraph += spacer;
         }
       }
       prevGraph += '\n```';
     }
 
-    /* for (let i = 0, len = lines.length; i < len; i++) {
+    let lines = prevGraph.split('\n');
+    lines = lines.slice(2, -1);
+
+    for (let i = 0, len = lines.length; i < len; i++) {
       let line = lines[i];
       let nums = [];
-      for (let j = 1; j < line.length; j++) {
+      for (let j = 0, lineLen = line.length; j < lineLen; j++) {
+        if (line.charAt(j) === spacer) {
+          nums.push(0);
+          nums.push(0);
+          continue;
+        }
         let vals = parseInt(line
           .charCodeAt(j) // Get the char code of that character (base 10 int)
           .toString(16) // Convert it to a base 16 int string
           .substring(2) // Cut out the first 2 chars ('28')
           , 16) // Parse it as base 16 int (without first 2 chars)
-          .toString(2) // Convert to base 2 int string
-          .split(''); // Convert to array
+          .toString(2); // Convert to base 2 int string
+        while (vals.length < 8) {
+          vals = '0' + vals; // Add back the leading 0s
+        }
+        vals = vals.split(''); // Convert to array
 
         let left = 0;
         let right = 0;
 
-        for (let i = 0; i < vals.length; i++) {
-          if (vals[i] === '1') {
-            // Values of i:
+        for (let pos = 0, valLen = vals.length; pos < valLen; pos++) {
+          if (vals[pos] === '1') {
+            // Values of pos:
             // 74
             // 63
             // 52
             // 10
 
-            if (i <= 4 && i !== 1) {
+            if (pos <= 4 && pos !== 1) {
               ++right;
             } else {
               ++left;
@@ -117,7 +130,7 @@ class SysInfo extends Command {
         nums.push(right);
       }
 
-      nums.shift();
+      nums = nums.slice(1);
       if (lines.length - i - 1 < avgLoad) {
         nums.push(4);
       } else if (lines.length - i - 1.25 < avgLoad) {
@@ -130,12 +143,49 @@ class SysInfo extends Command {
         nums.push(0);
       }
 
-      //for num in nums, convert back to braille
-    }*/
+      line = '';
+      for (let j = 0, numLen = nums.length; j < numLen; j += 2) {
+        let left = nums[j];
+        let right = nums[j + 1];
+        if (left == 0 && right == 0) {
+          line += spacer;
+          continue;
+        }
+        let binary = '00000000'.split('');
 
-    let lines = prevGraph.split('\n');
-    lines = lines.slice(2, -1);
-    for (let i = 0, len = lines.length; i < len; i++) {
+        let leftVals = {
+          1: 1,
+          2: 5,
+          3: 6,
+          4: 7,
+        };
+        let rightVals = {
+          1: 0,
+          2: 2,
+          3: 3,
+          4: 4,
+        };
+
+        for (let key = 1; key <= 4; key++) {
+          if (left >= key) {
+            binary[leftVals[key]] = 1;
+          }
+          if (right >= key) {
+            binary[rightVals[key]] = 1;
+          }
+        }
+        binary = binary.join('');
+
+        let braille = parseInt(binary, 2).toString(16); // Convert to base 16
+        braille = '28' + braille; // Add '28' in front of it
+        braille = parseInt(braille, 16); // Convert to base 10
+        line += String.fromCharCode(braille); // Convert to symbol
+      }
+
+      lines[i] = line;
+    }
+
+    /* for (let i = 0, len = lines.length; i < len; i++) {
       let j = lines.length - i - 1;
       lines[i] = lines[i].substring(1);
 
@@ -146,7 +196,7 @@ class SysInfo extends Command {
       } else {
         lines[i] += ' ';
       }
-    }
+    }*/
 
     let newGraph = '**System Info:**'
       + '\nCPU Load:```'
