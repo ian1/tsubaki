@@ -147,7 +147,7 @@ class Profile extends Command {
    */
   execute(message, args, bot, db) {
     if (args.length >= 1 && args[0].toLowerCase() === 'beta') {
-      executeNew(message, args.slice(1), bot, db);
+      this.executeNew(message, args.slice(1), bot, db);
       return;
     }
     let profileMention = message.mentions.users.first();
