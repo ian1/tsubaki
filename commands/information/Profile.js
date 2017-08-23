@@ -99,7 +99,7 @@ class Profile extends Command {
 
     this.getSize(text, textRegionWidth, textRegionHeight).then((fontSize) => {
       https.get(profileMention.displayAvatarURL, (response) => {
-        gm(response, 'image.png')
+        gm(response, name + '.png')
           .autoOrient()
           .resize(width, height)
           .blur(5, 5)
@@ -123,7 +123,7 @@ class Profile extends Command {
           .font('Calibri')
           .drawText(0, 0, text)
 
-          .write('test.png', (err) => {
+          .write(name + '.png', (err) => {
             if (err) console.log(err);
             fs.unlink(name + '.jpg');
             fs.rename(name + '.png', `/var/www/html/img/${name}.png`, () => {
