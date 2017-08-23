@@ -50,6 +50,10 @@ class SysInfo extends Command {
   static getInfo(prevGraph) {
     let embed = new Discord.RichEmbed();
 
+    let spacer = '\u2808';
+    let fill = '\u2588';
+    let fillHalf = '\u258C';
+
     let cpus = os.cpus();
     let index = 1;
     let total = 0;
@@ -57,22 +61,35 @@ class SysInfo extends Command {
     cpus.forEach((cpu) => {
       let load = SysInfo.getCoreLoad(cpu.times, index); // From 0 to 100
       total += load;
-      let bar = '`[';
+      let bar = '`';
       for (let i = 0; i < 25; i++) {
         if (i < load / 4) {
-          bar += '|';
+          bar += fill;
+        } else if (i - 0.5 < load / 4) {
+          bar += fillHalf;
+        } else if (i == 0) {
+          bar += '.';
         } else {
           bar += ' ';
         }
       }
-      bar += ']` ' + load.toFixed(1) + '%';
+      load = load.toFixed(1);
+      if (load.length == 5) { // Will only be length 5 if '100.0'
+        load = '100';
+      }
+      while (load.length < 5) {
+        load = ' ' + load;
+      }
+      bar += '|' + load + '%`';
 
       embed.addField(`CPU ${index++}`, bar, true);
     });
 
-    let spacer = '\u2808';
-
     let avgLoad = total / ((index - 1) * 10); // Max load will be 10
+    if (avgLoad < (1 / 3) * 10) embed.setColor(Tsubaki.color.green);
+    else if (avgLoad < (2 / 3) * 10) embed.setColor(Tsubaki.color.yellow);
+    else embed.setColor(Tsubaki.color.red);
+
     if (prevGraph === '') {
       prevGraph = `**${Tsubaki.name} System Info:**`
         + '\nCPU Load:```';
@@ -207,18 +224,22 @@ class SysInfo extends Command {
     let totalMem = os.totalmem();
     let memUsage = freeMem * 25 / totalMem; // From 0 to 25
 
-    let bar = '`[';
+    let bar = '`';
     for (let i = 0; i < 25; i++) {
       if (i < memUsage) {
-        bar += '|';
+        bar += fill;
+      } else if (i - 0.5 < memUsage) {
+        bar += fillHalf;
+      } else if (i == 0) {
+        bar += '.';
       } else {
         bar += ' ';
       }
     }
-    bar += ']` ';
+    bar += '| ';
     freeMem = (freeMem / Math.pow(1024, 3)).toFixed(2);
-    totalMem = (totalMem / Math.pow(1024, 3)).toFixed(2);
-    bar += `${freeMem}G/${totalMem}G`;
+    totalMem = Math.round(totalMem / Math.pow(1024, 3));
+    bar += `${freeMem}G/${totalMem}G\``;
 
     embed.addField('Mem', bar, true);
 
