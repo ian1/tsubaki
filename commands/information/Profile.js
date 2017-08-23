@@ -91,7 +91,7 @@ class Profile extends Command {
       name += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
-    let file = fs.createWriteStream(name + '.jpg');
+    let file = fs.createWriteStream(name + '.png');
 
     https.get(profileMention.displayAvatarURL, (response) => {
       response.pipe(file);
@@ -99,7 +99,7 @@ class Profile extends Command {
 
     this.getSize(text, textRegionWidth, textRegionHeight).then((fontSize) => {
       https.get(profileMention.displayAvatarURL, (response) => {
-        gm(response, name + '.png')
+        gm(response, 'image.png')
           .autoOrient()
           .resize(width, height)
           .blur(5, 5)
@@ -110,8 +110,8 @@ class Profile extends Command {
           .fill('#ffffff00')
           .drawRectangle(profX - profBorderWidth, profY - profBorderWidth, profX + profWidth + profBorderWidth, profY + profHeight + profBorderWidth)
 
-          .draw(`image over ${profX},${profY + 1} ${profWidth},${profHeight} ${name}.jpg`)
-          .draw(`image over ${profX},${profY} ${profWidth},${profHeight} ${name}.jpg`)
+          .draw(`image over ${profX},${profY + 1} ${profWidth},${profHeight} ${name}.png`)
+          .draw(`image over ${profX},${profY} ${profWidth},${profHeight} ${name}.png`)
 
           .fill('#FF000000')
           //.drawRectangle(profX, profY, profX + profWidth, profY + profHeight)
@@ -123,15 +123,10 @@ class Profile extends Command {
           .font('Calibri')
           .drawText(0, 0, text)
 
-          .write(name + '.png', (err) => {
+          .toBuffer('PNG', (err, imgBuffer) => {
             if (err) console.log(err);
             fs.unlink(name + '.jpg');
-            fs.rename(name + '.png', `/var/www/html/img/${name}.png`, () => {
-              let embed = new Discord.RichEmbed()
-                .setImage(`http://iandomme.com/img/${name}.png`);
-              message.channel.sendTemp({ embed: embed }, 30000);
-            });
-
+            message.channel.sendTemp({ files: [imgBuffer] }, 30000);
           });
       });
     }).catch((err) => {
