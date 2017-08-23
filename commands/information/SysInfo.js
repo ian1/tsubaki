@@ -236,7 +236,7 @@ class SysInfo extends Command {
     totalMem = Math.round(totalMem / Math.pow(1024, 3));
 
     let memBar = '`' + SysInfo.createBar(memUsage, 20)
-      + `| ${usedMem} / ${totalMem} G\``;
+      + `| ${usedMem}/${totalMem}G\``;
 
     let diskInfo = disk.checkSync('/');
     let freeDisk = diskInfo.available;
@@ -248,7 +248,7 @@ class SysInfo extends Command {
     totalDisk = Math.round(totalDisk / Math.pow(1024, 3));
 
     let diskBar = '`' + SysInfo.createBar(diskUsage, 20)
-      + `| ${usedDisk} / ${totalDisk} G\``;
+      + `| ${usedDisk}/${totalDisk}G\``;
 
     embed.addField('Mem', memBar, true)
       .addField('Disk', diskBar, true)
