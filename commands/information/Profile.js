@@ -2,6 +2,9 @@ const Tsubaki = require('../../Tsubaki.js');
 const Discord = require('discord.js');
 
 const Command = require('../Command.js');
+const fs = require('fs');
+const https = require('https');
+const gm = require('gm');
 
 /** The profile command */
 class Profile extends Command {
@@ -13,6 +16,129 @@ class Profile extends Command {
     );
   }
 
+  getSize(text, width, height, fontSize = 30) {
+    return new Promise((resolve, reject) => {
+      gm(1000, 500, '#ffffff00')
+        .fontSize(fontSize)
+        .font('Calibri')
+        .gravity('Center')
+        .drawText(0, 0, text)
+        .toBuffer('PNG', (err, buffer) => {
+          if (err) reject(err);
+          gm(buffer, 'image.png')
+            .trim()
+            .toBuffer('PNG', (err, buffer2) => {
+              gm(buffer2, 'image.png').size((err, size) => {
+                if (err) reject(err);
+                if (size.width >= width || size.height >= height) {
+                  this.getSize(text, width, height, fontSize - 3).then((fontSize) => {
+                    resolve(fontSize)
+                  }).catch((err) => {
+                    reject(err)
+                  });
+                } else {
+                  resolve(fontSize);
+                }
+              });
+            });
+        });
+    });
+  }
+
+  /**
+   * @param {Discord.Message} message The sent command
+   * @param {string[]} args The arguments in the command
+   * @param {Discord.Client} bot The instance of the discord client
+   * @param {sqlite.Database} db The instance of the database
+   */
+  executeNew(message, args, bot, db) {
+    let profileMention = message.mentions.users.first();
+    if (profileMention == '' || profileMention === undefined) {
+      if (args.length === 0) {
+        profileMention = message.author;
+      } else {
+        message.channel.sendType(Tsubaki.Style.unknownUser(), 10000);
+        return;
+      }
+    }
+
+    let width = 300;
+    let height = width;
+    let boxWidth = 280;
+    let boxHeight = 40;
+    let boxX = 10;
+    let boxY = 100;
+
+    let textRegionWidth = boxWidth - 120;
+    let textRegionHeight = boxHeight - 10;
+    let textRegionX = boxX + 105;
+    let textRegionY = boxY + 5;
+
+    let profBorderWidth = 2;
+
+    let profWidth = 80;
+    let profHeight = profWidth;
+    let profX = ((textRegionX - boxX - profWidth) / 2) + boxX;
+    let profY = boxY + boxHeight + profBorderWidth - profHeight + 5;
+
+    let text = profileMention.username;
+
+    let name = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      + 'abcdefghijklmnopqrstuvwxyz';
+
+    for (let i = 0; i < 64; i++) {
+      name += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    let file = fs.createWriteStream(name + '.jpg');
+
+    https.get(profileMention.displayAvatarURL, (response) => {
+      response.pipe(file);
+    });
+
+    this.getSize(text, textRegionWidth, textRegionHeight).then((fontSize) => {
+      https.get(profileMention.displayAvatarURL, (response) => {
+        gm(response, 'image.png')
+          .autoOrient()
+          .resize(width, height)
+          .blur(5, 5)
+
+          .fill('#00000060')
+          .drawRectangle(boxX, boxY, boxX + boxWidth, boxY + boxHeight)
+
+          .fill('#ffffff00')
+          .drawRectangle(profX - profBorderWidth, profY - profBorderWidth, profX + profWidth + profBorderWidth, profY + profHeight + profBorderWidth)
+
+          .draw(`image over ${profX},${profY + 1} ${profWidth},${profHeight} ${name}.jpg`)
+          .draw(`image over ${profX},${profY} ${profWidth},${profHeight} ${name}.jpg`)
+
+          .fill('#FF000000')
+          //.drawRectangle(profX, profY, profX + profWidth, profY + profHeight)
+
+          .region(textRegionWidth, textRegionHeight, textRegionX, textRegionY)
+          .gravity('Center')
+          .fill('#ffffff00')
+          .fontSize(fontSize)
+          .font('Calibri')
+          .drawText(0, 0, text)
+
+          .write('test.png', (err) => {
+            if (err) console.log(err);
+            fs.unlink(name + '.jpg');
+            fs.rename(name + '.png', `/var/www/html/img/${name}.png`, () => {
+              let embed = new Discord.RichEmbed()
+                .setImage(`http://iandomme.com/img/${name}.png`);
+              message.channel.sendTemp({ embed: embed }, 30000);
+            });
+
+          });
+      });
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
   /**
    * @param {Discord.Message} message The sent command
    * @param {string[]} args The arguments in the command
@@ -20,6 +146,10 @@ class Profile extends Command {
    * @param {sqlite.Database} db The instance of the database
    */
   execute(message, args, bot, db) {
+    if (args.length >= 1 && args[0].toLowerCase() === 'beta') {
+      executeNew(message, args.slice(1), bot, db);
+      return;
+    }
     let profileMention = message.mentions.users.first();
     if (profileMention == '' || profileMention === undefined) {
       if (args.length === 0) {
@@ -52,16 +182,16 @@ class Profile extends Command {
         .addField('Full Username', profileMention.tag, true)
         .addField('ID', profileMention.id, true)
         .addField(
-          'Banana'
-          , `Level ${Tsubaki.getLevelR(points)}, with ${points} Bananas`
-          , true
+        'Banana'
+        , `Level ${Tsubaki.getLevelR(points)}, with ${points} Bananas`
+        , true
         )
         .addField('Roles', roleList.join(' '), true)
         .setThumbnail(profileMention.displayAvatarURL)
         .setFooter(`Member since ${Profile.formatDate(guildMember.joinedAt)}`
-          + `, Discorder since ${Profile.formatDate(profileMention.createdAt)}`)
+        + `, Discorder since ${Profile.formatDate(profileMention.createdAt)}`)
         .setColor(color);
-      message.channel.sendTemp({embed: profileEmbed}, 20000);
+      message.channel.sendTemp({ embed: profileEmbed }, 20000);
     });
   }
 
