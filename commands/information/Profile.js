@@ -125,7 +125,7 @@ class Profile extends Command {
 
           .toBuffer('PNG', (err, imgBuffer) => {
             if (err) console.log(err);
-            fs.unlink(name + '.jpg');
+            fs.unlink(name + '.png');
             message.channel.sendTemp({ files: [imgBuffer] }, 30000);
           });
       });
