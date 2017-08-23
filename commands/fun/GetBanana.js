@@ -1,18 +1,26 @@
 const Tsubaki = require('../../Tsubaki.js');
-const Discord = require('discord.js');
-
 const Command = require('../Command.js');
 
+/** The getbanana command */
 class GetBanana extends Command {
+  /** Create the command */
   constructor() {
-    super('getbanana', 'Will give you a banana, and list your current points.', '');
+    super('getbanana', 'Will give you a banana, and list your current points.');
   }
 
+  /**
+   * @param {Discord.Message} message The sent command
+   * @param {string[]} args The arguments in the command
+   * @param {Discord.Client} bot The instance of the discord client
+   * @param {sqlite.Database} db The instance of the database
+   */
   execute(message, args, bot, db) {
-    Tsubaki.getPoints(message.author.id, function (points) {
-      message.reply(':banana: ' + Tsubaki.Style.italicize('You are currently Banana level')
-        + ' ' + Tsubaki.Style.code(Tsubaki.getLevelR(points)) + Tsubaki.Style.italicize(', with')
-        + ' ' + Tsubaki.Style.code(points) + ' Bananas!');
+    Tsubaki.getPoints(message.author.id, (points) => {
+      Tsubaki.setPoints(message.author.id, points + 1, message.channel);
+      message.channel.sendTemp(`${message.author}`
+        + `, :banana: *You are currently Banana level*`
+        + ` \`${Tsubaki.getLevelR(points)}\`, *with*`
+        + ` \`${points}\` Bananas!`, 10000);
     });
   }
 }

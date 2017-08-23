@@ -1,23 +1,25 @@
 const Tsubaki = require('../../Tsubaki.js');
-const Discord = require('discord.js');
+const OwnerCommand = require('./OwnerCommand.js');
 
-const Command = require('../Command.js');
-
-class Playing extends Command {
+/** The playing command */
+class Playing extends OwnerCommand {
+  /** Create the command */
   constructor() {
-    super('playing', 'Set the game of the ' + Tsubaki.name + '. If left empty, it will revert to default.', ' [game]');
+    super(
+      'playing', `Set the game of ${Tsubaki.name}. If left empty, it will`
+      + ` revert to default.`
+      , ' [game]'
+    );
   }
 
-  executeAdmin(message, args, bot, db) {
+  /**
+   * @param {Discord.Message} message The sent command
+   * @param {string[]} args The arguments in the command
+   * @param {Discord.Client} bot The instance of the discord client
+   * @param {sqlite.Database} db The instance of the database
+   */
+  executeOwner(message, args, bot, db) {
     Tsubaki.setPlaying(args.join(' '));
-  }
-
-  execute(message, args, bot, db) {
-    if (message.member !== undefined && (message.member.id === Tsubaki.ianId || message.member.id === Tsubaki.davidId)) {
-      this.executeAdmin(message, args, bot, db);
-    } else {
-      return message.channel.send({ embed: Tsubaki.Style.notFound() });
-    }
   }
 }
 
