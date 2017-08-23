@@ -18,21 +18,30 @@ class SysInfo extends Command {
    */
   execute(message, args, bot, db) {
     SysInfo.cores = [];
-    message.channel.sendType({embed: SysInfo.getInfo('')}).then((msg) => {
-      SysInfo.sendEmbeds(msg, 1);
+    let time = new Date().getTime();
+    message.channel.sendType({
+      embed: SysInfo.getInfo('', bot, time),
+    }).then((msg) => {
+      SysInfo.sendEmbeds(msg, bot, time, 1);
     });
   }
 
   /**
    * Send the embeds, editing every second
    * @param {Discord.Message} msg The previous message
+   * @param {Discord.Client} bot The bot instance
+   * @param {number} time The time (in milliseconds) it was last executed
    * @param {number} iter The number of times this has executed
    */
-  static sendEmbeds(msg, iter) {
+  static sendEmbeds(msg, bot, time, iter) {
+    let newTime = new Date().getTime();
+    let delay = newTime - time;
     setTimeout(() => {
       if (iter < 600) {
-        msg.edit({embed: SysInfo.getInfo(msg.embeds[0].description)})
-          .then((edited) => SysInfo.sendEmbeds(edited, iter + 1))
+        let newTime = new Date().getTime();
+        msg.edit({
+          embed: SysInfo.getInfo(msg.embeds[0].description, bot, delay),
+        }).then((edited) => SysInfo.sendEmbeds(edited, bot, newTime, iter + 1))
           .catch(() => {
             return;
           });
@@ -45,15 +54,15 @@ class SysInfo extends Command {
   /**
    * Get the system info
    * @param {string} prevGraph The previous graph (or blank if new)
+   * @param {Discord.Client} bot The bot instance (to get uptime)
+   * @param {number} delay The time (in milliseconds) between last 2 executions
    * @return {Discord.RichEmbed} The system info, formatted in an embed
    */
-  static getInfo(prevGraph) {
+  static getInfo(prevGraph, bot, delay) {
+    let spacer = '\u2808';
     let embed = new Discord.RichEmbed();
 
-    let spacer = '\u2808';
-    let fill = '\u2588';
-    let fillHalf = '\u258C';
-
+    // Create cpu bars
     let cpus = os.cpus();
     let index = 1;
     let total = 0;
@@ -61,18 +70,7 @@ class SysInfo extends Command {
     cpus.forEach((cpu) => {
       let load = SysInfo.getCoreLoad(cpu.times, index); // From 0 to 100
       total += load;
-      let bar = '`';
-      for (let i = 0; i < 25; i++) {
-        if (i < load / 4) {
-          bar += fill;
-        } else if (i - 0.5 < load / 4) {
-          bar += fillHalf;
-        } else if (i == 0) {
-          bar += '.';
-        } else {
-          bar += ' ';
-        }
-      }
+      let bar = '`' + SysInfo.createBar(load / 100);
       load = load.toFixed(1);
       if (load.length == 5) { // Will only be length 5 if '100.0'
         load = '100';
@@ -85,11 +83,15 @@ class SysInfo extends Command {
       embed.addField(`CPU ${index++}`, bar, true);
     });
 
-    let avgLoad = total / ((index - 1) * 10); // Max load will be 10
+    let avgLoad = total / (index - 1); // Calculate the average
+    avgLoad = avgLoad * (10 / 100.0); // Set the range to 0-10
+
+    // Colors!
     if (avgLoad < (1 / 3) * 10) embed.setColor(Tsubaki.color.green);
     else if (avgLoad < (2 / 3) * 10) embed.setColor(Tsubaki.color.yellow);
     else embed.setColor(Tsubaki.color.red);
 
+    // Create a blank canvas if prevGraph doesn't exist
     if (prevGraph === '') {
       prevGraph = `**${Tsubaki.name} System Info:**`
         + '\nCPU Load:```';
@@ -108,6 +110,8 @@ class SysInfo extends Command {
     for (let i = 0, len = lines.length; i < len; i++) {
       let line = lines[i];
       let nums = [];
+
+      // Convert the graph to number data
       for (let j = 0, lineLen = line.length; j < lineLen; j++) {
         if (line.charAt(j) === spacer) {
           nums.push(0);
@@ -147,6 +151,7 @@ class SysInfo extends Command {
         nums.push(right);
       }
 
+      // Remove the first row and add the new data to the array
       nums = nums.slice(1);
       if (lines.length - i - 1 < avgLoad) {
         nums.push(4);
@@ -161,6 +166,7 @@ class SysInfo extends Command {
       }
 
       line = '';
+      // Recreate the graph, with the shifted and new data
       for (let j = 0, numLen = nums.length; j < numLen; j += 2) {
         let left = nums[j];
         let right = nums[j + 1];
@@ -222,13 +228,60 @@ class SysInfo extends Command {
 
     let freeMem = os.freemem();
     let totalMem = os.totalmem();
-    let memUsage = freeMem * 25 / totalMem; // From 0 to 25
+    let memUsage = freeMem / totalMem;
 
-    let bar = '`';
-    for (let i = 0; i < 25; i++) {
-      if (i < memUsage) {
+    freeMem = (freeMem / Math.pow(1024, 3)).toFixed(2);
+    totalMem = Math.round(totalMem / Math.pow(1024, 3));
+
+    let bar = '`' + SysInfo.createBar(memUsage, 25)
+      + `| ${freeMem}G/${totalMem}G\``;
+
+    embed.addField('Mem', bar, true)
+      .addField('Ping', `${Math.round(delay * 10) / 10.0}ms`, true)
+      .addField('System Uptime', SysInfo.toTimeString(os.uptime()), true)
+      .addField('Bot Uptime', SysInfo.toTimeString(bot.uptime / 1000), true)
+      .addField('Bot Version', `${Tsubaki.name} v${Tsubaki.version}`, true)
+      .addField('Guilds', bot.guilds.size, true)
+      .addField('Users', bot.users.size, true)
+      .addField('Channels', bot.channels.size, true);
+    return embed;
+  }
+
+  /**
+   * Formats seconds into a time value
+   * @param {number} time The time to format, in milliseconds
+   * @return {string} The formatted string
+   */
+  static toTimeString(time) {
+    let days = Math.floor(time / 86400);
+    time -= days * 86400;
+
+    let hours = Math.floor(time / 3600) % 24;
+    time -= hours * 3600;
+
+    let minutes = Math.floor(time / 60) % 60;
+    time -= minutes * 60;
+
+    let seconds = Math.round(time % 60);
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  /**
+   * Create a bar
+   * @param {number} percentage Percentage of bar should be filled, 0 to 1
+   * @param {number} max The number of spaces the bar should fill
+   * @return {string} The generated bar
+   */
+  static createBar(percentage, max = 25) {
+    let fill = '\u2588';
+    let fillHalf = '\u258C';
+    let bar = '';
+    percentage = percentage * max;
+
+    for (let i = 0; i < max; i++) {
+      if (i < percentage) {
         bar += fill;
-      } else if (i - 0.5 < memUsage) {
+      } else if (i - 0.5 < percentage) {
         bar += fillHalf;
       } else if (i == 0) {
         bar += '.';
@@ -236,27 +289,7 @@ class SysInfo extends Command {
         bar += ' ';
       }
     }
-    bar += '| ';
-    freeMem = (freeMem / Math.pow(1024, 3)).toFixed(2);
-    totalMem = Math.round(totalMem / Math.pow(1024, 3));
-    bar += `${freeMem}G/${totalMem}G\``;
-
-    embed.addField('Mem', bar, true);
-
-    let uptime = os.uptime();
-    let days = Math.floor(uptime / 86400);
-    uptime -= days * 86400;
-
-    let hours = Math.floor(uptime / 3600) % 24;
-    uptime -= hours * 3600;
-
-    let minutes = Math.floor(uptime / 60) % 60;
-    uptime -= minutes * 60;
-
-    let seconds = Math.round(uptime % 60);
-
-    embed.addField('Uptime', `${days}:${hours}:${minutes}:${seconds}`, true);
-    return embed;
+    return bar;
   }
 
   /**
