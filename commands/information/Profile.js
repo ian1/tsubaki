@@ -22,7 +22,12 @@ class Profile extends Command {
   execute(message, args, bot, db) {
     let profileMention = message.mentions.users.first();
     if (profileMention == '' || profileMention === undefined) {
-      profileMention = message.author;
+      if (args.length === 0) {
+        profileMention = message.author;
+      } else {
+        message.channel.sendType(Tsubaki.Style.unknownUser(), 10000);
+        return;
+      }
     }
 
     let color = Tsubaki.color.gray;
@@ -38,7 +43,7 @@ class Profile extends Command {
         break;
     }
 
-    let guildMember = message.guild.member(profileMention.id);
+    let guildMember = message.member;
     let roleList = guildMember.roles.array();
 
     Tsubaki.getPoints(profileMention.id, (points) => {

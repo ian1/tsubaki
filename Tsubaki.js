@@ -87,6 +87,111 @@ const db = new sqlite.Database('./data.db');
 
 let tokenCmds = {};
 
+/* const fs = require('fs');
+const https = require('https');
+const gm = require('gm');
+
+let width = 300;
+let height = width;
+let boxWidth = 280;
+let boxHeight = 40;
+let boxX = 10;
+let boxY = 100;
+
+let textRegionWidth = boxWidth - 120;
+let textRegionHeight = boxHeight - 10;
+let textRegionX = boxX + 105;
+let textRegionY = boxY + 5;
+
+let profBorderWidth = 2;
+
+let profWidth = 80;
+let profHeight = profWidth;
+let profX = ((textRegionX - boxX - profWidth) / 2) + boxX;
+let profY = boxY + boxHeight + profBorderWidth - profHeight + 5;
+
+let text = 'PantherMan594';
+
+let name = '';
+let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  + 'abcdefghijklmnopqrstuvwxyz';
+
+for (let i = 0; i < 64; i++) {
+  name += possible.charAt(Math.floor(Math.random() * possible.length));
+}
+
+let file = fs.createWriteStream(name + '.jpg');
+
+https.get('https://cdn.discordapp.com/avatars/142037204548583424/c390a43249c3327f381ef1a20b074385.png', (response) => {
+  response.pipe(file);
+});
+
+getSize(text, textRegionWidth, textRegionHeight).then((fontSize) => {
+  https.get('https://cdn.discordapp.com/avatars/142037204548583424/c390a43249c3327f381ef1a20b074385.png?size=2048', (response) => {
+    gm(response, 'image.png')
+      .autoOrient()
+      .resize(width, height)
+      .blur(5, 5)
+
+      .fill('#00000060')
+      .drawRectangle(boxX, boxY, boxX + boxWidth, boxY + boxHeight)
+
+      .fill('#ffffff00')
+      .drawRectangle(profX - profBorderWidth, profY - profBorderWidth, profX + profWidth + profBorderWidth, profY + profHeight + profBorderWidth)
+
+      .fill('#00000000')
+      .drawRectangle(profX, profY, profX + profWidth, profY + profHeight)
+
+      .draw(`image over ${profX},${profY} ${profWidth},${profHeight} ${name}.jpg`)
+
+      .fill('#FF000000')
+      //.drawRectangle(profX, profY, profX + profWidth, profY + profHeight)
+
+      .region(textRegionWidth, textRegionHeight, textRegionX, textRegionY)
+      .gravity('Center')
+      .fill('#ffffff00')
+      .fontSize(fontSize)
+      .font('Calibri')
+      .drawText(0, 0, text)
+
+      .write('test.jpg', (err) => {
+        if (err) console.log(err);
+      });
+  });
+}).catch((err) => {
+  console.log(err);
+});
+
+function getSize(text, width, height, fontSize = 30) {
+  return new Promise((resolve, reject) => {
+    gm(1000, 500, '#ffffff00')
+      .fontSize(fontSize)
+      .font('Calibri')
+      .gravity('Center')
+      .drawText(0, 0, text)
+      .toBuffer('PNG', (err, buffer) => {
+        if (err) reject(err);
+        gm(buffer, 'image.png')
+          .trim()
+          .toBuffer('PNG', (err, buffer2) => {
+            gm(buffer2, 'image.png').size((err, size) => {
+              if (err) reject(err);
+              if (size.width >= width || size.height >= height ) {
+                getSize(text, width, height, fontSize - 3).then((fontSize) => {
+                  resolve(fontSize)
+                }).catch((err) => {
+                  reject(err)
+                });
+              } else {
+                resolve(fontSize);
+              }
+            });
+          });
+      });
+  });
+}
+return;*/
+
 // Setup server for token commands
 const server = http.createServer((req, res) => {
   console.dir(req.param);
