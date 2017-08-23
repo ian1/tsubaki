@@ -129,7 +129,7 @@ class Profile extends Command {
             message.channel.sendTemp({
               files: [{
                 attachment: imgBuffer,
-                name: `${profileMention}'s profile`,
+                name: `${profileMention.username}.png`,
             }] }, 30000);
           });
       });
