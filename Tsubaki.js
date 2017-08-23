@@ -139,7 +139,7 @@ function createTokenCmd(callback) {
 
   tokenCmds[token] = callback;
   setTimeout(() => {
-    delete this.tokensCmds[token];
+    delete tokenCmds[token];
   }, 120000); // delete token after 2 minutes
 
   return 'http://iandomme.com/t?n='
