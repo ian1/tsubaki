@@ -263,6 +263,15 @@ function getLevelR(points) {
 }
 
 /**
+ * Calculates the points needed for a certain level
+ * @param {number} level The level to calculate
+ * @return {number} The points needed
+ */
+function getPointsFor(level) {
+  return Math.pow(level * 10, 2);
+}
+
+/**
  * Logs a command to the cmd logger channel
  * @param {Discord.Message} message The message sent
  * @param {Discord.Client} bot This instance of the discord client
@@ -555,6 +564,7 @@ module.exports.getPoints = getPoints;
 module.exports.setPoints = setPoints;
 module.exports.getLevel = getLevel;
 module.exports.getLevelR = getLevelR;
+module.exports.getPointsFor = getPointsFor;
 module.exports.setPlaying = setPlaying;
 module.exports.commands = function() {
   return commands;
