@@ -13,7 +13,7 @@ let height = width;
 
 let profWidth = 80;
 let profHeight = profWidth;
-let profX = width / 2 - profWidth - 15;
+let profX = (width - profWidth) / 2;
 let profY = 10;
 let profRadius = profWidth / 2;
 let profOX = profX + profWidth / 2;
@@ -44,6 +44,7 @@ let sideBoxY = mainBoxY;
 let font = process.env['HOME'] + '/.fonts/EncodeSansSemiCondensed-Regular.ttf';
 let fontBold = process.env['HOME'] + '/.fonts/EncodeSansSemiCondensed-Bold.ttf';
 let pointsBar = '#BF42F400';
+let devColor = '#2BBBEF00';
 
 /** The profile command */
 class Profile extends Command {
@@ -85,17 +86,19 @@ class Profile extends Command {
     fs.mkdirSync(dir);
 
     let size = 20;
+    let nameWidth = 0;
 
     Profile.getP(profileMention.displayAvatarURL).then((response) => {
       // response.pipe(file);
       return Profile.createAvatar(response, dir);
     }).then(() => {
       return Profile.getSize(name, textRegionWidth, textRegionHeight, 20);
-    }).then((fontSize) => {
+    }).then((fontSize, width) => {
       size = fontSize;
+      nameWidth = width;
       return Tsubaki.getPoints(profileMention.id);
     }).then((points) => {
-      return Profile.drawProfile(profileMention, points, dir, size);
+      return Profile.drawProfile(profileMention, points, dir, size, nameWidth);
     }).then((imgBuffer) => {
         message.channel.sendTemp({
           files: [{
@@ -176,7 +179,7 @@ class Profile extends Command {
    * @param {number} width The maximum width
    * @param {number} height The maximum height
    * @param {number} fontSize The starting font size
-   * @return {number} The largest font size that fits in the boundaries
+   * @return {Promise} The largest font size that fits in the boundaries
    */
   static getSize(text, width, height, fontSize = 30) {
     return new Promise((resolve, reject) => {
@@ -197,13 +200,13 @@ class Profile extends Command {
 
                 if (size.width >= width || size.height >= height) {
                   Profile.getSize(text, width, height, fontSize - 5)
-                    .then((fontSize) => {
-                      resolve(fontSize);
+                    .then((fontSize, width) => {
+                      resolve(fontSize, width);
                     }).catch((err) => {
                       reject(err);
                     });
                 } else {
-                  resolve(fontSize);
+                  resolve(fontSize, size.width);
                 }
               });
             });
@@ -217,11 +220,13 @@ class Profile extends Command {
    * @param {number} points The number of points the user has
    * @param {string} dir The temporary directory for the files
    * @param {number} fontSize The font size for the name
-   * @return {Promise.<string, Error>} A buffer of the drawn image if resolved.
+   * @param {number} nameWidth The width of the name at that font size
+   * @return {Promise.<string, Error>} A buffer of the drawn image if resolved,
    * an error if rejected
    */
-  static drawProfile(profile, points, dir, fontSize) {
+  static drawProfile(profile, points, dir, fontSize, nameWidth) {
     let name = profile.username;
+
 
     let level = Tsubaki.getLevelR(points);
     let levelPoints = Tsubaki.getPointsFor(level);
@@ -231,6 +236,14 @@ class Profile extends Command {
     let percentStep = pointsOver * 1.0 / (pointsBetween * 19);
 
     let avatar = `${dir}/avatar.png`;
+
+    let role = '';
+    let roleColor = '#FFFFFFFF';
+
+    if (profile.id === Tsubaki.ianId || profile.id === Tsubaki.davidId) {
+      role = 'Dev';
+      roleColor = devColor;
+    }
 
     return new Promise((resolve, reject) => {
     // replace avatar with background
@@ -279,18 +292,31 @@ class Profile extends Command {
             + ` ${avatar}`
           )
 
+          .fill('#000000D0')
+          .drawCircle(
+            profOX
+            , profOY
+            , profOX + profRadius
+            , profOY
+          )
+
           .fill('#FFFFFF00')
-          .fontSize(20)
+          .fontSize(40)
           .font(fontBold)
-          .drawText(profOX + profRadius + 15 + 65, profOY - 15, level)
-          .font(font)
-          .drawText(profOX + profRadius + 15, profOY - 15, 'Level:')
-          .drawText(profOX + profRadius + 15, profOY + 15, 'Points:')
+          .region(profWidth, profHeight, profX, profY - 10)
+          .gravity('Center')
+          .drawText(0, 0, level)
 
           .region(textRegionWidth, textRegionHeight, textRegionX, textRegionY)
           .gravity('Center')
           .fontSize(fontSize)
+          .font(font)
           .drawText(0, 0, name)
+
+          .font(fontBold)
+          .fill(roleColor)
+          .gravity('West')
+          .drawText(0, 0, role)
 
           .write(`${dir}/template.png`, (err) => {
             if (err) reject(err);
@@ -305,6 +331,9 @@ class Profile extends Command {
               let progX = profOX + progRadius * Math.sin(endDegree);
               let progY = profOY - progRadius * Math.cos(endDegree);
 
+              let progPoints = percentage * pointsBetween;
+              progPoints = Math.round(progPoints);
+
               gm(`${dir}/template.png`)
                 .fill('#FFFFFFFF')
                 .stroke(pointsBar, profBorderWidth)
@@ -316,11 +345,11 @@ class Profile extends Command {
 
                 .fill('#FFFFFF00')
                 .stroke('#FFFFFFFF', 0)
-                .font(fontBold)
-                .fontSize(20)
-                .drawText(profOX + profRadius + 15 + 65, profOY + 15
-                  , Math.round(percentage * pointsBetween + levelPoints)
-                )
+                .font(font)
+                .fontSize(10)
+                .region(profWidth, profHeight - 15, profX, profY)
+                .gravity('South')
+                .drawText(0, 0, `${progPoints} / ${pointsBetween}`)
                 .write(`${dir}/part-${i}.png`, (err) => {
                   if (err) reject(err);
                   if (++parts >= 20) {
