@@ -67,7 +67,7 @@ class Profile extends Command {
       if (args.length === 0) {
         profileMention = message.author;
       } else {
-        message.channel.sendType(Tsubaki.Style.unknownUser(), 10000);
+        message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
         return;
       }
     }
@@ -100,7 +100,7 @@ class Profile extends Command {
         message.channel.sendTemp({
           files: [{
             attachment: imgBuffer,
-            name: 'profile.gif',
+            name: profileMention.username + '.gif',
           }],
         }, 30000);
     });
