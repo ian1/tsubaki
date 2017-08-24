@@ -202,25 +202,27 @@ function cooldownMsg(id, username, sentCooldownMsg, message) {
 }
 
 /**
- * Get the points of a user, then execute the callback
+ * Get the points of a user
  * @param {number} id The id of the user to get points from
- * @param {calback} callback The function to call after getting points
+ * @return {Promise.<number, Error>} Returns a promise of the points
  */
-function getPoints(id, callback) {
-  let points = -2;
-  db.get(`SELECT points FROM members WHERE member_id = ${id}`, (err, row) => {
-    if (row !== undefined) {
-      points = row.points;
-    }
+function getPoints(id) {
+  return new Promise((resolve, reject) => {
+    let points = -2;
+    db.get(`SELECT points FROM members WHERE member_id = ${id}`, (err, row) => {
+      if (row !== undefined) {
+        points = row.points;
+      }
 
-    if (points < 0) {
-      points = 0;
-      db.run(`INSERT INTO members (member_id) VALUES (${id})`, function() {
-        callback(points);
-      });
-    } else {
-      callback(points);
-    }
+      if (points < 0) {
+        points = 0;
+        db.run(`INSERT INTO members (member_id) VALUES (${id})`, () => {
+          resolve(points);
+        });
+      } else {
+        resolve(points);
+      }
+    });
   });
 }
 
@@ -473,7 +475,7 @@ bot.on('message', (message) => {
     .slice(config.prefix.length).toLowerCase();
   let args = message.content.split(' ').slice(1);
 
-  getPoints(message.author.id, function(points) {
+  getPoints(message.author.id).then((points) => {
     setPoints(message.author.id, points + 1, message.channel);
   });
 
