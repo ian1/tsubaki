@@ -85,27 +85,27 @@ class Profile extends Command {
 
     fs.mkdirSync(dir);
 
-    let size = 20;
-    let nameWidth = 0;
+    let fontInfo;
 
     Profile.getP(profileMention.displayAvatarURL).then((response) => {
       // response.pipe(file);
       return Profile.createAvatar(response, dir);
     }).then(() => {
-      return Profile.getSize(name, textRegionWidth, textRegionHeight, 20);
-    }).then((fontSize, width) => {
-      size = fontSize;
-      nameWidth = width;
+      return Profile.getSize(name, textRegionWidth - 100, textRegionHeight, 20);
+    }).then((info) => {
+      fontInfo = info;
       return Tsubaki.getPoints(profileMention.id);
     }).then((points) => {
-      return Profile.drawProfile(profileMention, points, dir, size, nameWidth);
+      return Profile.drawProfile(profileMention, points, dir, fontInfo.size, fontInfo.width);
     }).then((imgBuffer) => {
-        message.channel.sendTemp({
-          files: [{
-            attachment: imgBuffer,
-            name: profileMention.username + '.gif',
-          }],
-        }, 30000);
+      message.channel.sendTemp({
+        files: [{
+          attachment: imgBuffer,
+          name: profileMention.username + '.gif',
+        }],
+      }, 30000);
+    }).catch((err) => { 
+      console.log(err);
     });
   }
 
@@ -200,13 +200,13 @@ class Profile extends Command {
 
                 if (size.width >= width || size.height >= height) {
                   Profile.getSize(text, width, height, fontSize - 5)
-                    .then((fontSize, width) => {
-                      resolve(fontSize, width);
+                    .then((fontInfo) => {
+                      resolve(fontInfo);
                     }).catch((err) => {
                       reject(err);
                     });
                 } else {
-                  resolve(fontSize, size.width);
+                  resolve({size: fontSize, width: size.width});
                 }
               });
             });
@@ -226,7 +226,6 @@ class Profile extends Command {
    */
   static drawProfile(profile, points, dir, fontSize, nameWidth) {
     let name = profile.username;
-
 
     let level = Tsubaki.getLevelR(points);
     let levelPoints = Tsubaki.getPointsFor(level);
@@ -313,9 +312,10 @@ class Profile extends Command {
           .font(font)
           .drawText(0, 0, name)
 
+          .region((textRegionWidth - nameWidth) / 2 - 10, textRegionHeight, textRegionX, textRegionY)
+          .gravity('East')
           .font(fontBold)
           .fill(roleColor)
-          .gravity('West')
           .drawText(0, 0, role)
 
           .write(`${dir}/template.png`, (err) => {
