@@ -15,7 +15,7 @@ class GetBanana extends Command {
    * @param {sqlite.Database} db The instance of the database
    */
   execute(message, args, bot, db) {
-    Tsubaki.getPoints(message.author.id, (points) => {
+    Tsubaki.getPoints(message.author.id).then( (points) => {
       Tsubaki.setPoints(message.author.id, points + 1, message.channel);
       message.channel.sendTemp(`${message.author}`
         + `, :banana: *You are currently Banana level*`

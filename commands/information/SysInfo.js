@@ -1,6 +1,7 @@
 const Tsubaki = require('../../Tsubaki.js');
 const Discord = require('discord.js');
 const os = require('os');
+const disk = require('diskusage');
 const Command = require('../Command.js');
 
 /** The sysinfo command  */
@@ -18,21 +19,30 @@ class SysInfo extends Command {
    */
   execute(message, args, bot, db) {
     SysInfo.cores = [];
-    message.channel.sendType({embed: SysInfo.getInfo('')}).then((msg) => {
-      SysInfo.sendEmbeds(msg, 1);
+    let time = new Date().getTime();
+    message.channel.sendType({
+      embed: SysInfo.getInfo('', bot, time),
+    }).then((msg) => {
+      SysInfo.sendEmbeds(msg, bot, time, 1);
     });
   }
 
   /**
    * Send the embeds, editing every second
    * @param {Discord.Message} msg The previous message
+   * @param {Discord.Client} bot The bot instance
+   * @param {number} time The time (in milliseconds) it was last executed
    * @param {number} iter The number of times this has executed
    */
-  static sendEmbeds(msg, iter) {
+  static sendEmbeds(msg, bot, time, iter) {
+    let newTime = new Date().getTime();
+    let delay = newTime - time;
     setTimeout(() => {
       if (iter < 600) {
-        msg.edit({embed: SysInfo.getInfo(msg.embeds[0].description)})
-          .then((edited) => SysInfo.sendEmbeds(edited, iter + 1))
+        let newTime = new Date().getTime();
+        msg.edit({
+          embed: SysInfo.getInfo(msg.embeds[0].description, bot, delay),
+        }).then((edited) => SysInfo.sendEmbeds(edited, bot, newTime, iter + 1))
           .catch(() => {
             return;
           });
@@ -45,11 +55,15 @@ class SysInfo extends Command {
   /**
    * Get the system info
    * @param {string} prevGraph The previous graph (or blank if new)
+   * @param {Discord.Client} bot The bot instance (to get uptime)
+   * @param {number} delay The time (in milliseconds) between last 2 executions
    * @return {Discord.RichEmbed} The system info, formatted in an embed
    */
-  static getInfo(prevGraph) {
+  static getInfo(prevGraph, bot, delay) {
+    let spacer = '\u2808';
     let embed = new Discord.RichEmbed();
 
+    // Create cpu bars
     let cpus = os.cpus();
     let index = 1;
     let total = 0;
@@ -57,56 +71,77 @@ class SysInfo extends Command {
     cpus.forEach((cpu) => {
       let load = SysInfo.getCoreLoad(cpu.times, index); // From 0 to 100
       total += load;
-
-      let bar = '`[';
-      for (let i = 0; i < 25; i++) {
-        if (i < load / 4) {
-          bar += '|';
-        } else {
-          bar += ' ';
-        }
+      let bar = '`' + SysInfo.createBar(load / 100);
+      load = load.toFixed(1);
+      if (load.length == 5) { // Will only be length 5 if '100.0'
+        load = '100';
       }
-      bar += ']` ' + load.toFixed(1) + '%';
+      while (load.length < 5) {
+        load = ' ' + load;
+      }
+      bar += '|' + load + '%`';
 
       embed.addField(`CPU ${index++}`, bar, true);
     });
-    let avgLoad = total / ((index - 1) * 10); // Max load will be 10
+
+    let avgLoad = total / (index - 1); // Calculate the average
+    avgLoad = avgLoad * (10 / 100.0); // Set the range to 0-10
+
+    // Colors!
+    if (avgLoad < (1 / 3) * 10) embed.setColor(Tsubaki.color.green);
+    else if (avgLoad < (2 / 3) * 10) embed.setColor(Tsubaki.color.yellow);
+    else embed.setColor(Tsubaki.color.red);
+
+    // Create a blank canvas if prevGraph doesn't exist
     if (prevGraph === '') {
       prevGraph = `**${Tsubaki.name} System Info:**`
         + '\nCPU Load:```';
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 9; i++) {
         prevGraph += '\n';
-        for (let j = 0; j < 60; j++) {
-          prevGraph += ' ';
+        for (let i = 0; i < 45; i++) {
+          prevGraph += spacer;
         }
       }
       prevGraph += '\n```';
     }
 
-    /* for (let i = 0, len = lines.length; i < len; i++) {
+    let lines = prevGraph.split('\n');
+    lines = lines.slice(2, -1);
+
+    for (let i = 0, len = lines.length; i < len; i++) {
       let line = lines[i];
       let nums = [];
-      for (let j = 1; j < line.length; j++) {
+
+      // Convert the graph to number data
+      for (let j = 0, lineLen = line.length; j < lineLen; j++) {
+        if (line.charAt(j) === spacer) {
+          nums.push(0);
+          nums.push(0);
+          continue;
+        }
         let vals = parseInt(line
           .charCodeAt(j) // Get the char code of that character (base 10 int)
           .toString(16) // Convert it to a base 16 int string
           .substring(2) // Cut out the first 2 chars ('28')
           , 16) // Parse it as base 16 int (without first 2 chars)
-          .toString(2) // Convert to base 2 int string
-          .split(''); // Convert to array
+          .toString(2); // Convert to base 2 int string
+        while (vals.length < 8) {
+          vals = '0' + vals; // Add back the leading 0s
+        }
+        vals = vals.split(''); // Convert to array
 
         let left = 0;
         let right = 0;
 
-        for (let i = 0; i < vals.length; i++) {
-          if (vals[i] === '1') {
-            // Values of i:
+        for (let pos = 0, valLen = vals.length; pos < valLen; pos++) {
+          if (vals[pos] === '1') {
+            // Values of pos:
             // 74
             // 63
             // 52
             // 10
 
-            if (i <= 4 && i !== 1) {
+            if (pos <= 4 && pos !== 1) {
               ++right;
             } else {
               ++left;
@@ -117,7 +152,8 @@ class SysInfo extends Command {
         nums.push(right);
       }
 
-      nums.shift();
+      // Remove the first row and add the new data to the array
+      nums = nums.slice(1);
       if (lines.length - i - 1 < avgLoad) {
         nums.push(4);
       } else if (lines.length - i - 1.25 < avgLoad) {
@@ -130,12 +166,50 @@ class SysInfo extends Command {
         nums.push(0);
       }
 
-      //for num in nums, convert back to braille
-    }*/
+      line = '';
+      // Recreate the graph, with the shifted and new data
+      for (let j = 0, numLen = nums.length; j < numLen; j += 2) {
+        let left = nums[j];
+        let right = nums[j + 1];
+        if (left == 0 && right == 0) {
+          line += spacer;
+          continue;
+        }
+        let binary = '00000000'.split('');
 
-    let lines = prevGraph.split('\n');
-    lines = lines.slice(2, -1);
-    for (let i = 0, len = lines.length; i < len; i++) {
+        let leftVals = {
+          1: 1,
+          2: 5,
+          3: 6,
+          4: 7,
+        };
+        let rightVals = {
+          1: 0,
+          2: 2,
+          3: 3,
+          4: 4,
+        };
+
+        for (let key = 1; key <= 4; key++) {
+          if (left >= key) {
+            binary[leftVals[key]] = 1;
+          }
+          if (right >= key) {
+            binary[rightVals[key]] = 1;
+          }
+        }
+        binary = binary.join('');
+
+        let braille = parseInt(binary, 2).toString(16); // Convert to base 16
+        braille = '28' + braille; // Add '28' in front of it
+        braille = parseInt(braille, 16); // Convert to base 10
+        line += String.fromCharCode(braille); // Convert to symbol
+      }
+
+      lines[i] = line;
+    }
+
+    /* for (let i = 0, len = lines.length; i < len; i++) {
       let j = lines.length - i - 1;
       lines[i] = lines[i].substring(1);
 
@@ -146,7 +220,7 @@ class SysInfo extends Command {
       } else {
         lines[i] += ' ';
       }
-    }
+    }*/
 
     let newGraph = '**System Info:**'
       + '\nCPU Load:```'
@@ -155,37 +229,82 @@ class SysInfo extends Command {
 
     let freeMem = os.freemem();
     let totalMem = os.totalmem();
-    let memUsage = freeMem * 25 / totalMem; // From 0 to 25
+    let usedMem = totalMem - freeMem;
+    let memUsage = usedMem / totalMem;
 
-    let bar = '`[';
-    for (let i = 0; i < 25; i++) {
-      if (i < memUsage) {
-        bar += '|';
+    usedMem = (usedMem / Math.pow(1024, 3)).toFixed(2);
+    totalMem = Math.round(totalMem / Math.pow(1024, 3));
+
+    let memBar = '`' + SysInfo.createBar(memUsage, 20)
+      + `| ${usedMem}/${totalMem}G\``;
+
+    let diskInfo = disk.checkSync('/');
+    let freeDisk = diskInfo.available;
+    let totalDisk = diskInfo.total;
+    let usedDisk = totalDisk - freeDisk;
+    let diskUsage = usedDisk / totalDisk;
+
+    usedDisk = (usedDisk / Math.pow(1024, 3)).toFixed(2);
+    totalDisk = Math.round(totalDisk / Math.pow(1024, 3));
+
+    let diskBar = '`' + SysInfo.createBar(diskUsage, 20)
+      + `| ${usedDisk}/${totalDisk}G\``;
+
+    embed.addField('Mem', memBar, true)
+      .addField('Disk', diskBar, true)
+      .addField('System Uptime', SysInfo.toTimeString(os.uptime()), true)
+      .addField('Bot Uptime', SysInfo.toTimeString(bot.uptime / 1000), true)
+      .addField('Bot Version', `${Tsubaki.name} v${Tsubaki.version}`, true)
+      .addField('Guilds', bot.guilds.size, true)
+      .addField('Users', bot.users.size, true)
+      .addField('Channels', bot.channels.size, true)
+      .addField('Ping', `${Math.round(delay * 10) / 10.0}ms`, true);
+    return embed;
+  }
+
+  /**
+   * Formats seconds into a time value
+   * @param {number} time The time to format, in milliseconds
+   * @return {string} The formatted string
+   */
+  static toTimeString(time) {
+    let days = Math.floor(time / 86400);
+    time -= days * 86400;
+
+    let hours = Math.floor(time / 3600) % 24;
+    time -= hours * 3600;
+
+    let minutes = Math.floor(time / 60) % 60;
+    time -= minutes * 60;
+
+    let seconds = Math.round(time % 60);
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  /**
+   * Create a bar
+   * @param {number} percentage Percentage of bar should be filled, 0 to 1
+   * @param {number} max The number of spaces the bar should fill
+   * @return {string} The generated bar
+   */
+  static createBar(percentage, max = 25) {
+    let fill = '\u2588';
+    let fillHalf = '\u258C';
+    let bar = '';
+    percentage = percentage * max;
+
+    for (let i = 0; i < max; i++) {
+      if (i < percentage) {
+        bar += fill;
+      } else if (i - 0.5 < percentage) {
+        bar += fillHalf;
+      } else if (i == 0) {
+        bar += '.';
       } else {
         bar += ' ';
       }
     }
-    bar += ']` ';
-    freeMem = (freeMem / Math.pow(1024, 3)).toFixed(2);
-    totalMem = (totalMem / Math.pow(1024, 3)).toFixed(2);
-    bar += `${freeMem}G/${totalMem}G`;
-
-    embed.addField('Mem', bar, true);
-
-    let uptime = os.uptime();
-    let days = Math.floor(uptime / 86400);
-    uptime -= days * 86400;
-
-    let hours = Math.floor(uptime / 3600) % 24;
-    uptime -= hours * 3600;
-
-    let minutes = Math.floor(uptime / 60) % 60;
-    uptime -= minutes * 60;
-
-    let seconds = Math.round(uptime % 60);
-
-    embed.addField('Uptime', `${days}:${hours}:${minutes}:${seconds}`, true);
-    return embed;
+    return bar;
   }
 
   /**

@@ -30,7 +30,7 @@ class Banana extends Command {
         `:banana: ${message.author.tag} has given ${memberMention} a banana!`
         , 20000);
 
-      Tsubaki.getPoints(memberMention.id, (points) => {
+      Tsubaki.getPoints(memberMention.id).then((points) => {
         Tsubaki.setPoints(memberMention.id, points + 1, message.channel);
       });
     }

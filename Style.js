@@ -49,7 +49,7 @@ module.exports = {
   },
 
   notFound: function() {
-    return module.exports.warn('Uh oh, I didn\'t find that command! Try '
+    return this.warn('Uh oh, I didn\'t find that command! Try '
       + `\`${Tsubaki.prefix + Tsubaki.help().getCommand()}\`.`);
   },
 };
