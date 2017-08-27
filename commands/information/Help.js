@@ -40,7 +40,7 @@ class Help extends Command {
       let embed = new Discord.RichEmbed()
         .setDescription(description)
         .setColor(Tsubaki.color.green);
-      message.channel.sendType({embed: embed}, );
+      message.channel.sendType({embed: embed} );
 
       description = '';
 
