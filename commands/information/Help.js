@@ -83,15 +83,15 @@ class Help extends Command {
               )) {
               message.channel.sendType(
                 {embed: this.helpEmbed(cmds[i][j], cmds[i][0])}
-                , );
+                 );
             } else {
-              message.channel.sendType(Tsubaki.Style.notFound(), );
+              message.channel.sendType(Tsubaki.Style.notFound() );
             }
             return;
           }
         }
       }
-      message.channel.sendType(Tsubaki.Style.notFound(), );
+      message.channel.sendType(Tsubaki.Style.notFound() );
     }
   }
 
