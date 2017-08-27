@@ -164,7 +164,7 @@ class Queue extends Command {
                 response.editTemp(Tsubaki.Style.embed(undefined
                   , 'Search results for ' + args.join(' '), Tsubaki.color.green
                   , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-                ), );
+                ) );
 
                 songs.forEach((songInfo) => {
                   let tokenUrl = Tsubaki.createTokenCmd(() => {

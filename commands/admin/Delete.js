@@ -29,7 +29,7 @@ class Delete extends AdminCommand {
     } else {
       message.channel.fetchMessages({limit: parseInt(args[0]) + 1})
         .then((messages) => message.channel.bulkDelete(messages)).catch((err) => {
-        message.channel.sendType(Tsubaki.Style.errorGeneric(), );
+        message.channel.sendType(Tsubaki.Style.errorGeneric() );
         console.log(err);
       });
     }
