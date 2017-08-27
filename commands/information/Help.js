@@ -58,7 +58,7 @@ class Help extends Command {
             let cmd = cmds[i][j];
             description += `[${cmd.getCommand()}](${
               Tsubaki.createTokenCmd(() => {
-                message.channel.sendType({embed: this.helpEmbed(cmd, cmds[i][0])}, );
+                message.channel.sendType({embed: this.helpEmbed(cmd, cmds[i][0])} );
               })
             })` + ' ';
           }
@@ -68,7 +68,7 @@ class Help extends Command {
       embed = new Discord.RichEmbed()
         .setDescription(description)
         .setColor(Tsubaki.color.green);
-      message.channel.sendType({embed: embed}, );
+      message.channel.sendType({embed: embed} );
     } else {
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
