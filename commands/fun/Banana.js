@@ -26,8 +26,8 @@ class Banana extends Command {
     if (memberMention == '' || memberMention === undefined) {
       message.channel.sendType(Tsubaki.Style.unknownUser() );
     } else {
-      message.channel.sendType(Tsubaki.Style.embed(
-        `:banana: **${message.author.tag}** has given ${memberMention} a banana!`
+      message.channel.sendType(Tsubaki.Style.success(
+        `**${message.author.tag}** has given ${memberMention} a banana! :banana:`
       ) );
 
       Tsubaki.getPoints(memberMention.id).then((points) => {
