@@ -36,7 +36,7 @@ class AdminCommand extends Command {
       && message.member.hasPermission(Tsubaki.adminPermission)) {
       this.executeAdmin(message, args, bot, db);
     } else {
-      message.channel.sendType(Tsubaki.Style.notFound(), 10000);
+      message.channel.sendType(Tsubaki.Style.notFound(), );
       return;
     }
   }

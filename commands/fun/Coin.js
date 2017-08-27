@@ -27,8 +27,8 @@ class Coin extends Command {
         msg.editTemp(
           msg.content
           + `  **${coins[Math.floor(Math.random() * coins.length)]}**!`
-          , 10000);
-      }, 1000);
+          , );
+      }, );
     });
   }
 }

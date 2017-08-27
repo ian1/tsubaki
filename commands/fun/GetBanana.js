@@ -20,7 +20,7 @@ class GetBanana extends Command {
       message.channel.sendType(Tsubaki.Style.success(`${message.author}`
         + `, :banana: *You are currently Banana level*`
         + ` \`${Tsubaki.getLevelR(points)}\`, *with*`
-        + ` \`${points}\` Bananas!`), 10000);
+        + ` \`${points}\` Bananas!`), );
     });
   }
 }

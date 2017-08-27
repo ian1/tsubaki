@@ -17,10 +17,10 @@ class Dog extends Command {
    */
   execute(message, args, bot, db) {
     random.dog().then(
-      (url) => message.channel.sendType(url, 30000)
+      (url) => message.channel.sendType(url, )
     ).catch((err) => {
       console.log(err);
-      message.channel.sendType(Tsubaki.Style.errorGeneric(), 10000);
+      message.channel.sendType(Tsubaki.Style.errorGeneric(), );
     });
   }
 }

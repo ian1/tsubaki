@@ -18,9 +18,9 @@ class Tts extends Command {
     if (args.length == 0) {
       message.channel.sendType(Tsubaki.Style.warn(
         'Please tell me what to say!'
-      ), 10000);
+      ), );
     } else {
-      message.channel.sendType(args.join(' '), {tts: true}, 10000);
+      message.channel.sendType(args.join(' '), {tts: true}, );
     }
   }
 }

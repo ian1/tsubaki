@@ -22,16 +22,16 @@ class Leave extends Command {
       if (music === undefined) {
         message.channel.sendType(Tsubaki.Style.warn(
           'You aren\'t in a voice channel!', `${Tsubaki.name} music`
-        ), 10000);
+        ), );
       } else {
         music.leave();
         message.channel.sendType(Tsubaki.Style.success(
           `${Tsubaki.name} music left ${music.getMusicChannel().name}.`
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-        ), 10000);
+        ), );
       }
     } else {
-      message.channel.sendType(Tsubaki.Style.notFound(), 10000);
+      message.channel.sendType(Tsubaki.Style.notFound(), );
     }
   }
 }

@@ -20,11 +20,11 @@ class LeaveGuild extends OwnerCommand {
       guild.leave();
       message.channel.sendType(Tsubaki.Style.success(
         `Left server ${guild.name}.`
-      ), 10000);
+      ), );
     } else {
       message.channel.sendType(Tsubaki.Style.warn(
         'Please provide a guild id.'
-      ), 10000);
+      ), );
     }
   }
 }

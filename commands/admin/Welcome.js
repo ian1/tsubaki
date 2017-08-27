@@ -21,7 +21,7 @@ class Welcome extends AdminCommand {
     if (args.length == 0) {
       message.channel.sendType(Tsubaki.Style.warn(
         'Invalid arguments! Usage: ' + this.getUsage()
-      ), 10000);
+      ), );
       return;
     }
 
@@ -37,7 +37,7 @@ class Welcome extends AdminCommand {
       if (!message.guild.channels.find('id', channelId)) {
         message.channel.sendType(Tsubaki.Style.warn(
           `Sorry, I couldn't find a channel with the id ${channelId}.`
-        ), 10000);
+        ), );
         return;
       }
 
@@ -47,12 +47,12 @@ class Welcome extends AdminCommand {
           message.channel.sendType(Tsubaki.Style.success(
             'Welcome messages are now `enabled`'
               + ` for this guild in channel <#${channelId}>.`
-          ), 10000);
+          ), );
         } else if (row.channel_id == channelId) {
           message.channel.sendType(Tsubaki.Style.warn(
             'Welcome messages are already `enabled`'
             + ` for this guild in channel <#${channelId}>.`
-          ), 10000);
+          ), );
         } else {
           db.run(
             `UPDATE guilds SET channel_id = ${channelId}`
@@ -61,19 +61,19 @@ class Welcome extends AdminCommand {
           message.channel.sendType(Tsubaki.Style.success(
             `Welcome messages have been switched to channel`
             + ` <#${channelId}> for this guild.`
-          ), 10000);
+          ), );
         }
       });
     } else if (status === 'disable') {
       db.run('DELETE FROM guilds WHERE guild_id = ' + guildId, () => {
         message.channel.sendType(Tsubaki.Style.success(
           'Welcome messages are now `disabled` for this guild. :frowning:'
-        ), 10000);
+        ), );
       });
     } else {
       message.channel.sendType(Tsubaki.Style.warn(
         'Invalid arguments! Usage: ' + this.getUsage()
-      ), 10000);
+      ), );
     }
   }
 }

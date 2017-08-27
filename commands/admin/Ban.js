@@ -17,7 +17,7 @@ class Ban extends AdminCommand {
   executeAdmin(message, args, bot, db) {
     let userToBan = message.mentions.users.first();
     if (userToBan == '' || userToBan === undefined) {
-      message.channel.sendType(Tsubaki.Style.unknownUser(), 10000);
+      message.channel.sendType(Tsubaki.Style.unknownUser(), );
       return;
     }
 
@@ -42,11 +42,11 @@ class Ban extends AdminCommand {
       message.channel.sendType(Tsubaki.Style.success(
         `${userToBan.tag} has been **banned** by **${message.author}**`
         + (reason.length > 0 ? ` for: **${reason}` : ' !')
-      ), 30000);
+      ), );
     } else if (!isBannable || !(userID.bannable)) {
       message.channel.sendType(Tsubaki.Style.error(
         `You can't ban that user!`
-      ), 10000);
+      ), );
     }
   }
 }

@@ -20,24 +20,24 @@ class Pause extends Command {
     if (music === undefined) {
       message.channel.sendType(Tsubaki.Style.warn(
         'You aren\'t in a voice channel!', Tsubaki.name + ' music'
-      ), 10000);
+      ), );
     } else {
       if (music.getPlaying() === undefined) {
         message.channel.sendType(Tsubaki.Style.warn(
           'I\'m not playing anything right now.'
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-        ), 10000);
+        ), );
       } else {
         if (music.pause()) {
           message.channel.sendType(Tsubaki.Style.success(
             'Paused ' + music.getPlaying().titleUrl + '.'
             , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-          ), 10000);
+          ), );
         } else {
           message.channel.sendType(Tsubaki.Style.warn(
             `${music.getPlaying().titleUrl} is already paused.`
             , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-          ), 10000);
+          ), );
         }
       }
     }
