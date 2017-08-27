@@ -28,7 +28,7 @@ class Kick extends AdminCommand {
 
     if (isKickable || userID.kickable) {
       message.guild.member(userToKick.id).send(
-        ` You have been **kicked** by **${message.author}`
+        `You have been **kicked** by **${message.author}`
         + (reason.length > 0 ? ` for: **${reason}**` : ' !')
       );
 
@@ -38,10 +38,10 @@ class Kick extends AdminCommand {
         message.guild.member(userToKick).kick();
       }
 
-      message.channel.sendType(
-        ` ${userToKick.tag} has been **kicked** by **${message.author}**`
+      message.channel.sendType(Tsubaki.Style.success(
+        `${userToKick.tag} has been **kicked** by **${message.author}**`
         + (reason.length > 0 ? ` for: **${reason}**` : ' !')
-        , 30000
+        , 30000)
       );
     } else if (!isKickable || !(userID.kickable)) {
       message.channel.sendType(Tsubaki.Style.error(
