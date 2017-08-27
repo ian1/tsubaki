@@ -50,7 +50,7 @@ class EightBall extends Command {
       'Oh, this one\'s easy!',
     ];
     if (question == '' || question === undefined) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         ':eye_in_speech_bubble: *Give me a question!*'
       ), 10000);
     } else {

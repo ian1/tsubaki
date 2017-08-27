@@ -16,11 +16,11 @@ class Tts extends Command {
    */
   execute(message, args, bot, db) {
     if (args.length == 0) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'Please tell me what to say!'
       ), 10000);
     } else {
-      message.channel.sendTemp(args.join(' '), {tts: true}, 10000);
+      message.channel.sendType(args.join(' '), {tts: true}, 10000);
     }
   }
 }

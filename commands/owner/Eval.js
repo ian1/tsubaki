@@ -26,7 +26,7 @@ class Eval extends OwnerCommand {
       try {
         result = eval(expression);
       } catch (e) {
-        message.channel.sendTemp(Tsubaki.Style.error(
+        message.channel.sendType(Tsubaki.Style.error(
           `Whoops! I got an error: ${e.message}. See console for stack trace.`
         ), 10000);
 
@@ -37,10 +37,10 @@ class Eval extends OwnerCommand {
         this.logEval(e.stack, 1);
       }
       if (result !== Object(result)) {
-        message.channel.sendTemp(Tsubaki.Style.codeBlock(result), 20000);
+        message.channel.sendType(Tsubaki.Style.codeBlock(result), 20000);
       }
     } else {
-      message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
+      message.channel.sendType(Tsubaki.Style.notFound(), 10000);
     }
 
     // Generate a new code and print to console

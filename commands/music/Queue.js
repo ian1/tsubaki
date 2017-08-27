@@ -44,13 +44,13 @@ class Queue extends Command {
   execute(message, args, bot, db) {
     let music = Music.getMusic(message.member.voiceChannel);
     if (music === undefined) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'You aren\'t in a voice channel!'
         , `${Tsubaki.name} music`
       ), 10000);
     } else {
       if (args.length == 0) {
-        message.channel.sendTemp(Queue.getQueue(music)).then((msg) => {
+        message.channel.sendType(Queue.getQueue(music)).then((msg) => {
           for (let i = 1; i <= 30; i++) {
             setTimeout(() => {
               msg.edit(Queue.getQueue(music));
@@ -64,7 +64,7 @@ class Queue extends Command {
         && message.member !== undefined
         && message.member.hasPermission(Tsubaki.adminPermission)) {
         music.clearQueue();
-        message.channel.sendTemp(Tsubaki.Style.success(
+        message.channel.sendType(Tsubaki.Style.success(
           'Queue cleared!'
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`), 10000);
       } else {
@@ -181,7 +181,7 @@ class Queue extends Command {
                       + ' . . . . . '
                       + songInfo.duration
                     ).setThumbnail(songInfo.thumbnail);
-                  message.channel.sendTemp({embed: embed}, 15000);
+                  message.channel.sendType({embed: embed}, 15000);
                 });
               } else {
                 response.delete();
@@ -203,17 +203,17 @@ class Queue extends Command {
   addQueue(music, message, songInfo) {
     let response = music.addToQueue(songInfo);
     if (response === 0) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         songInfo.titleUrl + ' is already queued.'
         , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
       ), 10000);
     } else if (response === 1) {
-      message.channel.sendTemp(Tsubaki.Style.success(
+      message.channel.sendType(Tsubaki.Style.success(
         `Playing: ${songInfo.titleUrl}`
         , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
       ), 10000);
     } else if (response === 2) {
-      message.channel.sendTemp(Tsubaki.Style.success(
+      message.channel.sendType(Tsubaki.Style.success(
         `Queued: ${songInfo.titleUrl}`
         , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
       ), 10000);

@@ -18,18 +18,18 @@ class Skip extends Command {
   execute(message, args, bot, db) {
     let music = Music.getMusic(message.member.voiceChannel);
     if (music === undefined) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'You aren\'t in a voice channel!'
         , `${Tsubaki.name} music`
       ), 10000);
     } else {
       if (music.getPlaying() === undefined) {
-        message.channel.sendTemp(Tsubaki.Style.warn(
+        message.channel.sendType(Tsubaki.Style.warn(
           'I\'m not playing anything right now.'
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
         ), 10000);
       } else {
-        message.channel.sendTemp(Tsubaki.Style.success(
+        message.channel.sendType(Tsubaki.Style.success(
           `Skipped ${music.getPlaying().titleUrl}.`
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
         ), 10000);

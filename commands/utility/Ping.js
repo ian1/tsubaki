@@ -30,7 +30,7 @@ class Ping extends Command {
       .setDescription(
         `Pong! \`${Number(Math.round(ping + 'e2') + 'e-2') + ' ms'}\`.`
       ).setColor(color);
-    message.channel.sendTemp({embed: embed}, 5000);
+    message.channel.sendType({embed: embed}, 5000);
   }
 }
 

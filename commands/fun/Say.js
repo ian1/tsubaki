@@ -16,7 +16,7 @@ class Say extends Command {
    */
   execute(message, args, bot, db) {
     if (args.length == 0) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'Please tell me what to say!'
       ), 10000);
     } else {

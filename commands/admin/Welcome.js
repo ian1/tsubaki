@@ -19,7 +19,7 @@ class Welcome extends AdminCommand {
    */
   executeAdmin(message, args, bot, db) {
     if (args.length == 0) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'Invalid arguments! Usage: ' + this.getUsage()
       ), 10000);
       return;
@@ -35,7 +35,7 @@ class Welcome extends AdminCommand {
 
     if (status === 'enable') {
       if (!message.guild.channels.find('id', channelId)) {
-        message.channel.sendTemp(Tsubaki.Style.warn(
+        message.channel.sendType(Tsubaki.Style.warn(
           `Sorry, I couldn't find a channel with the id ${channelId}.`
         ), 10000);
         return;
@@ -44,12 +44,12 @@ class Welcome extends AdminCommand {
       db.get(`SELECT * FROM guilds WHERE guild_id = ${guildId}`, (err, row) => {
         if (row === undefined) {
           db.run(`INSERT INTO guilds VALUES (${guildId}, ${channelId})`);
-          message.channel.sendTemp(Tsubaki.Style.success(
+          message.channel.sendType(Tsubaki.Style.success(
             'Welcome messages are now `enabled`'
               + ` for this guild in channel <#${channelId}>.`
           ), 10000);
         } else if (row.channel_id == channelId) {
-          message.channel.sendTemp(Tsubaki.Style.warn(
+          message.channel.sendType(Tsubaki.Style.warn(
             'Welcome messages are already `enabled`'
             + ` for this guild in channel <#${channelId}>.`
           ), 10000);
@@ -58,7 +58,7 @@ class Welcome extends AdminCommand {
             `UPDATE guilds SET channel_id = ${channelId}`
             + ` WHERE guild_id = ${guildId}`
           );
-          message.channel.sendTemp(Tsubaki.Style.success(
+          message.channel.sendType(Tsubaki.Style.success(
             `Welcome messages have been switched to channel`
             + ` <#${channelId}> for this guild.`
           ), 10000);
@@ -66,12 +66,12 @@ class Welcome extends AdminCommand {
       });
     } else if (status === 'disable') {
       db.run('DELETE FROM guilds WHERE guild_id = ' + guildId, () => {
-        message.channel.sendTemp(Tsubaki.Style.success(
+        message.channel.sendType(Tsubaki.Style.success(
           'Welcome messages are now `disabled` for this guild. :frowning:'
         ), 10000);
       });
     } else {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'Invalid arguments! Usage: ' + this.getUsage()
       ), 10000);
     }

@@ -31,7 +31,7 @@ class Help extends Command {
           let cmd = cmds[i][j];
           description += `[${cmd.getCommand()}](${
             Tsubaki.createTokenCmd(() => {
-              message.channel.sendTemp({embed: this.helpEmbed(cmd, cmds[i][0])}, 20000);
+              message.channel.sendType({embed: this.helpEmbed(cmd, cmds[i][0])}, 20000);
             })
           })` + ' ';
         }
@@ -40,7 +40,7 @@ class Help extends Command {
       let embed = new Discord.RichEmbed()
         .setDescription(description)
         .setColor(Tsubaki.color.green);
-      message.channel.sendTemp({embed: embed}, 60000);
+      message.channel.sendType({embed: embed}, 60000);
 
       description = '';
 
@@ -58,7 +58,7 @@ class Help extends Command {
             let cmd = cmds[i][j];
             description += `[${cmd.getCommand()}](${
               Tsubaki.createTokenCmd(() => {
-                message.channel.sendTemp({embed: this.helpEmbed(cmd, cmds[i][0])}, 20000);
+                message.channel.sendType({embed: this.helpEmbed(cmd, cmds[i][0])}, 20000);
               })
             })` + ' ';
           }
@@ -68,7 +68,7 @@ class Help extends Command {
       embed = new Discord.RichEmbed()
         .setDescription(description)
         .setColor(Tsubaki.color.green);
-      message.channel.sendTemp({embed: embed}, 20000);
+      message.channel.sendType({embed: embed}, 20000);
     } else {
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         for (let j = 1, lenJ = cmds[i].length; j < lenJ; j++) {
@@ -81,17 +81,17 @@ class Help extends Command {
                 || message.member.id === Tsubaki.ianId
                 || message.member.id === Tsubaki.davidId
               )) {
-              message.channel.sendTemp(
+              message.channel.sendType(
                 {embed: this.helpEmbed(cmds[i][j], cmds[i][0])}
                 , 20000);
             } else {
-              message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
+              message.channel.sendType(Tsubaki.Style.notFound(), 10000);
             }
             return;
           }
         }
       }
-      message.channel.sendTemp(Tsubaki.Style.notFound(), 10000);
+      message.channel.sendType(Tsubaki.Style.notFound(), 10000);
     }
   }
 

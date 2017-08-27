@@ -19,7 +19,7 @@ class Define extends Command {
   execute(message, args, bot, db) {
     let toDefine = message.content.split(' ')[1];
     if (toDefine == '' || toDefine === undefined) {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'Provide a word to define! :book:'
       ), 10000);
     } else {
@@ -31,9 +31,9 @@ class Define extends Command {
           .addField('Definition', result)
           .setColor(Tsubaki.color.green)
           .setFooter(Tsubaki.name + ' Dictionary');
-        message.channel.sendTemp({embed: embed}, 20000);
+        message.channel.sendType({embed: embed}, 20000);
       }).catch(() => {
-        message.channel.sendTemp(Tsubaki.Style.error(
+        message.channel.sendType(Tsubaki.Style.error(
           'Hmm... I can\'t find that word. Please check your spelling!'
         ), 10000);
       });

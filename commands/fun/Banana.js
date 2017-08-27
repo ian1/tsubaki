@@ -17,16 +17,16 @@ class Banana extends Command {
   execute(message, args, bot, db) {
     let memberMention = message.mentions.users.first();
     if (memberMention == message.author) {
-      message.channel.sendTemp(Tsubaki.Style.embed(
+      message.channel.sendType(Tsubaki.Style.embed(
         `:x: Don't be greedy, sweetie~ :kissing_heart:`
       ), 10000);
       return;
     }
 
     if (memberMention == '' || memberMention === undefined) {
-      message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
+      message.channel.sendType(Tsubaki.Style.unknownUser(), 10000);
     } else {
-      message.channel.sendTemp(
+      message.channel.sendType(
         `:banana: ${message.author.tag} has given ${memberMention} a banana!`
         , 20000);
 

@@ -416,13 +416,13 @@ bot.on('guildMemberAdd', (member) => {
           let welcomeEmbed = new Discord.RichEmbed()
             .setDescription(`Welcome to **${guild.name}**, **${member}**!`)
             .setColor(color.white);
-          bot.channels.get(channelId).sendTemp({embed: welcomeEmbed}, 60000);
+          bot.channels.get(channelId).sendType({embed: welcomeEmbed}, 60000);
           db.run(`INSERT INTO guild_join VALUES (${member.id}, ${guild.id})`);
         } else {
           let welcomeEmbed = new Discord.RichEmbed()
             .setDescription(`Welcome back to **${guild.name}**, **${member}**!`)
             .setColor(color.white);
-          bot.channels.get(channelId).sendTemp({embed: welcomeEmbed}, 60000);
+          bot.channels.get(channelId).sendType({embed: welcomeEmbed}, 60000);
         }
     });
   });

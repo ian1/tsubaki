@@ -24,7 +24,7 @@ class Embed extends Command {
     } else if (args.length >= 1) {
       msg = args.join(' ');
     } else {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'Please tell me what to say!'
       ), 10000);
       return;

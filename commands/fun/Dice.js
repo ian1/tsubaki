@@ -17,7 +17,7 @@ class Dice extends Command {
    * @param {sqlite.Database} db The instance of the database
    */
   execute(message, args, bot, db) {
-    message.channel.sendTemp(
+    message.channel.sendType(
       `:game_die: You rolled a ${Math.ceil(Math.random() * 6)}`
       , 10000);
   }

@@ -55,7 +55,7 @@ class Guilds extends OwnerCommand {
         .setTitle(title)
         .setDescription(guildsList[i])
         .setColor(Tsubaki.color.green);
-      message.channel.sendTemp({embed: embed}, 60000);
+      message.channel.sendType({embed: embed}, 60000);
     }
   }
 }

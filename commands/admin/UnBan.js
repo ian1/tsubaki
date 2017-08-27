@@ -17,7 +17,7 @@ class UnBan extends AdminCommand {
   executeAdmin(message, args, bot, db) {
     let userToUnBan = bot.users.get(args[0]);
     if (userToUnBan == '' || userToUnBan === undefined) {
-      message.channel.sendTemp(Tsubaki.Style.unknownUser(), 10000);
+      message.channel.sendType(Tsubaki.Style.unknownUser(), 10000);
       return;
     }
 
@@ -29,7 +29,7 @@ class UnBan extends AdminCommand {
 
     message.guild.unban(userToUnBan);
 
-    message.channel.sendTemp(Tsubaki.Style.success(
+    message.channel.sendType(Tsubaki.Style.success(
       `${userToUnban.tag} have been **unbanned** by **${message.author}**`
       + (reason.length > 0 ? ` for: **${reason}**` : ' !')
     ), 30000);

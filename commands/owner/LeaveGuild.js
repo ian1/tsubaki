@@ -18,11 +18,11 @@ class LeaveGuild extends OwnerCommand {
     if (args.length > 0) {
       let guild = bot.guilds.get(args[0]);
       guild.leave();
-      message.channel.sendTemp(Tsubaki.Style.success(
+      message.channel.sendType(Tsubaki.Style.success(
         `Left server ${guild.name}.`
       ), 10000);
     } else {
-      message.channel.sendTemp(Tsubaki.Style.warn(
+      message.channel.sendType(Tsubaki.Style.warn(
         'Please provide a guild id.'
       ), 10000);
     }
