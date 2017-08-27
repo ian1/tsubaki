@@ -31,7 +31,7 @@ class Help extends Command {
           let cmd = cmds[i][j];
           description += `[${cmd.getCommand()}](${
             Tsubaki.createTokenCmd(() => {
-              message.channel.sendType({embed: this.helpEmbed(cmd, cmds[i][0])}, );
+              message.channel.sendType({embed: this.helpEmbed(cmd, cmds[i][0])} );
             })
           })` + ' ';
         }

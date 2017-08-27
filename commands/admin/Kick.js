@@ -17,7 +17,7 @@ class Kick extends AdminCommand {
   executeAdmin(message, args, bot, db) {
     let userToKick = message.mentions.users.first();
     if (userToKick == '' || userToKick === undefined) {
-      message.channel.sendType(Tsubaki.Style.unknownUser(), );
+      message.channel.sendType(Tsubaki.Style.unknownUser() );
       return;
     }
     let userID = userToKick.id;
@@ -41,12 +41,12 @@ class Kick extends AdminCommand {
       message.channel.sendType(Tsubaki.Style.success(
         `${userToKick.tag} has been **kicked** by **${message.author}**`
         + (reason.length > 0 ? ` for: **${reason}**` : ' !')
-        , )
+         )
       );
     } else if (!isKickable || !(userID.kickable)) {
       message.channel.sendType(Tsubaki.Style.error(
         'You can\'t kick that user!'
-      ), );
+      ) );
     }
   }
 }

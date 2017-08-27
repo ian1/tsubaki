@@ -36,7 +36,7 @@ class OwnerCommand extends Command {
       || message.member.id === Tsubaki.davidId)) {
       this.executeOwner(message, args, bot, db);
     } else {
-      message.channel.sendType(Tsubaki.Style.notFound(), );
+      message.channel.sendType(Tsubaki.Style.notFound() );
     }
   }
 }

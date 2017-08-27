@@ -21,7 +21,7 @@ class Define extends Command {
     if (toDefine == '' || toDefine === undefined) {
       message.channel.sendType(Tsubaki.Style.warn(
         'Provide a word to define! :book:'
-      ), );
+      ) );
     } else {
       webdict('dictionary', toDefine).then((resp) => {
         let result = resp.definition[0];
@@ -31,11 +31,11 @@ class Define extends Command {
           .addField('Definition', result)
           .setColor(Tsubaki.color.green)
           .setFooter(Tsubaki.name + ' Dictionary');
-        message.channel.sendType({embed: embed}, );
+        message.channel.sendType({embed: embed} );
       }).catch(() => {
         message.channel.sendType(Tsubaki.Style.error(
           'Hmm... I can\'t find that word. Please check your spelling!'
-        ), );
+        ) );
       });
     }
   }

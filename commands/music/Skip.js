@@ -21,18 +21,18 @@ class Skip extends Command {
       message.channel.sendType(Tsubaki.Style.warn(
         'You aren\'t in a voice channel!'
         , `${Tsubaki.name} music`
-      ), );
+      ) );
     } else {
       if (music.getPlaying() === undefined) {
         message.channel.sendType(Tsubaki.Style.warn(
           'I\'m not playing anything right now.'
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-        ), );
+        ) );
       } else {
         message.channel.sendType(Tsubaki.Style.success(
           `Skipped ${music.getPlaying().titleUrl}.`
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-        ), );
+        ) );
         music.skip();
       }
     }

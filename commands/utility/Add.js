@@ -22,7 +22,7 @@ class Add extends Command {
     if (args.length < 2) {
       message.channel.sendType(Tsubaki.Style.warn(
         'Hey, you must provide the numbers first!'
-      ), );
+      ) );
       return;
     }
     let numArray = args.map((n) => parseInt(n));
@@ -31,8 +31,8 @@ class Add extends Command {
     if (!(total < 9007199254740991)) {
       message.channel.sendType(Tsubaki.Style.warn(
         'Hey, you must provide the numbers first!'
-      ), );
-    } else message.channel.sendType(total, );
+      ) );
+    } else message.channel.sendType(total );
   }
 }
 

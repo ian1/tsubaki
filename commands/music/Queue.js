@@ -47,7 +47,7 @@ class Queue extends Command {
       message.channel.sendType(Tsubaki.Style.warn(
         'You aren\'t in a voice channel!'
         , `${Tsubaki.name} music`
-      ), );
+      ) );
     } else {
       if (args.length == 0) {
         message.channel.sendType(Queue.getQueue(music)).then((msg) => {
@@ -56,7 +56,7 @@ class Queue extends Command {
               msg.edit(Queue.getQueue(music));
             }, i * 1000);
           }
-        }, );
+        } );
         return;
       }
 
@@ -66,7 +66,7 @@ class Queue extends Command {
         music.clearQueue();
         message.channel.sendType(Tsubaki.Style.success(
           'Queue cleared!'
-          , `${Tsubaki.name} music on ${music.getMusicChannel().name}`), );
+          , `${Tsubaki.name} music on ${music.getMusicChannel().name}`) );
       } else {
         message.channel.sendType(Tsubaki.Style.embed(
           undefined, 'Searching...', Tsubaki.color.gray
@@ -181,7 +181,7 @@ class Queue extends Command {
                       + ' . . . . . '
                       + songInfo.duration
                     ).setThumbnail(songInfo.thumbnail);
-                  message.channel.sendType({embed: embed}, );
+                  message.channel.sendType({embed: embed} );
                 });
               } else {
                 response.delete();
@@ -206,17 +206,17 @@ class Queue extends Command {
       message.channel.sendType(Tsubaki.Style.warn(
         songInfo.titleUrl + ' is already queued.'
         , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-      ), );
+      ));
     } else if (response === 1) {
       message.channel.sendType(Tsubaki.Style.success(
         `Playing: ${songInfo.titleUrl}`
         , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-      ), );
+      ) );
     } else if (response === 2) {
       message.channel.sendType(Tsubaki.Style.success(
         `Queued: ${songInfo.titleUrl}`
         , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
-      ), );
+      ) );
     }
   }
 

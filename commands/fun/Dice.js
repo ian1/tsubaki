@@ -19,7 +19,7 @@ class Dice extends Command {
   execute(message, args, bot, db) {
     message.channel.sendType(
       `:game_die: You rolled a ${Math.ceil(Math.random() * 6)}`
-      , );
+       );
   }
 }
 

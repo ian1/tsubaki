@@ -21,11 +21,11 @@ class Delete extends AdminCommand {
     if (args.length == 0 || parseInt(args[0]) < 1) {
       message.channel.sendType(Tsubaki.Style.warn(
         ':grey_question: How many messages do you want to delete?'
-      ), );
+      ) );
     } else if (parseInt(args[0]) > 100) {
       message.channel.sendType(Tsubaki.Style.warn(
         `I can't delete more than 100 messages!`
-      ), );
+      ) );
     } else {
       message.channel.fetchMessages({limit: parseInt(args[0]) + 1})
         .then((messages) => message.channel.bulkDelete(messages)).catch((err) => {

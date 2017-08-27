@@ -19,16 +19,16 @@ class Banana extends Command {
     if (memberMention == message.author) {
       message.channel.sendType(Tsubaki.Style.embed(
         `:x: Don't be greedy, sweetie~ :kissing_heart:`
-      ), );
+      ) );
       return;
     }
 
     if (memberMention == '' || memberMention === undefined) {
-      message.channel.sendType(Tsubaki.Style.unknownUser(), );
+      message.channel.sendType(Tsubaki.Style.unknownUser() );
     } else {
       message.channel.sendType(Tsubaki.Style.success(
         `:banana: ${message.author.tag} has given ${memberMention} a banana!`
-      ), );
+      ) );
 
       Tsubaki.getPoints(memberMention.id).then((points) => {
         Tsubaki.setPoints(memberMention.id, points + 1, message.channel);

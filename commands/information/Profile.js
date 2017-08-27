@@ -68,7 +68,7 @@ class Profile extends Command {
       if (args.length === 0) {
         profileMention = message.author;
       } else {
-        message.channel.sendType(Tsubaki.Style.unknownUser(), );
+        message.channel.sendType(Tsubaki.Style.unknownUser() );
         return;
       }
     }
@@ -103,7 +103,7 @@ class Profile extends Command {
           attachment: imgBuffer,
           name: profileMention.username + '.gif',
         }],
-      }, );
+      } );
     }).catch((err) => { 
       console.log(err);
     });
@@ -404,7 +404,7 @@ class Profile extends Command {
       if (args.length === 0) {
         profileMention = message.author;
       } else {
-        message.channel.sendType(Tsubaki.Style.unknownUser(), );
+        message.channel.sendType(Tsubaki.Style.unknownUser() );
         return;
       }
     }
@@ -440,7 +440,7 @@ class Profile extends Command {
         .setFooter(`Member since ${Profile.formatDate(guildMember.joinedAt)}`
         + `, Discorder since ${Profile.formatDate(profileMention.createdAt)}`)
         .setColor(color);
-      message.channel.sendType({embed: profileEmbed}, );
+      message.channel.sendType({embed: profileEmbed} );
     });
   }
 

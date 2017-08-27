@@ -52,7 +52,7 @@ class EightBall extends Command {
     if (question == '' || question === undefined) {
       message.channel.sendType(Tsubaki.Style.warn(
         ':eye_in_speech_bubble: *Give me a question!*'
-      ), );
+      ) );
     } else {
       message.channel.sendType(
         `:thinking: *${thinking[Math.floor(Math.random() * thinking.length)]}* `
@@ -62,8 +62,8 @@ class EightBall extends Command {
           msg.editTemp(
             msg.content
             + `  **${balls[Math.floor(Math.random() * balls.length)]}**`
-            , );
-        }, );
+             );
+        } );
       });
     }
   }
