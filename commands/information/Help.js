@@ -21,7 +21,7 @@ class Help extends Command {
     if (args.length == 0) {
       let description = `**${Tsubaki.name} Command List**`
         + `\n\nDo \`${this.getUsage()}\` and replace \`[command]\``
-        + ' with any command you want to learn more about. \n';
+        + ' with any command you want to learn more about, or you can click on the commands in this list. \n';
 
       for (let i = 0, lenI = cmds.length; i < lenI; i++) {
         if (cmds[i][0].startsWith('_')) continue;
