@@ -42,7 +42,7 @@ const Help = require('./commands/information/Help.js');
 const Info = require('./commands/information/Info.js');
 const Stats = require('./commands/information/Stats.js');
 const SysInfo = require('./commands/information/SysInfo.js');
-const Profile = require('./commands/information/Profile.js');
+const Pinfo = require('./commands/information/Pinfo.js');
 const Invite = require('./commands/information/Invite.js');
 const Support = require('./commands/information/Support.js');
 const ChangeLog = require('./commands/information/ChangeLog.js');
@@ -341,7 +341,7 @@ setPlaying();
       new Info(),
       new Stats(),
       new SysInfo(),
-      new Profile(),
+      new Pinfo(),
       new Invite(),
       new Support(),
       new ChangeLog(),

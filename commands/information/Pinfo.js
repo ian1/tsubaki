@@ -46,12 +46,12 @@ let fontBold = process.env['HOME'] + '/.fonts/EncodeSansSemiCondensed-Bold.ttf';
 let pointsBar = '#BF42F400';
 let devColor = '#2BBBEF00';
 
-/** The profile command */
-class Profile extends Command {
+/** The pinfo command */
+class pinfo extends Command {
   /** Create the command */
   constructor() {
     super(
-      'profile', 'Will show your profile or the mentioned profile.'
+      'pinfo', 'Will show your pinfo or the mentioned pinfo.'
       , ' [@mention]'
     );
   }
@@ -63,17 +63,17 @@ class Profile extends Command {
    * @param {sqlite.Database} db The instance of the database
    */
   executeNew(message, args, bot, db) {
-    let profileMention = message.mentions.users.first();
-    if (profileMention == '' || profileMention === undefined) {
+    let pinfoMention = message.mentions.users.first();
+    if (pinfoMention == '' || pinfoMention === undefined) {
       if (args.length === 0) {
-        profileMention = message.author;
+        pinfoMention = message.author;
       } else {
         message.channel.sendType(Tsubaki.Style.unknownUser() );
         return;
       }
     }
 
-    let name = profileMention.username;
+    let name = pinfoMention.username;
 
     let dir = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -87,21 +87,21 @@ class Profile extends Command {
 
     let fontInfo;
 
-    Profile.getP(profileMention.displayAvatarURL).then((response) => {
+    pinfo.getP(pinfoMention.displayAvatarURL).then((response) => {
       // response.pipe(file);
-      return Profile.createAvatar(response, dir);
+      return pinfo.createAvatar(response, dir);
     }).then(() => {
-      return Profile.getSize(name, textRegionWidth - 100, textRegionHeight, 20);
+      return pinfo.getSize(name, textRegionWidth - 100, textRegionHeight, 20);
     }).then((info) => {
       fontInfo = info;
-      return Tsubaki.getPoints(profileMention.id);
+      return Tsubaki.getPoints(pinfoMention.id);
     }).then((points) => {
-      return Profile.drawProfile(profileMention, points, dir, fontInfo.size, fontInfo.width);
+      return pinfo.drawpinfo(pinfoMention, points, dir, fontInfo.size, fontInfo.width);
     }).then((imgBuffer) => {
       message.channel.sendType({
         files: [{
           attachment: imgBuffer,
-          name: profileMention.username + '.gif',
+          name: pinfoMention.username + '.gif',
         }],
       } );
     }).catch((err) => { 
@@ -199,7 +199,7 @@ class Profile extends Command {
                 if (err) reject(err);
 
                 if (size.width >= width || size.height >= height) {
-                  Profile.getSize(text, width, height, fontSize - 5)
+                  pinfo.getSize(text, width, height, fontSize - 5)
                     .then((fontInfo) => {
                       resolve(fontInfo);
                     }).catch((err) => {
@@ -216,7 +216,7 @@ class Profile extends Command {
 
   /**
    * 
-   * @param {Discord.User} profile The user's profile
+   * @param {Discord.User} pinfo The user's pinfo
    * @param {number} points The number of points the user has
    * @param {string} dir The temporary directory for the files
    * @param {number} fontSize The font size for the name
@@ -224,8 +224,8 @@ class Profile extends Command {
    * @return {Promise.<string, Error>} A buffer of the drawn image if resolved,
    * an error if rejected
    */
-  static drawProfile(profile, points, dir, fontSize, nameWidth) {
-    let name = profile.username;
+  static drawpinfo(pinfo, points, dir, fontSize, nameWidth) {
+    let name = pinfo.username;
 
     let level = Tsubaki.getLevelR(points);
     let levelPoints = Tsubaki.getPointsFor(level);
@@ -239,14 +239,14 @@ class Profile extends Command {
     let role = '';
     let roleColor = '#FFFFFFFF';
 
-    if (profile.id === Tsubaki.ianId || profile.id === Tsubaki.davidId) {
+    if (pinfo.id === Tsubaki.ianId || pinfo.id === Tsubaki.davidId) {
       role = 'Dev';
       roleColor = devColor;
     }
 
     return new Promise((resolve, reject) => {
     // replace avatar with background
-    Profile.getP(profile.displayAvatarURL).then((response) => {
+    pinfo.getP(pinfo.displayAvatarURL).then((response) => {
         gm(response, 'image.png')
           .autoOrient()
           .resize(width, height)
@@ -353,7 +353,7 @@ class Profile extends Command {
                 .write(`${dir}/part-${i}.png`, (err) => {
                   if (err) reject(err);
                   if (++parts >= 20) {
-                    Profile.toGif(dir).then((imgBuffer) => {
+                    pinfo.toGif(dir).then((imgBuffer) => {
                       resolve(imgBuffer);
                     });
                   }
@@ -399,10 +399,10 @@ class Profile extends Command {
       this.executeNew(message, args.slice(1), bot, db);
       return;
     }
-    let profileMention = message.mentions.users.first();
-    if (profileMention == '' || profileMention === undefined) {
+    let pinfoMention = message.mentions.users.first();
+    if (pinfoMention == '' || pinfoMention === undefined) {
       if (args.length === 0) {
-        profileMention = message.author;
+        pinfoMention = message.author;
       } else {
         message.channel.sendType(Tsubaki.Style.unknownUser() );
         return;
@@ -410,7 +410,7 @@ class Profile extends Command {
     }
 
     let color = Tsubaki.color.gray;
-    switch (profileMention.presence.status) {
+    switch (pinfoMention.presence.status) {
       case 'online':
         color = Tsubaki.color.green;
         break;
@@ -425,22 +425,22 @@ class Profile extends Command {
     let guildMember = message.member;
     let roleList = guildMember.roles.array();
 
-    Tsubaki.getPoints(profileMention.id).then((points) => {
-      let profileEmbed = new Discord.RichEmbed()
+    Tsubaki.getPoints(pinfoMention.id).then((points) => {
+      let pinfoEmbed = new Discord.RichEmbed()
         .setDescription(`**__${guildMember.displayName}__**`)
-        .addField('Full Username', profileMention.tag, true)
-        .addField('ID', profileMention.id, true)
+        .addField('Full Username', pinfoMention.tag, true)
+        .addField('ID', pinfoMention.id, true)
         .addField(
         'Banana'
         , `Level ${Tsubaki.getLevelR(points)}, with ${points} Bananas`
         , true
         )
         .addField('Roles', roleList.join(' '), true)
-        .setThumbnail(profileMention.displayAvatarURL)
-        .setFooter(`Member since ${Profile.formatDate(guildMember.joinedAt)}`
-        + `, Discorder since ${Profile.formatDate(profileMention.createdAt)}`)
+        .setThumbnail(pinfoMention.displayAvatarURL)
+        .setFooter(`Member since ${pinfo.formatDate(guildMember.joinedAt)}`
+        + `, Discorder since ${pinfo.formatDate(pinfoMention.createdAt)}`)
         .setColor(color);
-      message.channel.sendType({embed: profileEmbed} );
+      message.channel.sendType({embed: pinfoEmbed} );
     });
   }
 
@@ -460,4 +460,4 @@ class Profile extends Command {
   }
 }
 
-module.exports = Profile;
+module.exports = pinfo;
