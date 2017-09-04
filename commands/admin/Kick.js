@@ -39,7 +39,7 @@ class Kick extends AdminCommand {
       }
 
       message.channel.sendType(Tsubaki.Style.success(
-        `${userToKick.tag} has been **kicked** by **${message.author}**`
+        `**${userToKick.tag}** has been **kicked** by **${message.author}**`
         + (reason.length > 0 ? ` for: **${reason}**` : ' !')
          )
       );
