@@ -40,8 +40,8 @@ class Ban extends AdminCommand {
       }
 
       message.channel.sendType(Tsubaki.Style.success(
-        `${userToBan.tag} has been **banned** by **${message.author}**`
-        + (reason.length > 0 ? ` for: **${reason}` : ' !')
+        `**${userToBan.tag}** has been **banned** by **${message.author}**`
+        + (reason.length > 0 ? ` for: **${reason}**` : ' !')
       ) );
     } else if (!isBannable || !(userID.bannable)) {
       message.channel.sendType(Tsubaki.Style.error(
