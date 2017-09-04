@@ -30,7 +30,7 @@ class UnBan extends AdminCommand {
     message.guild.unban(userToUnBan);
 
     message.channel.sendType(Tsubaki.Style.success(
-      `${userToUnban.tag} have been **unbanned** by **${message.author}**`
+      `**${userToUnban.tag}** have been **unbanned** by **${message.author}**`
       + (reason.length > 0 ? ` for: **${reason}**` : ' !')
     ) );
   }
