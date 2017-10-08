@@ -20,18 +20,18 @@ class Leave extends Command {
       && message.member.hasPermission(Tsubaki.adminPermission)) {
       let music = Music.getMusic(message.member.voiceChannel);
       if (music === undefined) {
-        message.channel.sendType(Tsubaki.Style.warn(
+        message.channel.sendTemp(Tsubaki.Style.warn(
           'You aren\'t in a voice channel!', `${Tsubaki.name} music`
         ) );
       } else {
         music.leave();
-        message.channel.sendType(Tsubaki.Style.success(
+        message.channel.sendTemp(Tsubaki.Style.success(
           `${Tsubaki.name} music left ${music.getMusicChannel().name}.`
           , `${Tsubaki.name} music on ${music.getMusicChannel().name}`
         ) );
       }
     } else {
-      message.channel.sendType(Tsubaki.Style.notFound() );
+      message.channel.sendTemp(Tsubaki.Style.notFound() );
     }
   }
 }
